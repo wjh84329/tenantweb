@@ -45,7 +45,7 @@
           <tr>
             <td class="th">联系QQ：</td>
             <!-- <td>{{ baseInfo.linkQQ }}</td> -->
-             <td>
+            <td>
               <div style="display: flex;align-items: center;">
                 <div>
                   {{ baseInfo.linkQQ }}
@@ -54,7 +54,7 @@
                   <el-button type="warning" size="small" plain @click="updateQQ">修改</el-button>
                 </div>
               </div>
-             </td>
+            </td>
             <td class="th">邮箱：</td>
             <!-- <td>{{ baseInfo.email }}</td> -->
             <td>
@@ -77,7 +77,7 @@
                   {{ baseInfo.linkphone }}
                 </div>
                 <div style="margin-left: 15px;">
-                  <el-button type="warning" size="small" plain  @click="handleAction('手机绑定')">修改</el-button>
+                  <el-button type="warning" size="small" plain @click="handleAction('手机绑定')">修改</el-button>
                 </div>
               </div>
             </td>
@@ -185,10 +185,10 @@
         <el-form-item label="验证码">
           <div style="display: flex; ">
             <el-input v-model="bindDialog.form.code" placeholder="请输入验证码"
-            style="width: 180px; margin-right: 10px;"></el-input>
-          <el-button size="small" :disabled="bindDialog.codeSending" @click="sendCode">
-            {{ bindDialog.codeSending ? bindDialog.countdown + 's后重发' : '发送验证码' }}
-          </el-button>
+              style="width: 180px; margin-right: 10px;"></el-input>
+            <el-button size="small" :disabled="bindDialog.codeSending" @click="sendCode">
+              {{ bindDialog.codeSending ? bindDialog.countdown + 's后重发' : '发送验证码' }}
+            </el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -300,6 +300,23 @@ export default {
           this.$message.error(err.message);
           this.bindDialog.codeSending = false;
         });
+    },
+    startCountdown() {
+      if (this.codeTimer) {
+        clearInterval(this.codeTimer);
+        this.codeTimer = null;
+      }
+      this.bindDialog.codeSending = true;
+      this.bindDialog.countdown = 60;
+      this.codeTimer = setInterval(() => {
+        this.bindDialog.countdown -= 1;
+        if (this.bindDialog.countdown <= 0) {
+          clearInterval(this.codeTimer);
+          this.codeTimer = null;
+          this.bindDialog.codeSending = false;
+          this.bindDialog.countdown = 60;
+        }
+      }, 1000);
     },
     confirmBind() {
       if (!this.bindDialog.form.account || !this.bindDialog.form.code) {

@@ -4,7 +4,7 @@
       <span class="tel">七星传奇游戏技术服务平台   |   7x24服务客服电话:{{ servicePhone }}</span>
     </div>
     <div class="contanct">
-      <img src="../assets/img/logo2.png" style="width: 166px;height: 50px;" class="logo" />
+      <img src="../assets/img/logo3.png" style="width: 166px;height: 50px;" class="logo" />
       <ul class="menu">
         <router-link tag="li" to="/login/loginHome" :class="{ on: $route.path.indexOf('loginHome') > 0 }">
           官方首页
@@ -14,18 +14,18 @@
           新闻公告
           <div class="after"></div>
         </router-link> -->
-        <!-- <router-link tag="li" to="/login/loginregister" :class="{ on: $route.path.indexOf('loginregister') > 0 }">
+        <router-link tag="li" to="/login/loginregister" :class="{ on: $route.path.indexOf('loginregister') > 0 }">
           商户注册
           <div class="after"></div>
-        </router-link> -->
+        </router-link>
         <router-link tag="li" to="/login/loginTool" :class="{ on: $route.path.indexOf('loginTool') > 0 }">
           开区助手
           <div class="after"></div>
         </router-link>
-        <!-- <router-link tag="li" to="/login/brows" :class="{ on: $route.path.indexOf('brows') > 0 }">
+        <router-link tag="li" to="/login/brows" :class="{ on: $route.path.indexOf('brows') > 0 }">
           服务介绍
           <div class="after"></div>
-        </router-link> -->
+        </router-link>
         <router-link tag="li" to="/login/logincontact" :class="{ on: $route.path.indexOf('logincontact') > 0 }">
           联系我们
           <div class="after"></div>
@@ -132,18 +132,14 @@ export default {
 }
 
 .header-top .contanct {
-  position: relative;          /* 让 logo 绝对定位的容器可用 */
   display: flex;
-  justify-content: flex-end;   /* 菜单靠右 */
+  justify-content: center;
   align-items: center;
-  padding: 15px 400px;          /* 适当内边距，保证菜单靠右有间距 */
-}
-.header-top .contanct .logo {
-  position: absolute;
-  left: 30%;
-  transform: translateX(-50%);
-  width: 166px;
-  height: 50px;
+  color: #333;
+  font-size: 18px;
+  /* margin-right: 30px; */
+  padding: 15px 0;
+  height: 66px;
 }
 .header-top .contanct1 {
   background-color: #333;

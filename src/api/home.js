@@ -379,5 +379,29 @@ export default {
       data: params,
       headers: { Authorization: 'Bearer ' + header }
     });
+  },
+  // 商户信息列表（接口已返回 IsEnableProductChannelSelect）
+  async getMerchantsInformationList(params) {
+    return api({
+      url: '/api/HomePage/GetMerchantsInformationListAsync', // TODO：按你的真实路由改
+      method: 'get',
+      params
+    });
+  },
+  // 获取产品通道设置
+  async getProductChannelSetting(params) {
+    return api({
+      url: '/api/UserCenter/GetProductChannelSetting',
+      method: 'get',
+      params
+    });
+  },
+  // 保存产品通道设置
+  async saveProductChannelSetting(data) {
+    return api({
+      url: '/api/UserCenter/SaveProductChannelSetting',
+      method: 'post',
+      data
+    });
   }
 };

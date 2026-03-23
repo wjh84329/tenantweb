@@ -52,11 +52,21 @@
             </div>
           </el-form-item>
           <el-form-item label="身份证起始日期" label-width="150px" prop="idEffectiveDateStart">
-            <el-date-picker v-model="form.idEffectiveDateStart" type="date" placeholder="选择起始日期">
+            <el-date-picker
+              v-model="form.idEffectiveDateStart"
+              type="date"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              placeholder="选择起始日期">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="身份证终止日期" label-width="150px" prop="idEffectiveDateEnd">
-            <el-date-picker v-model="form.idEffectiveDateEnd" type="date" placeholder="选择起始日期">
+            <el-date-picker
+              v-model="form.idEffectiveDateEnd"
+              type="date"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              placeholder="选择起始日期">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="身份证照片" label-width="150px" prop="idCard">
@@ -93,11 +103,21 @@
               <el-input v-model="form.businessAddress" placeholder="请输入营业执照号" />
             </el-form-item>
             <el-form-item label-width="150px" label="营业执照起始日期" prop="businessLicenseStart">
-              <el-date-picker v-model="form.businessLicenseStart" type="date" placeholder="选择起始日期">
+              <el-date-picker
+                v-model="form.businessLicenseStart"
+                type="date"
+                format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd"
+                placeholder="选择起始日期">
               </el-date-picker>
             </el-form-item>
             <el-form-item label-width="150px" label="营业执照结束日期" prop="businessLicenseEnd">
-              <el-date-picker v-model="form.businessLicenseEnd" type="date" placeholder="选择起始日期">
+              <el-date-picker
+                v-model="form.businessLicenseEnd"
+                type="date"
+                format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd"
+                placeholder="选择起始日期">
               </el-date-picker>
               <el-checkbox style="margin-left: 20px;" @change="changeTime" v-model="form.isCq">长期</el-checkbox>
             </el-form-item>
@@ -108,11 +128,21 @@
               <el-input v-model="form.legalPersonIdNo" placeholder="请输入法人身份证号" />
             </el-form-item>
             <el-form-item label-width="150px" label="法人身份证起始日期" prop="idEffectiveDateStart">
-              <el-date-picker v-model="form.idEffectiveDateStart" type="date" placeholder="选择起始日期">
+              <el-date-picker
+                v-model="form.idEffectiveDateStart"
+                type="date"
+                format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd"
+                placeholder="选择起始日期">
               </el-date-picker>
             </el-form-item>
             <el-form-item label-width="150px" label="法人身份证终止日期" prop="idEffectiveDateEnd">
-              <el-date-picker v-model="form.idEffectiveDateEnd" type="date" placeholder="选择起始日期">
+              <el-date-picker
+                v-model="form.idEffectiveDateEnd"
+                type="date"
+                format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd"
+                placeholder="选择起始日期">
               </el-date-picker>
             </el-form-item>
           </div>
@@ -176,7 +206,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -197,10 +226,10 @@ export default {
         proofFile: '', // 证明材料文件（保留项）
         type: 0,
         businessAddress: '',
-        businessLicenseStart: this.getCerentTime(true),
-        businessLicenseEnd: this.getCerentTime(false),
-        idEffectiveDateStart: this.getCerentTime(true),
-        idEffectiveDateEnd: this.getCerentTime(false),
+        businessLicenseStart: this.getCerentDate(true),
+        businessLicenseEnd: this.getCerentDate(false),
+        idEffectiveDateStart: this.getCerentDate(true),
+        idEffectiveDateEnd: this.getCerentDate(false),
         bankCode: '',
         isCq: false,
         brachName: '',
@@ -369,15 +398,15 @@ export default {
             this.form.brachName = data.data.brachName;
             this.form.idCard = data.data.idNumber;
             this.form.businessAddress = data.data.businessAddress;
-            this.form.businessLicenseEnd = data.data.businessLicenseEnd;
-            this.form.businessLicenseStart = data.data.businessLicenseStart;
+            this.form.businessLicenseEnd = this.normalizeDate(data.data.businessLicenseEnd);
+            this.form.businessLicenseStart = this.normalizeDate(data.data.businessLicenseStart);
             this.form.businessLicenseNo = data.data.businessLicenseNo;
             this.form.idCardBack = data.data.idCardBackPreview;
             this.form.idCardBackPreview = data.data.idCardBackBase64;
             this.form.idCardFront = data.data.idCardFrontPreview;
             this.form.idCardFrontPreview = data.data.idCardFrontBase64;
-            this.form.idEffectiveDateEnd = data.data.idEffectiveDateEnd;
-            this.form.idEffectiveDateStart = data.data.idEffectiveDateStart;
+            this.form.idEffectiveDateEnd = this.normalizeDate(data.data.idEffectiveDateEnd);
+            this.form.idEffectiveDateStart = this.normalizeDate(data.data.idEffectiveDateStart);
             this.form.isCq = data.data.isCq;
             this.form.legalPersonIdNo = data.data.legalPersonIdNo;
             this.form.legalPersonName = data.data.legalPersonName;
@@ -475,6 +504,19 @@ export default {
             this.$messageError(err.message);
           });
       });
+    },
+    normalizeDate(val) {
+      if (!val) return '';
+      if (typeof val === 'string') {
+        return val.length >= 10 ? val.slice(0, 10) : val;
+      }
+      if (val instanceof Date) {
+        const y = val.getFullYear();
+        const m = String(val.getMonth() + 1).padStart(2, '0');
+        const d = String(val.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      }
+      return '';
     }
   },
   created() {

@@ -548,11 +548,11 @@ export default {
       return menuIds.includes(menuId);
     },
     updateThemeVars() {
-      // headboxStyle 是 computed，可以直接读取 background 与 color
       const bg = (this.headboxStyle && this.headboxStyle.background) || '#0398d6';
       const txt = (this.headboxStyle && this.headboxStyle.color) || 'white';
       document.documentElement.style.setProperty('--theme-color', bg);
       document.documentElement.style.setProperty('--theme-text', txt);
+      localStorage.setItem('themeColor', bg);
     }
   },
   created() {

@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-box">
-    <div class="sonbar" style="background-color: #72c9f5;"><img src="../../assets/img/san.png" /><span style="color: white;">版本管理</span></div>
+    <div class="gs_title"><span style="color: white;">版本管理</span></div>
     <div class="wrap-box-c">
       <el-button
         type="primary"
@@ -196,6 +196,9 @@ export default {
 </script>
 
 <style scoped>
+.gs_title {
+  background: var(--theme-color);
+}
 .wrap-box {
   min-height: 800px;
   background-color: #fff;

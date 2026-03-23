@@ -860,7 +860,7 @@ const routes = [
           role: ['SuperAdmin', 'Admin', 'Tenant', 'Agent', 'Employee']
         },
         component: resolve => {
-          require(['../views/agentSys/agentOrder'], resolve);
+          require(['../views/agentSys/agentOrder1'], resolve);
         }
       },
       {

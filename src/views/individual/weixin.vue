@@ -69,13 +69,13 @@
         <div class="inputBox">
           <el-input v-if="isbindFlag" style="width:220px;" type="password" size="small" v-model="dialog.secondPassword"
             @keyup.enter.native="unbindWei" placeholder="请输入二级密码"></el-input>
-          <el-input v-else style="width:220px;" type="password" size="small" v-model="dialog.secondPassword"
-            @keyup.enter.native="bindWei" placeholder="请输入二级密码"></el-input>
+          <!-- <el-input v-else style="width:220px;" type="password" size="small" v-model="dialog.secondPassword"
+            @keyup.enter.native="bindWei" placeholder="请输入二级密码"></el-input> -->
         </div>
       </div>
       <p class="tc pdb10">
         <el-button v-if="isbindFlag" size="small" type="primary" @click="unbindWei">确定</el-button>
-        <el-button v-else size="small" type="primary" @click="bindWei">确定</el-button>
+        <!-- <el-button v-else size="small" type="primary" @click="bindWei">确定</el-button> -->
         <el-button size="small" type="info" @click="dialog.show = false">取消</el-button>
       </p>
     </el-dialog>
