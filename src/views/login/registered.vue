@@ -1,6 +1,5 @@
 <template>
   <div class="register-page">
-  <div class="register-page">
     <login-header></login-header>
 
     <div class="page-body">
@@ -36,56 +35,7 @@
                   @input="checkniceName"
                   @blur="checkniceName1"
                 ></el-input>
-
-    <div class="page-body">
-      <!-- <div class="page-decor"></div> -->
-
-      <div class="register-panel">
-        <div class="panel-title">用户注册</div>
-
-        <div class="form-list">
-          <div class="form-item">
-            <div class="form-label">用户名</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="account"
-                  placeholder="用户名由3-18个英文字母或数字组成"
-                  @input="checkAccount"
-                  @blur="checkAccount1"
-                ></el-input>
               </div>
-            </div>
-          </div>
-
-          <div class="form-item">
-            <div class="form-label">商户昵称</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="niceName"
-                  placeholder="请输入商户昵称"
-                  @input="checkniceName"
-                  @blur="checkniceName1"
-                ></el-input>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-item">
-            <div class="form-label">密码</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  type="password"
-                  v-model="password"
-                  placeholder="密码由6-20个英文字母、数字或下划线组成"
-                  @input="checkpassword"
-                  @blur="checkpassword1"
-                ></el-input>
             </div>
           </div>
 
@@ -165,101 +115,7 @@
                 手机格式不正确
               </p>
             </div>
-            </div>
           </div>
-
-          <div class="form-item">
-            <div class="form-label">确认密码</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  type="password"
-                  v-model="surePassword"
-                  placeholder="请再次输入密码"
-                ></el-input>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-item">
-            <div class="form-label">QQ</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="qq"
-                  placeholder="请输入联系QQ"
-                  @input="qq = intNumber(qq)"
-                ></el-input>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-item">
-            <div class="form-label">邮箱</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="mails"
-                  placeholder="请输入邮箱"
-                  @blur="checkmail"
-                ></el-input>
-              </div>
-              <p class="field-tip" v-if="!checkflag4" :class="{ wrong: !checkflag4 }">
-                邮箱格式不正确
-              </p>
-            </div>
-          </div>
-
-          <div class="form-item">
-            <div class="form-label">手机号</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="phone"
-                  placeholder="请输入常用手机号"
-                  @blur="checkphone"
-                ></el-input>
-              </div>
-              <p class="field-tip" v-if="!checkflag5" :class="{ wrong: !checkflag5 }">
-                手机格式不正确
-              </p>
-            </div>
-          </div>
-
-          <div class="form-item captcha-item">
-            <div class="form-label">验证码</div>
-            <div class="form-main">
-              <div class="captcha-wrap">
-                <div class="field-box captcha-input-box">
-                  <el-input
-                    class="form-input"
-                    v-model="validcode"
-                    placeholder="请输入图形验证码"
-                  ></el-input>
-                </div>
-                <a class="captcha-box" href="javascript:;" @click.prevent="getRandomCode">
-                  <img class="yzm" id="code" :src="randomCode" alt="" />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="action-row">
-            <el-button class="submit-btn1" type="primary" @click="submit">
-              立即注册
-            </el-button>
-            <el-button class="submit-btn2" type="warning" @click="singin">
-              返回登录
-            </el-button>
-          </div>
-        </div>
-      </div>
-
-      <login-footer></login-footer>
 
           <div class="form-item captcha-item">
             <div class="form-label">验证码</div>
@@ -293,7 +149,6 @@
       <login-footer></login-footer>
     </div>
 
-
     <div class="dialogContainer" v-if="dialog.show">
       <div class="dialogbox">
         <div class="close" @click="dialog.show = false"></div>
@@ -301,11 +156,6 @@
         <div class="box">
           <p class="text">请联系工作人员进行审核</p>
           <p class="tc" v-for="(item, i) in serverQQ" :key="'qq' + i">
-            <a
-              class="service-qq"
-              :href="'https://wpa.qq.com/msgrd?v=3&uin=' + item.qq + '&site=qq&menu=yes'"
-              target="_blank"
-            >
             <a
               class="service-qq"
               :href="'https://wpa.qq.com/msgrd?v=3&uin=' + item.qq + '&site=qq&menu=yes'"
@@ -325,7 +175,6 @@
 import loginFooter from '../../components/loginFooter';
 import loginHeader from '../../components/loginHeader';
 
-
 export default {
   components: {
     loginFooter,
@@ -334,40 +183,29 @@ export default {
   data() {
     return {
       account: '',
-      account: '',
       checkflag1: true,
       niceName: '',
-      niceName: '',
       checkflag2: true,
-      password: '',
       password: '',
       checkflag3: true,
       saferank: 0,
       surePassword: '',
       qq: '',
       mails: '',
-      surePassword: '',
-      qq: '',
-      mails: '',
       checkflag4: true,
-      phone: '',
       phone: '',
       checkflag5: true,
       dialog: {
         show: false
       },
       serverQQ: [],
-      serverQQ: [],
       randomCode: ' ',
       validcode: '',
-      validKey: ''
       validKey: ''
     };
   },
   methods: {
     singin() {
-      // 跳转到首页
-      this.$router.push('/login');
       // 跳转到首页
       this.$router.push('/login');
     },
@@ -398,9 +236,6 @@ export default {
       }
       this.saferank = 0;
       if (this.password.length < 6) return this.saferank;
-      if (/\d/.test(this.password)) this.saferank++;
-      if (/[a-zA-Z]/.test(this.password)) this.saferank++;
-      if (/\W/.test(this.password)) this.saferank++;
       if (/\d/.test(this.password)) this.saferank++;
       if (/[a-zA-Z]/.test(this.password)) this.saferank++;
       if (/\W/.test(this.password)) this.saferank++;
@@ -456,7 +291,6 @@ export default {
         return;
       }
 
-
       this.$api.login
         .register({
           loginName: this.account,
@@ -487,26 +321,18 @@ export default {
     },
     datainit() {
       this.account = '';
-      this.account = '';
       this.checkflag1 = true;
       this.niceName = '';
-      this.niceName = '';
       this.checkflag2 = true;
-      this.password = '';
       this.password = '';
       this.checkflag3 = true;
       this.saferank = 0;
       this.surePassword = '';
       this.qq = '';
       this.mails = '';
-      this.surePassword = '';
-      this.qq = '';
-      this.mails = '';
       this.checkflag4 = true;
       this.phone = '';
-      this.phone = '';
       this.checkflag5 = true;
-      this.validcode = '';
       this.validcode = '';
     },
     getinfo() {
@@ -514,13 +340,6 @@ export default {
         .contactinfo()
         .then(data => {
           if (data.status === 200) {
-            let qqList = [];
-            try {
-              qqList = JSON.parse(data.data.serviceQq || '[]');
-            } catch (e) {
-              qqList = [];
-            }
-            this.serverQQ = qqList.filter(item => {
             let qqList = [];
             try {
               qqList = JSON.parse(data.data.serviceQq || '[]');
@@ -558,17 +377,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.register-page {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
-}
-
-.page-body {
-  position: relative;
-  top: 126px;
-  min-height: calc(100vh - 126px);
-  padding: 36px 0 120px;
-  overflow: hidden;
 .register-page {
   min-height: 100vh;
   background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
@@ -786,49 +594,7 @@ export default {
   z-index: 99999;
   background: rgba(0, 0, 0, 0.5);
 }
-.dialogContainer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 99999;
-  background: rgba(0, 0, 0, 0.5);
-}
 
-.dialogbox {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 288px;
-  min-height: 327px;
-  margin-left: -144px;
-  margin-top: -163px;
-  background: #fff;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.dialogbox .close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 22px;
-  height: 22px;
-  background: url(../../assets/images/login/cross_img.png) no-repeat center center;
-  cursor: pointer;
-}
-
-.dialogbox .tit {
-  height: 66px;
-  line-height: 66px;
-  margin: 0;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 400;
-  color: #fff;
-  background: #1792e3;
-}
 .dialogbox {
   position: absolute;
   top: 50%;
@@ -868,91 +634,7 @@ export default {
   background: url(../../assets/images/login/cross.png) no-repeat center 35px;
   text-align: center;
 }
-.dialogbox .box {
-  padding-top: 140px;
-  background: url(../../assets/images/login/cross.png) no-repeat center 35px;
-  text-align: center;
-}
 
-.dialogbox .text {
-  margin-top: 5px;
-  margin-bottom: 15px;
-  font-size: 18px;
-  color: #5f5f5f;
-}
-
-.service-qq {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-}
-
-.service-qq img {
-  margin-bottom: 8px;
-}
-
-@media (max-width: 1024px) {
-  .register-panel {
-    width: 94%;
-    padding: 28px 24px 36px;
-  }
-
-  .form-label {
-    width: 96px;
-    font-size: 18px;
-  }
-
-  .form-input::v-deep .el-input__inner {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 768px) {
-  .page-body {
-    top: 96px;
-    min-height: calc(100vh - 96px);
-    padding: 24px 0 80px;
-  }
-
-  .register-panel {
-    width: 94%;
-    padding: 24px 14px 30px;
-  }
-
-  .panel-title {
-    font-size: 24px;
-  }
-
-  .form-item {
-    flex-direction: column;
-    margin-bottom: 14px;
-  }
-
-  .form-label {
-    width: 100%;
-    border-right: 1px solid #cfd4dc;
-    border-bottom: none;
-  }
-
-  .field-box {
-    border-top: none;
-  }
-
-  .captcha-wrap {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .captcha-input-box,
-  .captcha-box {
-    width: 100%;
-  }
-
-  .submit-btn {
-    width: 100%;
 .dialogbox .text {
   margin-top: 5px;
   margin-bottom: 15px;
