@@ -24,7 +24,7 @@
               </p> -->
               <p class="acout">{{ userInfo.userName }}</p>
               <p class="text">ID：{{ userInfo.id }}</p>
-              <p class="text">IP：{{ userInfo.ip}}</p>
+              <p class="text">IP：{{ userInfo.ip }}</p>
               <!-- <p class="range"><span>{{ userInfo.type ? '代理' : '商户' }}</span></p> -->
             </div>
           </div>
@@ -77,11 +77,12 @@
               </li>
             </ul>
             <div class="getbtn">
-              <el-button v-if="$store.state.userType && $store.state.settlementType !=3" size="mini" type="danger"
+              <el-button v-if="$store.state.userType && $store.state.settlementType != 3" size="mini" type="danger"
                 @click="$router.push({ path: '/agentsystem/merchant' })">代理中心</el-button>
               <el-button size="mini" type="danger" v-if="this.bank.realName != '未知户'"
                 @click="$router.push({ path: '/main/Withdrawalrecords' })">提现记录</el-button>
-              <el-button size="mini" v-if="this.bank.realName != '未知户'" type="danger" @click="$router.push({ path: '/main/withdrawapply' })">提现</el-button>
+              <el-button size="mini" v-if="this.bank.realName != '未知户'" type="danger"
+                @click="$router.push({ path: '/main/withdrawapply' })">提现</el-button>
             </div>
             <div class="btns">
               <el-tooltip class="item" effect="dark" content="点击查看账户安全" placement="bottom">
@@ -278,6 +279,14 @@
             <span class="linkspan" @click="PromoteLink">{{ functionSet.linkurl }}</span>
             <p class="fr">
               <span class="settingBtn" @click="copyPromoteLink">复制</span>
+            </p>
+          </li>
+          <!-- 新增：通道设置（后台开关开启才显示） -->
+          <li class="icon12" v-if="showChannelSettingEntry">
+            <span class="mgr15">通道设置</span>
+            <span>设置产品对应通道</span>
+            <p class="fr">
+              <span class="settingBtn" @click="goChannelSetting">设置</span>
             </p>
           </li>
         </ul>
@@ -645,7 +654,8 @@ export default {
 
       bank: [],
       pageLoading: false, // 新增全局loading状态
-      isQY: false // 是否强制签约
+      isQY: false, // 是否强制签约
+      showChannelSettingEntry: false
     };
   },
   methods: {
@@ -687,9 +697,9 @@ export default {
             this.chargeInfoData.waitSend = chargeRes.data.toBeIssuedState;
             this.chargeInfoData.agentProfit = chargeRes.data.agentProfit.toFixed(2);
             this.chargeInfoData.tenantCount = chargeRes.data.tenantCount;
-            this.chargeInfoData.agentPayAmount = chargeRes.data.agentPayAmount.toFixed(2);
-            this.chargeInfoData.yesterdayPayAmount = chargeRes.data.yesterdayPayAmount.toFixed(2);
-            this.chargeInfoData.yesterdayProfit = chargeRes.data.yesterdayProfit.toFixed(2);
+            this.chargeInfoData.agentPayAmount = chargeRes.data.agentPayAmount.toFixed(
+              2
+            );
           }
           // 推广链接（仅代理用户显示）
           if (this.userInfo.type && linkRes.status === 200) {
@@ -1414,6 +1424,23 @@ export default {
         .catch((err) => {
           this.$messageError(err.message);
         });
+    },
+    loadChannelSettingEntry() {
+      // 复用你现有接口：GetProductChannelSetting（返回 enabled）
+      this.$api.home.getProductChannelSetting()
+        .then((res) => {
+          if (res && res.status === 200) {
+            this.showChannelSettingEntry = !!res.data.enabled;
+          } else {
+            this.showChannelSettingEntry = false;
+          }
+        })
+        .catch(() => {
+          this.showChannelSettingEntry = false;
+        });
+    },
+    goChannelSetting() {
+      this.$router.push({ path: '/main/rateList' }).catch(() => { });
     }
   },
   created() {
@@ -1442,6 +1469,7 @@ export default {
     // function hasMenu(menuId) {
     //   return menuIds.includes(menuId);
     // }
+    this.loadChannelSettingEntry();
   }
 };
 </script>
@@ -1677,8 +1705,6 @@ export default {
       line-height: 40px;
       // border-bottom: 1px dashed #63aafa;
       padding-left: 34px;
-      border: 1px solid #eaedf1;
-      padding-left: 5%;
       padding-right: 3%;
 
       .basecolor {
@@ -1753,6 +1779,7 @@ export default {
         background: url(../assets/images/角色管理.png) no-repeat 3px center;
         background-size: 20px 20px;
       }
+
       // &.icon9 {
       //   background: url(../assets/images/phone.png) no-repeat 6px center;
       //   background-size: auto 17px;
@@ -1765,7 +1792,10 @@ export default {
         background: url(../assets/images/订单.png) no-repeat 3px center;
         background-size: 20px 20px;
       }
-
+      &.icon12 {
+        background: url(../assets/images/资金支付通道.png) no-repeat 3px center;
+        background-size: 20px 20px;
+      }
       // &:last-child {
       //   margin-bottom: 15px;
       // }

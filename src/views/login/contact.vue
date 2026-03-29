@@ -1,63 +1,49 @@
 <template>
-    <div class="container">
-        <login-header></login-header>
-        <div style="position: relative;top: 126px;">
-            <div class="banner">
-                <div class="banner-txt">
-                    <img src="../../assets/img/abouttitle.png" />
-                </div>
-            </div>
-            <div class="wrap">
-                <div class="navtitle">联系我们</div>
-                <div class="about">
-                    <p>
-                        <img src="../../assets/img/dou1.png" class="img1" />
-                        多渠道兑换平台网络兑换平台稳定运营九年，深受广大GM客户欢迎，我们致力于为客户提供安全、稳定、快捷的支付结算方案！坚决杜绝黑单掉单，长期稳定运营，支持微信、支付宝、各大银行秒到帐，满50元即可随时结算！
-                        <img src="../../assets/img/dou2.png" class="img2" />
-                    </p>
-                </div>
-            </div>
-            <div class="wrap">
-                <div class="navtitle blue">7*24在线客服</div>
-            </div>
-            <div class="wrap">
-                <div class="kefu">
-                    <div class="kefu_box">
-                        <div class="kefuinfo" v-for="(item, idx) in mail" :key="idx">
-                            <img src="../../assets/newLogin/icon8.png" alt="">
-                            <div class="kefu_detail">
-                                <div class="kefu-name">{{ item.name }}:{{ item.qq }}</div>
-                                <!-- <div class="kefu-number">{{ item.desc }}</div> -->
-                                <div style="height: 17px;margin-top: 5px;margin-bottom: 5px;">
-                                    <a :href="`tencent://message/?uin=${item.qq}&Site=xxx&Menu=yes`">
-                                        <img style="width: 74px;height: 23px;" src="../../assets/newLogin/QQ.gif"
-                                            alt="">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  <div class="page-wrap">
+    <login-header style="position: fixed"></login-header>
+      <div class="head_box">
+      <div class="banner-box"></div>
+    </div>
 
-                </div>
-            </div>
-            <div class="wrap">
-                <div class="navtitle blue">7*24小时企业QQ</div>
-            </div>
-            <div class="wrap">
-                <div class="qiyekefu">
-                    <div class="qq"><a target="_blank"
-                            :href="`https://wpa.qq.com/msgrd?v=3&amp;uin=${mail[0].qq}&amp;Site=&amp;Menu=yes`">{{mail[0].qq}}</a>
-                    </div>
-                </div>
-            </div>
-            <login-footer></login-footer>
+      <div class="content-wrap">
+        <div class="section-title">商务联系</div>
+        <div class="section-subtitle">
+          商务排序不分先后，每个商务服务都非常到位且专业！
         </div>
+
+        <div class="cards-wrap">
+          <div class="cards-grid" v-if="mail.length">
+            <div class="contact-card" v-for="(item, idx) in mail" :key="idx">
+              <div class="card-head">
+                <span class="card-dot"></span>
+                <span class="card-name">{{ item.name }}</span>
+              </div>
+              <div class="card-body">
+                <div class="card-qq">{{ item.name }}：{{ item.qq }}</div>
+                <a
+                  class="qq-btn"
+                  :href="'tencent://message/?uin=' + item.qq + '&Site=xxx&Menu=yes'"
+                >
+                  QQ交谈
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="empty-box" v-else>
+            暂无客服信息
+          </div>
+        </div>
+      </div>
+
+      <login-footer></login-footer>
     </div>
 </template>
 
 <script>
 import loginFooter from '../../components/loginFooter';
 import loginHeader from '../../components/loginHeader';
+
 export default {
   components: {
     loginFooter,
@@ -70,6 +56,11 @@ export default {
       mail: []
     };
   },
+  computed: {
+    enterpriseQq() {
+      return this.mail.length ? this.mail[0].qq : '';
+    }
+  },
   methods: {
     getinfo() {
       this.$api.login
@@ -78,10 +69,15 @@ export default {
           if (data.status === 200) {
             this.address = data.data.companyAddress;
             this.phone = data.data.servicePhone;
-            this.mail = JSON.parse(data.data.serviceQq).filter((item) => {
-              return item.type === 0;
-            });
-            console.log(this.mail);
+
+            let qqList = [];
+            try {
+              qqList = JSON.parse(data.data.serviceQq || '[]');
+            } catch (e) {
+              qqList = [];
+            }
+
+            this.mail = qqList.filter((item) => item.type === 0);
           }
         })
         .catch((err) => {
@@ -96,150 +92,296 @@ export default {
 </script>
 
 <style scoped>
-.container {}
+.contact-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.head_box {
+    background: url(../../assets/img/about.jpg) center center no-repeat;
+    height: 500px;
+    position: relative;
+    /* padding-top: 126px; */
+    /* background: #fff; */
+}
+
+.banner-box {
+    position: relative;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    height: 722px;
+}
+
+.main-wrap {
+  position: relative;
+  top: 126px;
+}
+
+.banner-wrap {
+  width: 1300px;
+  margin: 0 auto;
+}
 
 .banner {
-    background-image: url('../../assets/img/contactbanner.png');
-    background-size: 100% 100%;
-    height: 633px;
-    display: flex;
-    align-items: center;
+  height: 280px;
+  background-image: url('../../assets/img/about.jpg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
 }
 
-.banner-txt {
-    background-color: rgba(255, 255, 255, 0.3);
-    height: 16px;
-    display: flex;
-    align-items: center;
-    width: 600px;
-    justify-content: center;
-    padding-right: 30px;
+.content-wrap {
+  width: 1300px;
+  margin: 0 auto;
+  padding: 24px 0 120px;
 }
 
-.wrap {
-    width: 1300px;
-    margin: 0 auto;
+.section-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f8fff;
+  line-height: 1;
+  margin-top: 20px;
 }
 
-.navtitle {
-    margin: 50px 0;
+.section-subtitle {
+  text-align: center;
+  font-size: 15px;
+  color: #666;
+  margin-top: 12px;
+  margin-bottom: 34px;
+}
+
+.cards-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.cards-grid {
+  width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.contact-card {
+  position: relative;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgba(34, 97, 176, 0.14);
+}
+
+.card-head {
+  position: relative;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(180deg, #3799ef 0%, #2c8fec 100%);
+  z-index: 1;
+}
+
+/* 中间那层：比标题层更浅一点，形成层次 */
+.card-head::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 9px;
+  height: 20px;
+  background: linear-gradient(180deg, #55b4ff 0%, #40a8fb 100%);
+  opacity: 0.65;
+  z-index: 0;
+}
+
+/* 底部白色斜切凸起层 */
+.card-head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 22px;
+  background: #fff;
+  clip-path: polygon(0 55%, 100% 18%, 100% 100%, 0 100%);
+  z-index: 0;
+}
+
+.card-dot {
+  position: relative;
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+.card-dot::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2f94ef;
+  transform: translate(-50%, -50%);
+}
+
+.card-name {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.card-body {
+  position: relative;
+  z-index: 1;
+  padding: 30px 18px 24px;
+  text-align: center;
+}
+
+.card-qq {
+  font-size: 16px;
+  color: #333;
+  line-height: 30px;
+  min-height: 30px;
+  margin-bottom: 28px;
+  word-break: break-all;
+}
+
+.qq-btn {
+  display: inline-block;
+  width: 184px;
+  height: 42px;
+  line-height: 42px;
+  border-radius: 24px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #2990f4 0%, #33a3ff 100%);
+  box-shadow: 0 8px 18px rgba(43, 142, 243, 0.28);
+}
+
+.qq-btn:hover {
+  opacity: 0.92;
+}
+
+.second-title {
+  margin-top: 34px;
+}
+
+.enterprise-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.enterprise-box {
+  width: 720px;
+  height: 220px;
+  background-image: url('../../assets/img/contact2.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.enterprise-box a,
+.enterprise-box span {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111;
+  text-decoration: none;
+}
+
+.empty-box {
+  width: 580px;
+  min-height: 120px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(34, 97, 176, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 14px;
+}
+
+@media (max-width: 1360px) {
+  .banner-wrap,
+  .content-wrap {
+    width: 94%;
+  }
+
+  .cards-grid {
+    width: 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .empty-box {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-wrap {
+    top: 96px;
+  }
+
+  .banner {
+    height: 160px;
+  }
+
+  .content-wrap {
+    padding-bottom: 80px;
+  }
+
+  .section-title {
     font-size: 24px;
-    font-weight: bold;
-}
+  }
 
-.navtitle.blue {
-    color: #0096ff;
-}
+  .section-subtitle {
+    font-size: 13px;
+    padding: 0 12px;
+    line-height: 22px;
+  }
 
-.about {
-    background-color: #F4F4F4;
-    height: 210px;
-    line-height: 36px;
-    padding: 40px 60px 0 60px;
-    box-sizing: content-box;
-}
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
 
-.about p {
-    position: relative;
-}
+  .card-head {
+    height: 64px;
+    font-size: 17px;
+  }
 
-.about .img1 {
-    margin-right: 10px;
-}
+  .card-qq {
+    font-size: 15px;
+  }
 
-.about .img2 {
-    position: absolute;
-    margin-left: 10px;
-}
-
-.kefu {
-    background-image: url('../../assets/img/contact1.png');
-    background-size: 100% 100%;
-    height: 414px;
-    display: flex;
-    align-items: center;
-
-}
-
-.kefu_box {
-    max-width: 59%;
-    /* margin: 0 auto; */
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: space-flex-start !important;
-    padding-left: 95px;
-}
-
-.kefuinfo {
-    background: #fff;
-    border-radius: 8px;
-    padding: 4px;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex: 1 1 30%;
-    max-width: 246px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
-}
-
-.kefuinfo img {
-    width: 48px;
-    height: 60px;
-    object-fit: contain;
-}
-
-.kefu_detail .kefu-name {
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 18px;
-}
-
-.kefu_detail .kefu-number {
-    color: #666;
-    font-size: 16px;
-    line-height: 18px;
-    letter-spacing: 1px;
-}
-
-.kefu .kefulist {
-    height: 220px;
-    width: 700px;
-    padding: 15px;
-    box-sizing: content-box;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin: 20px 0 0 20px;
-}
-
-.kefu .kefulist .item {
-    width: 50%;
-
-}
-
-.kefu .kefulist .item .info {
-    display: flex;
-    align-items: center;
-
-}
-
-.qiyekefu {
-    background-image: url('../../assets/img/contact2.png');
-    background-size: 100% 100%;
-    height: 414px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 150px;
-}
-
-.qiyekefu .qq {
-    height: 100px;
-}
-
-.qiyekefu .qq a {
-    text-decoration: none;
-    color: #000
+  .qq-btn {
+    width: 150px;
+    font-size: 15px;
+  }
 }
 </style>

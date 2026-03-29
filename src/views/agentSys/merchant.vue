@@ -8,11 +8,11 @@
 
 <template>
   <div class="home">
-    <div class="gs_title" style="color: white;">下属商户</div>
+    <div class="gs_title" style="color: white;margin-bottom: initial;">下属商户</div>
     <div class="gs_tabbox clearfix mgt15">
       <div class="tabbox">
         <div class="tablebox pdb15 pdt10 bg_fff">
-          <div class="clearfix pdb10">
+          <div class="clearfix pdb10" style="margin-left: 2%;">
             <p class="mgr10">
               <el-button size='small' type="primary" @click="subMerchant.dialog.show = true">添加商户</el-button>
             </p>

@@ -352,7 +352,7 @@
           <dd>
             <span class="inputbox">
               <el-date-picker
-                style="width: 250px"
+                style="width: 190px"
                 size="small"
                 v-model="setTime"
                 value-format="yyyy-MM-dd HH:mm:ss"
@@ -362,7 +362,25 @@
               >
               </el-date-picker>
             </span>
-            <span class="line_tip">系统将在您指定的时间开始提供充值服务</span>
+            <span class="line_tip">系统将在您指定的时间开始提供充值服务(时间超过现在5分钟，即为开启定时开区,开区前5分钟执行加载脚本)</span>
+          </dd>
+        </dl>
+        <dl class="clearfix">
+          <dt>定时删区：</dt>
+          <dd>
+            <span class="inputbox">
+              <el-checkbox v-model="setDelType">系统将在您指定的时间删除分区</el-checkbox>
+            </span>
+          </dd>
+        </dl>
+        <dl class="clearfix">
+          <dt>删区时间：</dt>
+          <dd>
+            <span class="inputbox">
+              <el-date-picker style="width: 250px" size="small" v-model="setDelTime" value-format="yyyy-MM-dd HH:mm:ss"
+                :clearable="false" type="datetime" placeholder="选择日期时间">
+              </el-date-picker>
+            </span>
           </dd>
         </dl>
         <dl class="clearfix" v-if="typeindex === 1 || typeindex === 2">
@@ -376,6 +394,7 @@
                 <el-radio :label="2">全部更新</el-radio>
               </el-radio-group>
             </span>
+            <span class="line_tip">设置了定时开区，该处功能将会失效</span>
           </dd>
         </dl>
         <dl class="clearfix" v-if="typeindex === 1 || typeindex === 2">
@@ -426,6 +445,7 @@ export default {
       installModel: '', // 模板
       modelDrow: [], // 模板的下拉
       glodEgg: true, // 元宝蛋
+      glodScan: 2, // 扫码充值
       notice: '', // 分区公告
       baseSql: {
         type: 0, // 类型
@@ -442,6 +462,8 @@ export default {
         datatype: '' // 数据格式
       },
       setTime: '', // 定时开区
+      setDelType: false, // 定时删区
+      setDelTime: '', // 定时删区时间
       iscreatjb: 1 // 创建脚本
     };
   },
@@ -470,7 +492,10 @@ export default {
           this.installModel = data.data.templateId; // 模板
           this.modelDrow = data.data.templateId; // 模板的下拉
           this.glodEgg = data.data.ybEgg; // 元宝蛋
+          this.glodScan = data.data.scan; // 扫码充值
           this.notice = data.data.notice; // 分区公告
+          this.setDelType = data.data.isDel !== 0;
+          this.setDelTime = data.data.delDate;
           // sql
           if (data.data.dbInfo === null) {
             this.baseSql.type = 0; // 类型
@@ -662,12 +687,15 @@ export default {
             // uuid: '', // 默认参数    *页面无对应*
             webUrl: this.webSet.address, // web通讯中服务地址
             ybEgg: this.glodEgg, // 是否开启元宝蛋
+            scan: this.glodScan, // 是否开启扫码充值
             // applicationUserId: 0, // 默认参数    *页面无对应*
             templateId: this.installModel, // 模板编号
             groups: this.teamdata.teamlist.map(item => {
               return { id: item };
             }),
-            partitionCmdType: this.iscreatjb // 是否创建脚本
+            partitionCmdType: this.iscreatjb, // 是否创建脚本
+            isDel: this.setDelType === true ? 1 : 0, // 是否定时删区
+            delDate: this.setDelTime // 删区时间
           })
           .then(data => {
             if (data.status === 200) {

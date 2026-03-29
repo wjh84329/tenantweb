@@ -50,17 +50,13 @@ export default {
 
 <style scoped>
 .footerbox {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  z-index: 999;
   background-color: #3e3e3e;
+  /* height: 340px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 18px 0;
+  margin-top: 134px;
 }
 .footerbox p {
   /* margin: 15px 0; */

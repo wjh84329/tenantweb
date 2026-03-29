@@ -1,137 +1,115 @@
+<!-- src/views/login/tool.vue -->
 <template>
-  <div>
-    <login-header></login-header>
-    <div style="position: relative;top: 126px;">
-      <div class="banner">
-      <div class="banner-txt">
-        <!-- <img src="../../assets/img/kaiqutitle.png" /> -->
-         <span style="font-size: 48px;">开区助手</span>
-      </div>
-      <div class="banner-right">
-        <!-- <img src="../../assets/img/downtxt.png" style="margin-bottom:30px;" /> -->
-        <!-- <a :href="downurl" target="_blank"><img src="../../assets/img/down.png" /></a> -->
-      </div>
+  <div class="page-wrap">
+    <login-header style="position: fixed"></login-header>
+
+    <div class="head_box">
+      <div class="banner-box"></div>
     </div>
-    <div class="youshi-box">
-      <div class="wrap">
-        <div class="navtitle one">
-          <div class="small">CORE ADVANTAGES</div>
-          <div class="title">服务能力</div>
-          <div class="line"></div>
-        </div>
-        <div class="youshilist">
+
+    <!-- =============== 说明区（4 个图标 + 文字） =============== -->
+    <div class="service-box">
+      <div class="service">
+        <div class="service-list">
           <div class="item">
-            <img src="../../assets/img/kaiquicon1.png" />
-            <div class="title">定时开区合区任务</div>
+            <div class="icon icon1"></div>
+            <div class="title">自动开合区</div>
             <div class="desc">
-              兼容所有32/64位各种系统，绿色安全，不破坏GM服务器
+              <p>自动开放测试区及正式区</p>
+              <p>自动备份合并数据及文本</p>
+              <p>自动合并登录器列表</p>
+              <p>自动合并充值链接</p>
             </div>
           </div>
+
           <div class="item">
-            <img src="../../assets/img/kaiquicon2.png" />
-            <div class="title">智能同步远程列表</div>
-            <div class="desc">智能同步所有列表日期及固定列表模式。</div>
-          </div>
-          <div class="item">
-            <img src="../../assets/img/kaiquicon3.png" />
-            <div class="title">充值保留自动补发</div>
+            <div class="icon icon2"></div>
+            <div class="title">自动生成登录器列表</div>
             <div class="desc">
-              玩家测试区充值正式区自动补发及可任意设置补发比例支持双货币。
+              <p>列表保存本地目录</p>
+              <p>上传FTP服务器</p>
+              <p>上传阿里云OSS</p>
+              <p>登录器列表自定义</p>
             </div>
           </div>
-          <div class="item">
-            <img src="../../assets/img/kaiquicon4.png" />
-            <div class="title">克隆一周任务计划</div>
-            <div class="desc">一次性可设置一周任务计划，实现智能托管。</div>
-          </div>
-          <div class="item">
-            <img src="../../assets/img/kaiquicon5.png" />
-            <div class="title">开区信息短信通知</div>
-            <div class="desc">开区信息实时短信通知，GM可实时了解开区情况。</div>
-          </div>
-        </div>
-        <div class="navtitle">
-          <div class="small">FUNCTION INTRODUCTION</div>
-          <div class="title">功能介绍</div>
-          <div class="line"></div>
-        </div>
-      </div>
-    </div>
-    <div class="gongneng">
-      <div class="item bg1">
-        <img src="../../assets/img/kaiqui1.png" />
-        <div class="title">一键克隆</div>
-        <div class="desc">
-          一键克隆版本<br />
-          一键添加任务
-        </div>
-      </div>
-      <div class="item bg2">
-        <img src="../../assets/img/kaiqui2.png" />
-        <div class="title">一键设置</div>
-        <div class="desc">
-          一键添加支付平台，<br />
 
-          自动充值回放补发
-        </div>
-      </div>
-      <div class="item bg3">
-        <img src="../../assets/img/kaiqui3.png" />
-        <div class="title">智能开区合区</div>
-        <div class="desc">
-          一键添加定时合区任务<br />
+          <div class="item">
+            <div class="icon icon3"></div>
+            <div class="title">自动安装平台</div>
+            <div class="desc">
+              <p>测试区多送20%</p>
+              <p>开区后自动修改充值分区名称</p>
+              <p>合区后自动修改充值分区名称</p>
+              <p>自动删除被合并分区充值链接</p>
+            </div>
+          </div>
 
-          自动改列表启动
-        </div>
-      </div>
-      <div class="item bg4">
-        <img src="../../assets/img/kaiqui4.png" />
-        <div class="title">智能服务</div>
-        <div class="desc">
-          自动修改FTP列表<br />
-          阿里OSS列表
-        </div>
-      </div>
-      <div class="item bg5">
-        <img src="../../assets/img/kaiqui5.png" />
-        <div class="title">短信通知</div>
-        <div class="desc">
-          全部运行状态<br />
-          可选择手机短信通知
-        </div>
-      </div>
-    </div>
-    <div class="contactus-box">
-      <div class="wrap">
-        <div class="navtitle one">
-          <div class="small">CONTACT US</div>
-          <div class="title">联系我们</div>
-          <div class="line"></div>
-        </div>
-        <div class="contactus">
-          <div class="bluebox">
-            <p>QQ</p>
-            <p>
-              <a target="_blank"
-                href="https://wpa.qq.com/msgrd?v=3&amp;uin=2851651389&amp;Site=&amp;Menu=yes">2851651389</a>
-            </p>
-          </div>
-          <div class="bluebox">
-            <p>电话</p>
-            <p>4009969297</p>
+          <div class="item">
+            <div class="icon icon4"></div>
+            <div class="title">开区微信消息通知</div>
+            <div class="desc">
+              <p>开区信息实时微信通知</p>
+              <p>GM及时了解开区情况</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- =============== 下载卡片区（3 个卡片） =============== -->
+    <div class="ability-box">
+      <div class="service">
+        <div class="service-list">
+          <div class="item bg1">
+            <div class="info">
+              <div class="title">好开区助手 - 下载地址</div>
+              <div class="desc">
+                支持多引擎，全智能开合区，智能辅助，释放双手，解决GM一切烦恼
+              </div>
+              <div class="btn-box">
+                <button class="btn primary">点击下载</button>
+                <button class="btn secondary">更新日志</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="item bg2">
+            <div class="info">
+              <div class="title">好跨服助手 - 下载地址</div>
+              <div class="desc">
+                支持多引擎，全智能跨服合区，智能辅助，释放双手，解决GM一切烦恼
+              </div>
+              <div class="btn-box">
+                <button class="btn primary">点击下载</button>
+                <button class="btn secondary">更新日志</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="item bg3">
+            <div class="info">
+              <div class="title">GM工具箱 - 下载地址</div>
+              <div class="desc">
+                文件同步、文本搜索替换，版本占用率查询，数据编辑，一个工具搞定！
+              </div>
+              <div class="btn-box">
+                <button class="btn primary">点击下载</button>
+                <button class="btn secondary">更新日志</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <login-footer></login-footer>
-    </div>
   </div>
 </template>
 
 <script>
 import loginFooter from '../../components/loginFooter';
-import loginHeader from '../../components/loginHeader';
-import { netUrl } from '../../assets/js/version';
+import loginHeader from '../../components/loginHeader.vue';
+
 export default {
   components: {
     loginFooter,
@@ -139,209 +117,268 @@ export default {
   },
   data() {
     return {
-      list: [],
-      downurl: netUrl + '/api/Upload/ShowFileNew?name=Wgzs'
+      webName: '' // 网站信息
     };
-  },
-  methods: {
-    getlist() {
-      this.$api.login
-        .rechargeList()
-        .then(data => {
-          if (data.status === 200) {
-            this.list = data.data;
-          }
-        })
-        .catch(err => {
-          this.$messageError(err.message);
-        });
-    }
-  },
-  created() {
-    this.getlist();
   }
 };
 </script>
 
-<style scoped>
-.banner {
-  background-image: url('../../assets/img/kaiqubg2.png');
-  background-size: 100% 100%;
-  height: 433px;
-  display: flex;
-  align-items: center;
+<style lang="scss" scoped>
+@import "../../assets/newLogin/animate.min.css";
+
+// -------------- 通用字体 / 颜色 --------------
+.page-wrap {
+  font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft Yahei", sans-serif;
+  background: #fff;
+  color: #333;
+}
+.head_box {
+    background: url(../../assets/img/banner02.jpg) center center no-repeat;
+    height: 500px;
+    position: relative;
+    // padding-top: 126px;
+    // background: #fff;
 }
 
-.banner-txt {
-  background-color: rgba(255, 255, 255, 0.3);
-  height: 160px;
-  display: flex;
-  align-items: center;
-  width: 60vh;
-  justify-content: flex-end;
-  padding-right: 30px;
+.banner-box {
+    position: relative;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    height: 722px;
 }
 
-.banner-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-left: 30vh;
+.banner-link {
+    position: absolute;
+    top: 166px;
+    left: 6%;
+    display: block;
 }
 
-.wrap {
-  width: 1300px;
+.banner-pic {
+    max-width: 760px;
+    display: block;
+}
+
+a {
+  color: inherit;
+}
+
+/* ============ 4 个图标说明块 ============ */
+.service-box {
+  background: #fff;
+  // padding: 92px 0 92px;
+}
+.service-box .service {
+  width: 1100px;
+  max-width: 100%;
   margin: 0 auto;
 }
-
-.youshi-box {
-  height: 900px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.navtitle {
+.service-box .service .navtitle {
+  margin-bottom: 56px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
-
-.navtitle.one {
-  margin-bottom: 75px;
+.service-box .service .navtitle .title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1aad5b;
+  margin-bottom: 10px;
 }
-
-.navtitle .title {
-  font-size: 36px;
-  margin-bottom: 15px;
-  margin-top: 10px;
-}
-
-.navtitle .small {
+.service-box .service .navtitle .small {
   font-size: 14px;
-  letter-spacing: 2px;
+  color: #666;
 }
-
-.navtitle .line {
-  height: 3px;
-  width: 30px;
-  background-color: #0195ff;
-  border-radius: 2px;
+.service-box .service .service-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(240px, 1fr));
+  gap: 22px;
+  justify-items: center;
 }
-
-.youshilist {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 160px;
-}
-
-.youshilist .item {
-  width: 18%;
-  box-sizing: border-box;
+.service-box .service .service-list .item {
+  width: 260px;
+  // background: #fff;
+  border-radius: 18px;
+  padding: 26px 24px 22px;
+  // box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
   text-align: center;
 }
-
-.youshilist .item .title {
-  font-weight: bold;
+.service-box .service .service-list .item .icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+}
+.service-box .service .service-list .item .icon1 {
+  background-image: url('../../assets/img/service-icon-11.png');
+  background-size: 72px 72px;
+}
+.service-box .service .service-list .item .icon2 {
+  background-image: url('../../assets/img/service-icon-22.png');
+  background-size: 72px 72px;
+}
+.service-box .service .service-list .item .icon3 {
+  background-image: url('../../assets/img/service-icon-33.png');
+  background-size: 72px 72px;
+}
+.service-box .service .service-list .item .icon4 {
+  background-image: url('../../assets/img/service-icon-44.png');
+  background-size: 72px 72px;
+}
+.service-box .service .service-list .item .title {
   font-size: 18px;
-  text-align: center;
-  margin: 48px 0 27px 0;
+  font-weight: 700;
+  color: #1aad5b;
+  margin: 0 auto 12px;
+  line-height: 1.3;
+  position: relative;
 }
-
-.youshilist .item .desc {
+.service-box .service .service-list .item .title::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 2px;
+  margin: 10px auto 0;
+  border-radius: 1px;
+  background: rgba(26, 173, 91, 0.3);
+}
+.service-box .service .service-list .item .desc {
+  margin-top: 14px;
+  color: #555;
+  font-size: 13px;
+  line-height: 1.8;
+  max-width: 180px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.service-box .service .service-list .item .desc p {
+  margin: 6px 0;
+  word-break: keep-all;
+}
+/* ============ 下载工具卡片区 ============ */
+.ability-box {
+  background: #fff;
+  // padding: 100px 0 120px;
+}
+.ability-box .service {
+  width: 1100px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.ability-box .service .navtitle {
+  margin-bottom: 56px;
+  text-align: center;
+}
+.ability-box .service .navtitle .title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1aad5b;
+  margin-bottom: 10px;
+}
+.ability-box .service .navtitle .small {
   font-size: 14px;
-  line-height: 24px;
-  text-align: left;
+  color: #666;
 }
-
-.gongneng {
-  display: flex;
-  justify-content: space-between;
+.ability-box .service .service-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 22px;
+  justify-items: center;
 }
-
-.gongneng .item {
-  width: 20%;
-  box-sizing: border-box;
-  text-align: center;
-  height: 540px;
-  color: #fff;
+.ability-box .service .service-list .item {
+  width: 320px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+.ability-box .service .service-list .item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 28px 48px rgba(0, 0, 0, 0.14);
+}
+.ability-box .service .service-list .item .info {
+  position: relative;
+  padding: 32px 22px 26px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  // min-height: 320px;
 }
-
-.gongneng .item .title {
-  font-weight: bold;
-  font-size: 24px;
-  margin: 48px 0 27px 0;
+.ability-box .service .service-list .item .info::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 82px;
+  background: linear-gradient(90deg, #1a6bf8, #2fb2ff);
+  clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
 }
-
-.gongneng .item .desc {
+.ability-box .service .service-list .item .info .title {
+  position: relative;
+  z-index: 1;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.ability-box .service .service-list .item .info .desc {
+  position: relative;
+  z-index: 1;
+  margin-top: 42px;
   font-size: 14px;
-  line-height: 24px;
+  color: #333;
+  line-height: 1.8;
 }
-
-.gongneng .item.bg1 {
-  background-image: url('../../assets/img/kaiquimg1.png');
-  background-size: 100% 100%;
-}
-
-.gongneng .item.bg2 {
-  background-image: url('../../assets/img/kaiquimg2.png');
-  background-size: 100% 100%;
-}
-
-.gongneng .item.bg3 {
-  background-image: url('../../assets/img/kaiquimg3.png');
-  background-size: 100% 100%;
-}
-
-.gongneng .item.bg4 {
-  background-image: url('../../assets/img/kaiquimg4.png');
-  background-size: 100% 100%;
-}
-
-.gongneng .item.bg5 {
-  background-image: url('../../assets/img/kaiquimg5.png');
-  background-size: 100% 100%;
-}
-
-.contactus-box {
-  padding: 75px 0 100px 0;
-}
-
-.contactus {
-  background-image: url('../../assets/img/contactus.png');
-  background-size: 100% 100%;
-  height: 412px;
+.ability-box .service .service-list .item .info .btn-box {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
+  gap: 12px;
+  // margin-top: auto;
 }
-
-.contactus .bluebox {
-  background-image: url('../../assets/img/conbg.png');
-  width: 376px;
-  height: 155px;
-  text-align: center;
+.ability-box .service .service-list .item .info .btn {
+  width: 120px;
+  padding: 10px 0;
+  border-radius: 999px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.22s ease, filter 0.22s ease;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+}
+.ability-box .service .service-list .item .info .btn.primary {
+  background: linear-gradient(90deg, #1a6bf8, #2fb2ff);
   color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
+}
+.ability-box .service .service-list .item .info .btn.secondary {
+  background: rgba(0, 0, 0, 0.22);
+  color: rgba(255, 255, 255, 0.92);
+}
+.ability-box .service .service-list .item .info .btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
 }
 
-.contactus .bluebox p:last-child {
-  font-size: 30px;
-  margin-top: 15px;
+// ============ 响应式 ============
+
+@media (max-width: 1100px) {
+  .service-box .service .service-list,
+  .ability-box .service .service-list {
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+  }
 }
 
-.contactus .bluebox a {
-  color: #fff;
-  text-decoration: none;
+@media (max-width: 780px) {
+  .service-box .service,
+  .ability-box .service {
+    width: 90%;
+  }
+
+  .service-box .service .service-list,
+  .ability-box .service .service-list {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

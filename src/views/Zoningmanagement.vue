@@ -118,6 +118,8 @@
           @click="handleClose(selectList)">删除</el-button>
         <el-button size="small" type="warning" :disabled="selectList.length === 0"
           @click="handleLoad(selectList)">加载所选分区</el-button>
+        <el-button size="small" type="info"
+          @click="Interval()">定时改名</el-button>
       </div>
       </div>
     </div>
@@ -178,6 +180,9 @@ export default {
       this.total = 0;
       this.tableData = [];
       this.getlist();
+    },
+    Interval() {
+      this.$router.push({ path: '/personal/orderInterval' });
     },
     // 在加载前执行检测，返回 Promise（检测成功 resolve，失败 reject）
     checkBeforeLoad(id) {

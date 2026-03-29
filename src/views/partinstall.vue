@@ -289,11 +289,18 @@
           <dt>定时开区：</dt>
           <dd>
             <span class="inputbox">
-              <el-date-picker style="width: 250px" size="small" v-model="setTime" value-format="yyyy-MM-dd HH:mm:ss"
-                :clearable="false" type="datetime" placeholder="选择日期时间">
+              <el-date-picker
+                style="width: 190px"
+                size="small"
+                v-model="setTime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                :clearable="false"
+                type="datetime"
+                placeholder="选择日期时间"
+              >
               </el-date-picker>
             </span>
-            <span class="line_tip">系统将在您指定的时间开始提供充值服务</span>
+            <span class="line_tip">系统将在您指定的时间开始提供充值服务(时间超过现在5分钟，即为开启定时开区,开区前5分钟执行加载脚本)</span>
           </dd>
         </dl>
         <dl class="clearfix">
@@ -325,6 +332,7 @@
                 <el-radio :label="2">全部更新</el-radio>
               </el-radio-group>
             </span>
+            <span class="line_tip">设置了定时开区，该处功能将会失效</span>
           </dd>
         </dl>
         <dl class="clearfix" v-if="typeindex === 1 || typeindex === 2">

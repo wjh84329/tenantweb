@@ -258,7 +258,7 @@ export default {
       margin-bottom: 10px;
       .tit {
         font-size: 14px;
-        color: #fff;
+        color: black;
         margin-right: 5px;
       }
       .txtbox {

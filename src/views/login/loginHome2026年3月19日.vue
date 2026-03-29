@@ -38,17 +38,20 @@
         </div>
         <div class="head_box">
             <div class="banner-box">
-                <!-- <span class="banner-link" target="_blank">
+                <span class="banner-link" target="_blank">
                     <img src="../../assets/newLogin/banner-pic.png" class="banner-pic" />
-                </span> -->
+                </span>
 
                 <div class="width_new">
                     <div class="login-box right">
+                        <div class="yello_line"></div>
+
                         <!-- 账号登录 -->
                         <div v-show="isPwdLoginShow" class="account-login" id="account-login">
                             <div class="login-box-label">
-                                <div class="tab-item" :class="{ active: isPwdLoginShow }" @click="tab(1)">密码登录</div>
-                                <div class="tab-item" :class="{ active: isWxQrLoginShow }" @click="tab(2)">扫码登录</div>
+                                <span class="login-e">登录账号</span>
+                                <img class="right toggle-img" src="../../assets/newLogin/login-code.png"
+                                    @click="tab(2)" />
                             </div>
 
                             <form @submit.prevent="singin">
@@ -77,7 +80,7 @@
                                     </div>
                                     <el-input placeholder="请输入验证码" :disabled="false" v-model="form.code"
                                         style="flex: 1"></el-input>
-                                    <img class="qrcode" id="code" style="width: 100px; height: 38px;margin-left: 10px;" alt=""
+                                    <img class="qrcode" id="code" style="width: 100px; height: 38px" alt=""
                                         :src="randomCode" v-on:click="getQrcode()" />
                                 </div>
 
@@ -98,13 +101,14 @@
                         <!-- 二维码登录 -->
                         <div v-show="isWxQrLoginShow" class="wetch-login" id="wetch-login">
                             <div class="login-box-label">
-                                <div class="tab-item" :class="{ active: isPwdLoginShow }" @click="tab(1)">密码登录</div>
-                                <div class="tab-item" :class="{ active: isWxQrLoginShow }" @click="tab(2)">扫码登录</div>
+                                <span class="login-e">二维码登录</span>
+                                <img class="right toggle-img" src="../../assets/newLogin/login-pwd.png"
+                                    @click="tab(1)" />
                             </div>
 
                             <img class="wx-image" :src="qrCodeUrl || '../../assets/images/qrcode.png'" />
 
-                            <div class="login-input" style="margin-top: -10px;border: none;text-align: center">
+                            <div class="login-input" style="margin-top: -20px;border: none;text-align: center">
                                 <span class="wetch-login-tip" style="text-align: center;width: 100%;">请先绑定公众号再使用</span>
                             </div>
 
@@ -116,6 +120,215 @@
                 </div>
             </div>
         </div>
+        <div class="select-box"
+            v-hover-active="{ inView: true, inViewAnimation: 'animate__animated animate__backInUp', once: true }">
+            <div class="loop-activity">
+                <img src="../../assets/newLogin/icon1.png" />
+                <div class="activity-detail">
+                    <div class="activity-label">新程序高能</div>
+                    <div class="activity-content">
+                        PCI-DSS安全认证<br>
+                        多节点高防服务器支持秒速链接<br>
+                        365天保障平台实时流畅高效访问
+                    </div>
+                </div>
+            </div>
+            <div class="loop-activity">
+                <img src="../../assets/newLogin/icon2.png" />
+                <div class="activity-detail">
+                    <div class="activity-label">功能强 超便捷</div>
+                    <div class="activity-content">
+                        稳定运营十年，诚信共赢<br>
+                        全新功能待您接入<br>
+                        多渠道稳定高效
+                    </div>
+                </div>
+            </div>
+            <div class="loop-activity">
+                <img src="../../assets/newLogin/icon3.png" />
+                <div class="activity-detail">
+                    <div class="activity-label">可靠承载重托</div>
+                    <div class="activity-content">更多个性化服务功能持续更新中...</div>
+                </div>
+            </div>
+        </div>
+        <section class="fixed-section core-advantage"
+            v-hover-active="{ inView: true, inViewAnimation: 'animate__animated animate__backInUp', once: true }">
+            <div class="label_box">
+                <div class="label_title">七星·核心优势</div>
+                <div class="label_content">欢迎您来电来函咨询洽谈!</div>
+            </div>
+            <div class="core_box">
+                <div class="core" v-hover-active="{ animation: 'cores_box', enterDelay: 80 }">
+                    <div><img src="../../assets/newLogin/icon11.png" height="80" alt="" /></div>
+                    <div class="core_detail">
+                        <div class="core-name">专业技术服务</div>
+                        <div class="core-text">正规订单空中分账，按照合同规定进行订单分账，全称任何环节，不会也无法触碰到任何一
+                            方的分润，且所有资金没有沉淀直接分账到各方的虚拟账户中去，有执牌三方进行结算。</div>
+                    </div>
+                </div>
+                <div class="core" v-hover-active="{ animation: 'cores_box', enterDelay: 80 }">
+                    <div><img src="../../assets/newLogin/icon10.png" height="80" alt="" /></div>
+                    <div class="core_detail">
+                        <div class="core-name">合规合法运营</div>
+                        <div class="core-text">银联/网银进行转接清算，支付公司进行审核管理及资金清分，真正规避二清风险； 支付公司提供
+                            财务认可的业务凭证，解决三流合一问题。 中国支付清算协会对系统代码审核查验，确认分账系统的合规性、真实性的同时，
+                            确保游戏运营商的资金绝对归属权。</div>
+                    </div>
+                </div>
+                <div class="core" v-hover-active="{ animation: 'cores_box', enterDelay: 80 }">
+                    <div><img src="../../assets/newLogin/icon12.png" height="80" alt="" /></div>
+                    <div class="core_detail">
+                        <div class="core-name">超强管理守护资金安全</div>
+                        <div class="core-text">轻松三步完成系统接入，让游戏数字化运营更便捷，最大程度保障客户业务稳定性和连续性。
+                            准确、高效、灵活的结算方式，为广大商户提供收款后随时查账、实时对账等服务。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="fixed-section free-benefit"
+            v-hover-active="{ inView: true, inViewAnimation: 'animate__animated animate__backInLeft', once: true }">
+            <div class="label_box">
+                <div class="label_title">免费福利</div>
+                <div class="label_content"></div>
+            </div>
+            <div class="advantage_box">
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/mf1.png" />
+                    <div class="advantage_text">
+                        <h1>全自动智能开区助手<span class="tag">(包安装)</span></h1>
+                        <p>定制级自研超强助手一次简单设置无限智能循环真正解放双手开区合区无忧永久包安装包售后</p>
+                    </div>
+                </div>
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/mf2.png" />
+                    <div class="advantage_text">
+                        <h1>新微信动态密保验证<span class="tag">(包安装)</span></h1>
+                        <p>最新版微信动态密保验证速度更快更准紧跟市场不断更新</p>
+                    </div>
+                </div>
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/mf3.png" />
+                    <div class="advantage_text">
+                        <h1>定制版超强会员站程序</h1>
+                        <p>免架设，节约服务器成本，登录后台一键管理会员站程序所有网站模块，10分即可打造专属会员站。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="advantage_box">
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/mf4.png" />
+                    <div class="advantage_text">
+                        <h1>公众号集成便携功能</h1>
+                        <p>微信公众号集成所有功能，使用便捷，每笔交易实时提醒。</p>
+                    </div>
+                </div>
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/mf5.png" />
+                    <div class="advantage_text">
+                        <h1>免费高防空间、低价服务器</h1>
+                        <p>免费400G高防空间，真实防御，无视攻击，并享受全网最低的各地机房价格。</p>
+                    </div>
+                </div>
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/mf6.png" />
+                    <div class="advantage_text">
+                        <h1>低折扣封挂插件、登录器</h1>
+                        <p>享受主流封挂插件、登录器、各类开区小工具等优惠政策</p>
+                    </div>
+                </div>
+            </div>
+            <div class="advantage_box">
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/mf7.png" />
+                    <div class="advantage_text">
+                        <h1>独创发布站精准来路统计</h1>
+                        <p>区别于传统来路统计，独创自研精湛统计方法，多维度统计玩家真实在线、点击、来路、充值等数据，助力高效开区快人一步。</p>
+                    </div>
+                </div>
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/mf8.png" />
+                    <div class="advantage_text">
+                        <h1>独创交易积分兑换实物奖品</h1>
+                        <p>全网唯一交易量即得积分系统，可直接兑换:手机、平板、键鼠等实物豪礼，多位作商共同见证真实有效。</p>
+                    </div>
+                </div>
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/mf9.png" />
+                    <div class="advantage_text">
+                        <h1>游戏内扫码&一键通区充值</h1>
+                        <p>独创游戏内便捷扫码付款，无需跳出 外部浏览器充值，便捷通区充值。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="fixed-section ai_box"
+            v-hover-active="{ inView: true, inViewAnimation: 'animate__animated animate__backInLeft', once: true }">
+            <div class="label_box">
+                <div class="label_title">提供国内卓越、快速、稳定的传奇计费助手</div>
+                <div class="label_content">安全可靠的支付平台程序满足你游戏支付的全面需要</div>
+            </div>
+            <div class="ai_content">
+                <div class="ai_left">
+                    <div class="item" v-hover-active="{ animation: 'ais_bg', enterDelay: 80 }">
+                        <img src="../../assets/newLogin/icon_a1.png" class="icon a1">
+                        <h1>多种比例模式</h1>
+                        <div class="text">
+                            <p>多渠道</p>
+                            <p>多种收费方式</p>
+                            <p>及时稳定</p>
+                            <p>安全高效</p>
+                            <p>PCI-DSS安全认证</p>
+                        </div>
+                    </div>
+                    <div class="item" v-hover-active="{ animation: 'ais_bg', enterDelay: 80 }">
+                        <img src="../../assets/newLogin/icon_a2.png" class="icon a1">
+                        <h1>多种秒结算方式</h1>
+                        <div class="text">
+                            <p>24小时随提随结</p>
+                            <p>最快一分钟到账</p>
+                            <p>传统结算模式</p>
+                            <p>秒结算模式</p>
+                            <p>自由切换</p>
+                        </div>
+                    </div>
+                    <div class="item" v-hover-active="{ animation: 'ais_bg', enterDelay: 80 }">
+                        <img src="../../assets/newLogin/icon_a3.png" class="icon a1">
+                        <h1>多种比例模式</h1>
+                        <div class="text">
+                            <p>不黑单</p>
+                            <p>秒结算</p>
+                            <p>九年平台</p>
+                            <p>您值得拥有</p>
+                            <p>支持来路统计</p>
+                        </div>
+                    </div>
+                    <div class="item" v-hover-active="{ animation: 'ais_bg', enterDelay: 80 }">
+                        <img src="../../assets/newLogin/icon_a4.png" class="icon a1">
+                        <h1>急速定时整区补发</h1>
+                        <div class="text">
+                            <p>自动提交售卡</p>
+                            <p>自动提交换卡</p>
+                            <p>为您提供</p>
+                            <p>多途径</p>
+                            <p>点卡解决方案</p>
+                        </div>
+                    </div>
+                    <div class="item" v-hover-active="{ animation: 'ais_bg', enterDelay: 80 }">
+                        <img src="../../assets/newLogin/icon_a5.png" class="icon a1">
+                        <h1>功能一步到位</h1>
+                        <div class="text">
+                            <p>7x24小时贴心客服</p>
+                            <p>资金安全</p>
+                            <p>服务省心</p>
+                            <p>功能齐全</p>
+                            <p>让您安心放心</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="fixed-section free-benefit"
             v-hover-active="{ inView: true, inViewAnimation: 'animate__animated animate__backInLeft', once: true }">
             <div class="label_box">
@@ -144,6 +357,15 @@
                         <p>轻松查看账户明细，降低企业在财务人员对账方面的投入，交易数据清晰明了。</p>
                     </div>
                 </div>
+            </div>
+            <div class="advantage_box">
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/in_icon_4.png" />
+                    <div class="advantage_text">
+                        <h1>快速服务</h1>
+                        <p>成熟完善的售前与售后服务，1V1专属销售客服跟进，7X24小时提供技术支持。</p>
+                    </div>
+                </div>
                 <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
                     <img src="../../assets/newLogin/in_icon_5.png" />
                     <div class="advantage_text">
@@ -151,9 +373,38 @@
                         <p>多机房异地容灾系统，专业的运维团队值守，稳如磐石的系统保障。</p>
                     </div>
                 </div>
+                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/in_icon_6.png" />
+                    <div class="advantage_text">
+                        <h1>信息安全</h1>
+                        <p>所有数据信息全程HTTPS传输加密，通过调用数字签名验证ACL权限进行控制。</p>
+                    </div>
+                </div>
             </div>
         </section>
 
+        <section class="fixed-section contact"
+            v-hover-active="{ inView: true, inViewAnimation: 'animate__animated animate__backInLeft', once: true }">
+            <div class="label_box">
+                <div class="label_title">专属客服QQ</div>
+                <div class="label_content">新用户请选择某个客服进行联系，协助您完成注册并签约。</div>
+            </div>
+            <div class="kefu_box">
+                <div class="kefu" v-for="(item, idx) in serviceQq" :key="idx"
+                    v-hover-active="{ animation: 'kefus', enterDelay: 80 }">
+                    <img src="../../assets/newLogin/icon8.png" alt="">
+                    <div class="kefu_detail">
+                        <div class="kefu-name">{{ item.name }}:{{ item.qq }}</div>
+                        <div class="kefu-number">{{ item.desc }}</div>
+                        <div style="height: 27px;margin-top: 15px;">
+                            <a :href="`tencent://message/?uin=${item.qq}&Site=xxx&Menu=yes`">
+                                <img style="width: 74px;height: 23px;" src="../../assets/newLogin/QQ.gif" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <login-footer></login-footer>
     </div>
 </template>
@@ -316,7 +567,6 @@ export default {
   },
   data() {
     return {
-      ubAccountLogin: false,
       current: 1,
       serviceQq: [],
       qrExpired: false,
@@ -736,14 +986,13 @@ export default {
 }
 
 .login-box {
-  width: 360px;
-  padding: 22px 20px 24px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
-  position: absolute;
-  right: 6%;
-  top: 16%;
+    width: 440px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .login-box .tabs {
@@ -1149,6 +1398,17 @@ export default {
     display: block;
 }
 
+/* 顶部黄色细条 —— 示例中的 yello_line */
+.login-box::before {
+    content: "";
+    display: block;
+    height: 6px;
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(90deg, #ffd24d 0%, #ffb13b 100%);
+    margin: -18px calc(-20px) 12px calc(-20px);
+}
+
 /* tabs 保持横向，但微调位置 */
 .login-box .tabs {
     display: flex;
@@ -1306,13 +1566,13 @@ export default {
 
 .page-wrap {
     font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft Yahei", sans-serif;
-    background: #fff;
+    background: #f5f5f5;
 }
 
 /* banner 与登录布局 */
 .head_box {
-    background: url(../../assets/img/banner-home.jpg) center center no-repeat;
-    height: 500px;
+    background: url(../../assets/newLogin/banner.jpg) center top no-repeat;
+    height: 700px;
     position: relative;
     // padding-top: 126px;
     // background: #fff;
@@ -1342,7 +1602,7 @@ export default {
 .width_new {
     position: absolute;
     right: 6%;
-    top: 122px;
+    top: 186px;
 }
 
 .login-box {
@@ -1353,28 +1613,25 @@ export default {
     padding: 18px 20px 26px;
     box-sizing: border-box;
     position: relative;
-    min-height: 335px;
+    min-height: 355px;
+}
+
+.yello_line {
+    height: 6px;
+    // width: 100%;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(90deg, #ffd24d 0%, #ffb13b 100%);
+    margin: -18px -20px 12px -20px;
 }
 
 /* 标签栏切换图标 */
 .login-box-label {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-.login-box-label .tab-item {
-  flex: 1;
-  text-align: center;
-  padding: 10px 0;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
 }
 
-.login-box-label .tab-item.active {
-  color: #0d6efd;
-  border-bottom-color: #0d6efd;
-}
 .login-e {
     font-size: 18px;
     font-weight: 700;
@@ -1597,11 +1854,12 @@ export default {
 
 /* 免费福利 / 优势卡片 */
 .advantage_box {
-  max-width: 1200px;
-  margin: 0 auto 18px;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(240px, 1fr));
-  gap: 18px;
+    max-width: 1200px;
+    margin: 0 auto 18px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .advantage_item {
@@ -1827,22 +2085,21 @@ export default {
     transition: all 0.3s;
     animation-fill-mode: none;
 }
-
 /* AI 卡片 hover/选中：文字强制白色 */
 .ai_left .item.ais_bg:hover,
 .ai_left .item.active {
-    color: #fff;
+  color: #fff;
 }
 
 .ai_left .item.ais_bg:hover .text p,
 .ai_left .item.active .text p,
 .ai_left .item.ais_bg:hover h1,
 .ai_left .item.active h1 {
-    color: #fff !important;
+  color: #fff !important;
 }
 
 .ai_left .item.ais_bg:hover h1,
 .ai_left .item.active h1 {
-    border-bottom-color: rgba(255, 255, 255, 0.35);
+  border-bottom-color: rgba(255, 255, 255, 0.35);
 }
 </style>

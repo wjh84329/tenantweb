@@ -79,8 +79,9 @@
             <dd>
               <span class="inputbox pdt5">
                 <el-radio-group v-model="baseInfo.isShowGlod">
-                  <el-radio :label="0">是</el-radio>
-                  <el-radio :label="1">否</el-radio>
+                  <el-radio :label="0">完全显示</el-radio>
+                  <el-radio :label="1">部分显示</el-radio>
+                  <el-radio :label="2">不显示</el-radio>
                 </el-radio-group>
               </span>
             </dd>
@@ -181,8 +182,10 @@
             <dt>游戏引擎：</dt>
             <dd>
               <span class="inputbox">
-                <el-select size="small" popper-class="custom-select" v-model="baseInfo.gameEngine" ref="baseGameEngine" placeholder="请选择" @change="gameEngineChange">
-                  <el-option v-for="(item,i) in gameEnginedrow" :key="'yq'+i" :label="item.engine" :value="item.engine">
+                <el-select size="small" popper-class="custom-select" v-model="baseInfo.gameEngine" ref="baseGameEngine"
+                  placeholder="请选择" @change="gameEngineChange">
+                  <el-option v-for="(item, i) in gameEnginedrow" :key="'yq' + i" :label="item.engine"
+                    :value="item.engine">
                   </el-option>
                 </el-select>
               </span>
@@ -215,7 +218,8 @@
                   <el-option v-for="(item) in scanModelDrow" :key="item.id" :label="item.title" :value="item.id">
                   </el-option>
                 </el-select>
-                <el-button style="margin-left: 15px;" size="small" type="primary" @click="openQrcodeDialog(false)">创建二维码模版</el-button>
+                <el-button style="margin-left: 15px;" size="small" type="primary"
+                  @click="openQrcodeDialog(false)">创建二维码模版</el-button>
               </span>
             </dd>
           </dl>
@@ -236,7 +240,8 @@
                   <el-option v-for="(item) in modelDrow" :key="item.id" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
-                <el-button style="margin-left: 15px;" size="small" type="primary" @click="openWxmbDialog(false, null, '热血传奇')">创建微信密保模版</el-button>
+                <el-button style="margin-left: 15px;" size="small" type="primary"
+                  @click="openWxmbDialog(false, null, '热血传奇')">创建微信密保模版</el-button>
               </span>
             </dd>
           </dl>
@@ -369,7 +374,8 @@
                         <th width="180">脚本命令</th>
                         <th width="100">赠送比例</th>
                         <th width="180">赠送方式</th>
-                        <th width="50" colspan="2">显示选项</th>
+                        <th width="70">网站显示</th>
+                        <th width="120">游戏显示</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -393,10 +399,14 @@
                           </el-select>
                         </td>
                         <td class="tc">
-                          <el-checkbox v-model="item.show">游戏</el-checkbox>
+                          <el-checkbox v-model="item.isShow">网站</el-checkbox>
                         </td>
                         <td class="tc">
-                          <el-checkbox v-model="item.isShow">网站</el-checkbox>
+                          <el-select v-model="item.show" size="small" placeholder="请选择" style="width: 110px;">
+                            <el-option label="显示" :value="0"></el-option>
+                            <el-option label="部分显示" :value="1"></el-option>
+                            <el-option label="不显示" :value="2"></el-option>
+                          </el-select>
                         </td>
                         <td>
                           <el-button size="small" type="danger" @click="delAttach(i)">删除</el-button>
@@ -454,8 +464,9 @@
                         </td>
                         <td>
                           <span class="mgr5 basecolor">赠送：</span>
-                          <el-input style="display:inline-block;width: 150px;" :ref="'inciteGiveAmount' + i" size="small"
-                            type="number" :disabled="!inciteInfo.checked" v-model="item.giveAmount"></el-input> 元
+                          <el-input style="display:inline-block;width: 150px;" :ref="'inciteGiveAmount' + i"
+                            size="small" type="number" :disabled="!inciteInfo.checked"
+                            v-model="item.giveAmount"></el-input> 元
                         </td>
                         <td>
                           <el-button size="small" type="danger" :disabled="!inciteInfo.checked"
@@ -501,22 +512,24 @@
                         <th width="150">文件路径</th>
                         <th width="100">赠送比例</th>
                         <th width="180">赠送方式</th>
-                        <th width="50" colspan="2">显示选项</th>
+                        <th width="70">网站显示</th>
+                        <th width="120">游戏显示</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="(item, i) in integralInfo.integralList" :key="'integral' + i">
                         <td>
-                          <el-input size="small" style="width:100px;" :ref="'integralName' + i"
+                          <el-input size="small" style="width:90px;" :ref="'integralName' + i"
                             @input="onChangeIntegralName(i)" v-model="item.name"></el-input>
                         </td>
                         <td>
-                          <el-input :disabled="true" size="small" style="width:300px;" :ref="'integralFile' + i"
+                          <el-input :disabled="true" size="small" style="width:250px;" :ref="'integralFile' + i"
                             v-model="item.file"></el-input>
                         </td>
                         <td>
-                          <el-input size="small" type="number" :ref="'integralRatio' + i" v-model="item.ratio"></el-input>
+                          <el-input size="small" type="number" :ref="'integralRatio' + i"
+                            v-model="item.ratio"></el-input>
                         </td>
                         <td>
                           <el-select size="small" v-model="item.type" placeholder="请选择" style="width:185px;">
@@ -526,10 +539,14 @@
                           </el-select>
                         </td>
                         <td class="tc">
-                          <el-checkbox v-model="item.show">游戏</el-checkbox>
+                          <el-checkbox v-model="item.isShow">网站</el-checkbox>
                         </td>
                         <td class="tc">
-                          <el-checkbox v-model="item.isShow">网站</el-checkbox>
+                          <el-select v-model="item.show" size="small" placeholder="请选择" style="width: 110px;">
+                            <el-option label="显示" :value="0"></el-option>
+                            <el-option label="部分显示" :value="1"></el-option>
+                            <el-option label="不显示" :value="2"></el-option>
+                          </el-select>
                         </td>
                         <td>
                           <el-button size="small" type="danger" @click="delIntegral(i)">删除</el-button>
@@ -719,8 +736,8 @@
                         </td>
                         <td>
                           <span class="mgr5 basecolor">随机赠送：</span>
-                          <el-input style="display:inline-block;width: 70px;" type="number" :ref="'redbagStartAmount' + i"
-                            size="small" v-model="item.startAmount"></el-input> --
+                          <el-input style="display:inline-block;width: 70px;" type="number"
+                            :ref="'redbagStartAmount' + i" size="small" v-model="item.startAmount"></el-input> --
                           <el-input style="display:inline-block;width: 70px;" type="number" :ref="'redbagEndAmount' + i"
                             size="small" v-model="item.endAmount"></el-input> 元
                         </td>
@@ -798,7 +815,8 @@
                     <tr>
                       <td :class="{ 'firstd': k === 0 }" v-for="(li, k) in item.amountRate" :key="'rate' + k">
                         <p>{{ k === 0 ? '不足' : '满' }}<el-input class="inp" size="small" type="number"
-                            :ref="'charge' + i + 'amount' + k" v-model="li.amount" @input="moneyInp(k, li.amount)"></el-input>元
+                            :ref="'charge' + i + 'amount' + k" v-model="li.amount"
+                            @input="moneyInp(k, li.amount)"></el-input>元
                         </p>
                         <p class="mgt5">
                           <el-input class="inp secondinp" size="small" type="number" :ref="'charge' + i + 'rate' + k"
@@ -1430,6 +1448,22 @@ export default {
       // }
       this.refreshIntegralFiles();
     },
+    normalizeGiveShow(list) {
+      if (!Array.isArray(list)) return;
+      list.forEach((item) => {
+        if (!item) return;
+
+        const rawShow = item.show;
+        if (rawShow === true) item.show = 0;
+        else if (rawShow === false) item.show = 2;
+        else if (rawShow === 0 || rawShow === 1 || rawShow === 2) item.show = rawShow;
+        else if (rawShow === '0' || rawShow === '1' || rawShow === '2') item.show = Number(rawShow);
+        else item.show = 2;
+
+        const rawIsShow = item.isShow;
+        item.isShow = rawIsShow === true || rawIsShow === 1 || rawIsShow === '1';
+      });
+    },
     // 获取模板的详情
     moduleDetail(id) {
       this.$api.partmodule
@@ -1478,9 +1512,12 @@ export default {
             this.attachInfo.checked = data.data.showAdditional;
             // this.attachInfo.isChecked = data.data.isShowAdditional;
             this.attachInfo.attachList = data.data.additionalGives;
+            this.normalizeGiveShow(this.attachInfo.attachList);
+
             // 积分赠送
             this.integralInfo.checked = data.data.showIntegral;
             this.integralInfo.integralList = data.data.integralGives;
+            this.normalizeGiveShow(this.integralInfo.integralList);
             // 装备赠送
             this.equipmentInfo.checked = data.data.showEquip;
             this.equipmentInfo.isChecked = data.data.isShow;
@@ -1594,7 +1631,7 @@ export default {
     addAttach() {
       this.attachInfo.attachList.push({
         name: '',
-        show: false,
+        show: 2,
         isShow: false,
         command: '',
         ratio: '',
@@ -1610,7 +1647,7 @@ export default {
     addIntegral() {
       this.integralInfo.integralList.push({
         name: '',
-        show: false,
+        show: 2,
         isShow: false,
         file: '',
         ratio: 0,
@@ -2585,6 +2622,7 @@ export default {
 .gs_title {
   background: var(--theme-color);
 }
+
 .tablebox {
   width: 680px;
 
@@ -2855,6 +2893,7 @@ export default {
   overflow-y: auto;
   padding-right: 10px;
 }
+
 .custom-select .el-select-dropdown__list {
   max-height: 500px;
 }
