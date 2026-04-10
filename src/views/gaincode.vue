@@ -215,11 +215,18 @@ export default {
     },
     // 保存自定义域名（这里只做本地保存，可扩展为API调用）
     saveDomains() {
-      const params = this.customDomains.map((domain) => ({
-        name: domain.name,
-        url: domain.url,
-        state: domain.enabled
-      }));
+      const params = this.customDomains.map((domain) => {
+        let url = domain.url || '';
+        if (!/^https?:\/\//i.test(url)) {
+          url = 'http://' + url;
+        }
+        return {
+          name: domain.name,
+          url: url,
+          state: domain.enabled
+        };
+      });
+      // 后续逻辑不变
       this.$api.getcode
         .addCustomDomain(params)
         .then((data) => {

@@ -592,6 +592,16 @@
                         ? '已开启' : '未开启' }}</span>
                   </template>
                 </el-table-column>
+                <el-table-column label="创建二维码" prop="generateQrCode" width="120">
+                  <template slot-scope="scope">
+                    <el-switch
+                      v-model="scope.row.generateQrCode"
+                      :active-value="true"
+                      :inactive-value="false"
+                      @change="val => updateWxmbTemplateQrCodeFlag(scope.row, val)"
+                    />
+                  </template>
+                </el-table-column>
                 <el-table-column prop="createTime" label="创建时间" align="center" min-width="140" />
                 <el-table-column label="操作" align="center" width="120">
                   <template slot-scope="scope">
@@ -1775,6 +1785,7 @@ export default {
         const apiUrl = this.wxmbDialog.isEdit
           ? '/api/WxUserValid/UpdateWxmbTemplate'
           : '/api/WxUserValid/AddWxmbTemplate';
+          this.wxmbDialog.form.generateQrCode = this.wxmbDialog.form.generateQrCode || true; // 确保该字段有值，默认为 false
         api
           .post(apiUrl, this.wxmbDialog.form, {
             headers: { Authorization: 'Bearer ' + header }
@@ -1930,6 +1941,26 @@ export default {
     getQrcodeTitle(id) {
       const item = this.qrcodeTemplatesList.find(item => item.id === id);
       return item ? item.title : id;
+    },
+    async updateWxmbTemplateQrCodeFlag(row, val) {
+      let header = await mgr();
+      api
+        .post('/api/WxUserValid/UpdateWxmbTemplateQrCodeFlag', {
+          id: row.id,
+          generateQrCode: val
+        }, {
+          headers: { Authorization: 'Bearer ' + header }
+        })
+        .then(() => {
+          this.$messageSuccess('二维码开关已更新');
+          // 可选：刷新表格
+          this.getWxmbList();
+        })
+        .catch(err => {
+          this.$messageError(err.message || '更新失败');
+          // 回滚开关状态
+          row.generateQrCode = !val;
+        });
     }
   },
 

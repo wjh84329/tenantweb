@@ -444,7 +444,7 @@
               <span class="inputbox pdt5">
                 <el-radio-group @input="onChangeRadio" v-model="baseInfo.giveOptionState">
                   <el-radio :label="0">按充值金额计算</el-radio>
-                  <el-radio :label="1">充值金额+渠道赠送</el-radio>
+                  <el-radio :label="1">充值金额+渠道赠送计算</el-radio>
                 </el-radio-group>
               </span>
             </dd>
