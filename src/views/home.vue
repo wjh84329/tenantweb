@@ -700,6 +700,8 @@ export default {
             this.chargeInfoData.agentPayAmount = chargeRes.data.agentPayAmount.toFixed(
               2
             );
+            this.chargeInfoData.yesterdayPayAmount = chargeRes.data.yesterdayPayAmount.toFixed(2);
+            this.chargeInfoData.yesterdayProfit = chargeRes.data.yesterdayProfit.toFixed(2);
           }
           // 推广链接（仅代理用户显示）
           if (this.userInfo.type && linkRes.status === 200) {
@@ -788,6 +790,12 @@ export default {
             this.chargeInfoData.agentProfit = data.data.agentProfit.toFixed(2);
             this.chargeInfoData.tenantCount = data.data.tenantCount;
             this.chargeInfoData.agentPayAmount = data.data.agentPayAmount.toFixed(
+              2
+            );
+            this.chargeInfoData.yesterdayPayAmount = data.data.yesterdayPayAmount.toFixed(
+              2
+            );
+            this.chargeInfoData.yesterdayProfit = data.data.yesterdayProfit.toFixed(
               2
             );
           } else if (data.status === 204) {
