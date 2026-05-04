@@ -22,7 +22,7 @@
       </div> -->
       <div class="btnsbox mgt10">
         <router-link style="margin-right: 20px;margin-left: 10px;" tag="span" :to="{path:'/main/partinstallmod?type=1'}">
-          <el-button style="background-color: #f69c0e;color: white;font-weight: 700;" size="small" type="button">+热血传奇模版</el-button>
+          <el-button style="background-color: #f69c0e;color: white;font-weight: 700;" size="small" type="button" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">+热血传奇模版</el-button>
         </router-link>
         <!-- <router-link tag="span" :to="{path:'/main/partinstallmod?type=2'}">
           <el-button style="background-color: #35aa47;color: white;font-weight: 700;" size="small" type="button">+传奇世界模版</el-button>
@@ -57,7 +57,7 @@
               <el-button-group>
                 <el-button size="mini" type="info" @click="editModule(scope.row.id)">编辑</el-button>
                 <el-button size="mini" type="primary" @click="areaClone(scope.row.id)">克隆</el-button>
-                <el-button size="mini" type="danger" :disabled="scope.row.partitionsCount>0" @click="handleClose(scope.row.id)">删除</el-button>
+                <el-button size="mini" type="danger" :disabled="scope.row.partitionsCount>0" @click="handleClose(scope.row.id)" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">删除</el-button>
               </el-button-group>
             </template>
           </el-table-column>

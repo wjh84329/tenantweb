@@ -41,7 +41,7 @@
               <span @click="dialog.show = true">登录密码</span>
             </el-tooltip>
           </li>
-          <li class="noboder">
+          <li class="noboder"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
             <el-tooltip class="item" effect="dark" content="点击查看操作日志" placement="bottom">
               <router-link to="/main/conectKey" tag='span'>通讯秘钥</router-link>
             </el-tooltip>
@@ -98,17 +98,17 @@
               <!-- <el-tooltip class="item" effect="dark" content="点击查看帐户提现记录" placement="bottom">
                 <router-link to="/main/Withdrawalrecords" tag="span" class="linebtn">提现记录</router-link>
               </el-tooltip> -->
-              <el-tooltip class="item" effect="dark" content="点击查看账户收支记录" placement="bottom">
+              <el-tooltip class="item" effect="dark" content="点击查看账户收支记录" placement="bottom"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/Withdrawalrecords" tag="span"
                   class="linebtn">账户收支</router-link>
                 <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">账户收支</span>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="点击查看子账户" placement="bottom">
+              <el-tooltip class="item" effect="dark" content="点击查看子账户" placement="bottom"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/employee" tag="span"
                   class="linebtn">子账户</router-link>
                 <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">子账户</span>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="点击查看微信动态密保" placement="bottom">
+              <el-tooltip class="item" effect="dark" content="点击查看微信动态密保" placement="bottom" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/wechat" tag="span"
                   class="linebtn">微信动态密保</router-link>
                 <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">微信动态密保</span>
@@ -121,7 +121,7 @@
               <el-tooltip class="item" effect="dark" content="点击查看登录日志" placement="bottom">
                 <router-link to="/main/Userlogs" tag="span" class="linebtn">登录日志</router-link>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="点击领取礼品" placement="bottom">
+              <el-tooltip class="item" effect="dark" content="点击领取礼品" placement="bottom"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <!-- <input type="button" class="linebtn" value="领取礼品" @click="goOrder"> -->
                 <span class="linebtn" style="cursor:pointer;" @click="goOrder">领取礼品</span>
               </el-tooltip>
@@ -187,7 +187,7 @@
       </div>
 
     </div>
-    <div class="functionbox gs_shadow mgt15">
+    <div class="functionbox gs_shadow mgt15"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
       <div class="gs_title" style="background: initial;">功能设置</div>
       <div style="display: flex;font-size: 13px;">
         <ul style="width: 47%;">

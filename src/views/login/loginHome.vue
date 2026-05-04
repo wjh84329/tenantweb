@@ -57,7 +57,7 @@
                                         <img src="../../assets/newLogin/icon4.png" alt="" />
                                     </div>
                                     <el-input placeholder="请输入登录帐号" v-model="form.username"
-                                        :disabled="false"></el-input>
+                                        :disabled="false" @keyup.enter.native="singin"></el-input>
                                 </div>
 
                                 <div class="login-input">
@@ -65,7 +65,7 @@
                                         <img src="../../assets/newLogin/icon5.png" alt="" />
                                     </div>
                                     <el-input placeholder="请输入密码" v-model="form.password" :disabled="false"
-                                        show-password></el-input>
+                                        show-password @keyup.enter.native="singin"></el-input>
                                 </div>
 
                                 <div class="login-input code-row">
@@ -76,12 +76,12 @@
                                         <!-- <div><input class="inputbox code" style="width: 100px;" id="Verify" maxlength="10" placeholder="验证码" v-model="form.code" /></div> -->
                                     </div>
                                     <el-input placeholder="请输入验证码" :disabled="false" v-model="form.code"
-                                        style="flex: 1"></el-input>
+                                        style="flex: 1" @keyup.enter.native="singin"></el-input>
                                     <img class="qrcode" id="code" style="width: 100px; height: 38px;margin-left: 10px;" alt=""
                                         :src="randomCode" v-on:click="getQrcode()" />
                                 </div>
 
-                                <button type="button" class="submit-style" @click="singin" :disabled="isLoading">
+                                <button type="submit" class="submit-style" :disabled="isLoading">
                                     {{ isLoading ? '登录中' : '登录' }}
                                 </button>
 
@@ -481,19 +481,21 @@ export default {
     },
     // === 核心：账号密码登录改造 ===
     async singin() {
-      this.isLoading = true;
       // 简单前端校验
       if (!this.form.username || !this.form.password || !this.form.code) {
         this.$messageError('请输入账号、密码和验证码');
         return;
       }
 
+      if (this.isLoading) return;
+      this.isLoading = true;
+
       axios.defaults.withCredentials = true;
 
       // 获取公网 IPv4（原逻辑保留，可选）
       //   let clientIp = null;
       //   try {
-      //     const resp = await fetch('https://v4.ident.me');
+      //     const resp = await fetch('https://icanhazip.com');
       //     if (resp.ok) {
       //       const txt = (await resp.text()).trim();
       //       if (/^\d{1,3}(\.\d{1,3}){3}$/.test(txt)) clientIp = txt;
@@ -546,7 +548,7 @@ export default {
 
       let clientIp = null;
       try {
-        const resp = await fetch('https://v4.ident.me');
+        const resp = await fetch('https://icanhazip.com');
         if (resp.ok) {
           const txt = (await resp.text()).trim();
           if (/^\d{1,3}(\.\d{1,3}){3}$/.test(txt)) clientIp = txt;

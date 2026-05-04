@@ -28,26 +28,26 @@
             @click="setActive('/main/Zoningmanagement')">
             <span class="icon1">分区管理</span>
           </li>
-          <li v-if="hasMenu(4) || $store.state.settlementType != 3" :class="{ active: activeNav === '/main/DA' }"
+          <li v-if="hasMenu(4) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :class="{ active: activeNav === '/main/DA' }"
             :style="activeNav === '/main/DA' ? activeNavStyle : (hoverNav === '/main/DA' ? hoverNavStyle : null)"
             @click="setActive('/main/DA')">
             <span class="icon1">数据分析</span>
           </li>
-          <li @click="setActive('/personal/baseInfo')" v-if="$store.state.settlementType != 3"
+          <li @click="setActive('/personal/baseInfo')" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4"
             :class="{ active: activeNav === '/personal' || activeNav === '/personal/baseInfo' }"
             :style="activeNav === '/personal' || activeNav === '/personal/baseInfo' ? activeNavStyle : (hoverNav === '/personal' ? hoverNavStyle : null)">
             <span class="icon1">账户管理</span>
           </li>
-          <li v-if="$store.state.isEnabledPaid && $store.state.settlementType != 3" @click="setActive('/behalf')"
+          <li v-if="$store.state.isEnabledPaid && $store.state.settlementType != 3 && $store.state.settlementType != 4" @click="setActive('/behalf')"
             :class="{ active: activeNav === '/behalf' }" :style="hoverNav === '/behalf' ? hoverNavStyle : null">
             <span class="icon1">代付管理</span>
           </li>
-          <li v-if="$store.state.userType && $store.state.settlementType != 3" @click="setActive('/agentsystem')"
+          <li v-if="$store.state.userType && $store.state.settlementType != 3 && $store.state.settlementType != 4" @click="setActive('/agentsystem')"
             :class="{ active: activeNav === '/agentsystem' }"
             :style="hoverNav === '/agentsystem' ? hoverNavStyle : null">
             <span class="icon1">代理系统</span>
           </li>
-          <li :class="{ active: activeNav === '/employee' }"
+          <li :class="{ active: activeNav === '/employee' }" v-if="$store.state.settlementType != 4"
             :style="activeNav === '/employee' ? activeNavStyle : (hoverNav === '/employee' ? hoverNavStyle : null)"
             @click="setActive('/employee')">
             <span class="icon1">员工管理</span>
@@ -82,10 +82,10 @@
             <li v-if="hasMenu(16) || $store.state.settlementType != 3" :style="sliderStyle">
               <span class="icon5" @click="refresh('/main/Replacementofrecords')">补发记录</span>
             </li>
-            <li v-if="hasMenu(16) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="hasMenu(16) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
               <span class="icon8" @click="refresh('/main/transfer')">转区点记录</span>
             </li>
-            <li v-if="hasMenu(17) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="hasMenu(17) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
               <span class="icon12" @click="refresh('/main/conectKey')">通讯秘钥</span>
             </li>
             <!-- <li style="color: black;">
@@ -101,7 +101,7 @@
             <!-- <li>
               <router-link tag="span" :to="{path:'/main/Userlogs'}" class="icon8">用户日志</router-link>
             </li> -->
-            <li v-if="hasMenu(18) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="hasMenu(18) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
               <span class="icon9" @click="refresh('/main/gaincode')">获取代码</span>
             </li>
             <!-- <li style="color: black;">
@@ -109,8 +109,11 @@
                 >推广分佣</span
               >
             </li> -->
-            <li v-if="hasMenu(19) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="hasMenu(19) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
               <span class="icon10" @click="download">下载网关</span>
+            </li>
+            <li v-if="isDisablePayApi === true" :style="sliderStyle">
+              <span class="icon13" @click="openApiDoc">接口文档</span>
             </li>
             <!-- <li>
               <span class="icon6" @click="refresh('/main/MobileGameDown')"
@@ -202,7 +205,7 @@ import { mapState } from 'vuex';
 import chargeLink from '../components/chargeLink';
 import Mgr from '../assets/js/SecurityService';
 import mgrs from '../assets/js/securityapi';
-import { netUrl } from '../assets/js/version';
+import { loginUrl, netUrl } from '../assets/js/version';
 import axios from 'axios';
 export default {
   name: 'Home',
@@ -232,7 +235,8 @@ export default {
       },
       activeNav: '/main/home', // 默认选中首页
       skinNum: Number(localStorage.getItem('skinNum')) || 0,
-      hoverNav: '' // 当前 hover 的菜单 path
+      hoverNav: '', // 当前 hover 的菜单 path
+      isDisablePayApi: false
     };
   },
   computed: {
@@ -385,6 +389,7 @@ export default {
           this.$store.commit('settlementType', data.data.settlementType);
           this.$store.commit('setRoleInfo', data.data.roleinfon);
           this.$store.commit('saveisCro', data.data.isCro);
+          this.isDisablePayApi = data.data.isDisablePayApi === true;
           // this.role=data.profile.role;
           console.log(this.$store.state);
         })
@@ -542,6 +547,10 @@ export default {
       } else {
         this.$router.push({ path: path });
       }
+    },
+    openApiDoc() {
+      const merchantBaseUrl = (loginUrl || '').replace(/\/$/, '');
+      window.open(merchantBaseUrl + '/api/doc/ApiDesc.html', '_blank');
     },
     hasMenu(menuId) {
       const menuIds = (this.$store.state.roleInfo || '').split(',').map(id => Number(id));
@@ -837,6 +846,14 @@ export default {
               }
 
               &.icon12 {
+                background-image: url(../assets/images/icons.png);
+                background-repeat: no-repeat;
+                background-position: 32px -448px;
+                height: 32px;
+                line-height: 32px;
+              }
+
+              &.icon13 {
                 background-image: url(../assets/images/icons.png);
                 background-repeat: no-repeat;
                 background-position: 32px -448px;

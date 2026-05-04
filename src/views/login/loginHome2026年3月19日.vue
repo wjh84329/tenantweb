@@ -743,7 +743,7 @@ export default {
       // 获取公网 IPv4（原逻辑保留，可选）
       //   let clientIp = null;
       //   try {
-      //     const resp = await fetch('https://v4.ident.me');
+      //     const resp = await fetch('https://icanhazip.com');
       //     if (resp.ok) {
       //       const txt = (await resp.text()).trim();
       //       if (/^\d{1,3}(\.\d{1,3}){3}$/.test(txt)) clientIp = txt;
@@ -796,7 +796,7 @@ export default {
 
       let clientIp = null;
       try {
-        const resp = await fetch('https://v4.ident.me');
+        const resp = await fetch('https://icanhazip.com');
         if (resp.ok) {
           const txt = (await resp.text()).trim();
           if (/^\d{1,3}(\.\d{1,3}){3}$/.test(txt)) clientIp = txt;
