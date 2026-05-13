@@ -56,7 +56,7 @@
         <div class="count" style="width: 6%;">{{ nickName }}</div>
       </div>
     </div>
-    <div class="container">
+    <div ref="mainScrollArea" class="container">
       <div class="midleContaner" style="background: #f2f2f2;width: 1280px;">
         <div class="slider" :style="sliderStyle">
           <div class="top_tit" :style="headboxStyle">控制面板</div>
@@ -81,6 +81,9 @@
             </li>
             <li v-if="hasMenu(16) || $store.state.settlementType != 3" :style="sliderStyle">
               <span class="icon5" @click="refresh('/main/Replacementofrecords')">补发记录</span>
+            </li>
+            <li v-if="hasMenu(16) || $store.state.settlementType != 3" :style="sliderStyle">
+              <span class="icon12" @click="refresh('/main/orderInterval')">定时任务</span>
             </li>
             <li v-if="hasMenu(16) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
               <span class="icon8" @click="refresh('/main/transfer')">转区点记录</span>
@@ -112,8 +115,8 @@
             <li v-if="hasMenu(19) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
               <span class="icon10" @click="download">下载网关</span>
             </li>
-            <li v-if="isDisablePayApi === true" :style="sliderStyle">
-              <span class="icon13" @click="openApiDoc">接口文档</span>
+            <li :style="sliderStyle">
+              <span class="icon13" @click="openApiDoc">教程文档</span>
             </li>
             <!-- <li>
               <span class="icon6" @click="refresh('/main/MobileGameDown')"
@@ -144,7 +147,7 @@
           </a>
         </li> -->
         <li>
-          <el-tooltip class="item" effect="dark" content="热血传奇" placement="bottom">
+          <el-tooltip class="item" effect="dark" content="点击下载充值网关" placement="bottom">
             <div class="imgbox">
               <img src="../assets/images/index.png" alt="" />
               <span class="mask" @click="loadzip(1)">{{
@@ -196,6 +199,83 @@
     </el-dialog>
     <charge-link v-if="preview" :chargeUrl="chargeUrl" :styleNum="floatingpictures"
       :styletype="floatstyle"></charge-link>
+    <!-- 右侧快捷浮窗（平台技术 / 微信验证 / 下载 / 回顶） -->
+    <div class="merchant-float-dock" :class="{ 'is-collapsed': floatDockCollapsed }">
+      <div class="merchant-float-dock__inner">
+        <div
+          class="merchant-float-dock__item merchant-float-dock__item--toggle"
+          role="button"
+          tabindex="0"
+          :title="floatDockCollapsed ? '展开' : '点击收起'"
+          @click="floatDockCollapsed = !floatDockCollapsed"
+          @keyup.enter="floatDockCollapsed = !floatDockCollapsed"
+        >
+          <i :class="floatDockCollapsed ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right'"></i>
+          <span v-show="!floatDockCollapsed" class="merchant-float-dock__label">点击收起</span>
+        </div>
+        <a
+          class="merchant-float-dock__item"
+          :href="floatDockQqHref('platform')"
+          title="平台技术"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="el-icon-setting"></i>
+          <span v-show="!floatDockCollapsed" class="merchant-float-dock__label">平台技术</span>
+        </a>
+        <a
+          class="merchant-float-dock__item"
+          :href="floatDockQqHref('assistant')"
+          title="助手技术"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="el-icon-service"></i>
+          <span v-show="!floatDockCollapsed" class="merchant-float-dock__label">助手技术</span>
+        </a>
+        <a
+          class="merchant-float-dock__item"
+          :href="floatDockPortalUrl"
+          title="微信验证"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="el-icon-search"></i>
+          <span v-show="!floatDockCollapsed" class="merchant-float-dock__label">微信验证</span>
+        </a>
+        <a
+          class="merchant-float-dock__item"
+          :href="floatDockPortalUrl"
+          title="助手下载"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="el-icon-download"></i>
+          <span v-show="!floatDockCollapsed" class="merchant-float-dock__label">助手下载</span>
+        </a>
+        <a
+          class="merchant-float-dock__item"
+          :href="floatDockPortalUrl"
+          title="备用下载"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="el-icon-folder"></i>
+          <span v-show="!floatDockCollapsed" class="merchant-float-dock__label">备用下载</span>
+        </a>
+        <div
+          class="merchant-float-dock__item"
+          role="button"
+          tabindex="0"
+          title="回到顶部"
+          @click="scrollMainToTop"
+          @keyup.enter="scrollMainToTop"
+        >
+          <i class="el-icon-arrow-up"></i>
+          <span v-show="!floatDockCollapsed" class="merchant-float-dock__label">回到顶部</span>
+        </div>
+      </div>
+    </div>
     <iframe name="downloadIframe" style="display:none;"></iframe>
   </div>
 </template>
@@ -223,7 +303,7 @@ export default {
         show: false,
         cq3: '', // 传奇3
         ty: '', // 传奇世界
-        wg: '', // 热血传奇
+        wg: '', // 网关安装包（管理端资源 key 与历来一致，如 wg）
         sql: '', // sql
         ltcq: '',
         yktl: '',
@@ -236,7 +316,19 @@ export default {
       activeNav: '/main/home', // 默认选中首页
       skinNum: Number(localStorage.getItem('skinNum')) || 0,
       hoverNav: '', // 当前 hover 的菜单 path
-      isDisablePayApi: false
+      isDisablePayApi: false,
+      floatDockCollapsed: false,
+      // 微信验证 / 助手下载 / 备用下载 统一打开的站点
+      floatDockPortalUrl: 'https://www.haozs.com/',
+      // 平台技术、助手技术：客服 QQ 号（用于 wpa 拉起会话）；若某项填了 floatDockQqHrefOverride 则优先用完整链接
+      floatDockQqUin: {
+        platform: '887572',
+        assistant: '284016'
+      },
+      floatDockQqHrefOverride: {
+        platform: '',
+        assistant: ''
+      }
     };
   },
   computed: {
@@ -452,7 +544,7 @@ export default {
     dialoginit() {
       this.dialog.cq3 = ''; // 传奇3
       this.dialog.ty = ''; // 传奇世界
-      this.dialog.wg = ''; // 热血传奇
+      this.dialog.wg = ''; // 网关
       this.dialog.sql = ''; // sql
     },
     // 下载
@@ -562,6 +654,34 @@ export default {
       document.documentElement.style.setProperty('--theme-color', bg);
       document.documentElement.style.setProperty('--theme-text', txt);
       localStorage.setItem('themeColor', bg);
+    },
+    floatDockQqHref(role) {
+      const key = role === 'assistant' ? 'assistant' : 'platform';
+      const override = (this.floatDockQqHrefOverride && this.floatDockQqHrefOverride[key]) || '';
+      if (String(override).trim()) {
+        return String(override).trim();
+      }
+      const uin = (
+        key === 'assistant'
+          ? (this.floatDockQqUin && this.floatDockQqUin.assistant) || ''
+          : (this.floatDockQqUin && this.floatDockQqUin.platform) || ''
+      )
+        .toString()
+        .trim();
+      if (!uin) {
+        return this.floatDockPortalUrl;
+      }
+      return `https://wpa.qq.com/msgrd?v=3&uin=${encodeURIComponent(uin)}&site=qq&menu=yes`;
+    },
+    scrollMainToTop() {
+      const el = this.$refs.mainScrollArea;
+      if (el && typeof el.scrollTo === 'function') {
+        el.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (el) {
+        el.scrollTop = 0;
+      } else {
+        window.scrollTo(0, 0);
+      }
     }
   },
   created() {
@@ -856,7 +976,7 @@ export default {
               &.icon13 {
                 background-image: url(../assets/images/icons.png);
                 background-repeat: no-repeat;
-                background-position: 32px -448px;
+                background-position: 32px -480px;
                 height: 32px;
                 line-height: 32px;
               }
@@ -912,6 +1032,74 @@ export default {
         display: block;
       }
     }
+  }
+}
+
+.merchant-float-dock {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3100;
+  font-size: 13px;
+  color: #fff;
+  user-select: none;
+
+  &__inner {
+    background: linear-gradient(180deg, #1a9fff 0%, #0877db 100%);
+    border-radius: 10px 0 0 10px;
+    box-shadow: -2px 4px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    min-width: 132px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px 11px 12px;
+    cursor: pointer;
+    color: #fff !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+    transition: background 0.18s ease;
+    line-height: 1.3;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    i {
+      font-size: 17px;
+      flex-shrink: 0;
+      width: 20px;
+      text-align: center;
+    }
+  }
+
+  &__item--toggle {
+    font-weight: 600;
+  }
+
+  &__label {
+    white-space: nowrap;
+  }
+
+  &.is-collapsed &__inner {
+    min-width: 0;
+  }
+
+  &.is-collapsed &__item {
+    padding: 10px 10px;
+    justify-content: center;
+  }
+
+  &.is-collapsed &__label {
+    display: none;
   }
 }
 </style>

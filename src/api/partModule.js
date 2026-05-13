@@ -97,5 +97,75 @@ export default {
       data: params,
       headers: { Authorization: 'Bearer ' + header }
     });
+  },
+  /**
+   * 安装脚本模板（与网关 installscriptprocessor 使用的「模板目录」对应，按模板 Id + 游戏引擎）
+   * 后台需实现以下契约（路径可按项目规范微调，前后端保持一致即可）
+   */
+  async getInstallScriptFiles(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/InstallScriptTemplate/GetInstallScriptFiles',
+      method: 'get',
+      params: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
+  async saveInstallScriptFile(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/InstallScriptTemplate/SaveInstallScriptFile',
+      method: 'post',
+      data: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
+  async previewInstallScript(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/InstallScriptTemplate/PreviewInstallScript',
+      method: 'post',
+      data: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
+  /** 按分区预览（占位符替换与网关生成对齐） */
+  async previewInstallScriptForPartition(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/InstallScriptTemplate/PreviewInstallScriptForPartition',
+      method: 'post',
+      data: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
+  /** 按分区列出与网关实际输出对应的脚本项（含 Market_Def 多文件、通区充值模板名） */
+  async getInstallScriptPreviewFilesForPartition(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/InstallScriptTemplate/GetInstallScriptPreviewFilesForPartition',
+      method: 'get',
+      params: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
+  /** 将分区预览编辑内容写入库（网关安装时优先使用）；content 空串可清除该文件键的覆盖 */
+  async savePartitionInstallScriptOverride(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/InstallScriptTemplate/SavePartitionInstallScriptOverride',
+      method: 'post',
+      data: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
+  async resetInstallScriptFile(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/InstallScriptTemplate/ResetInstallScriptFile',
+      method: 'post',
+      data: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
   }
 };

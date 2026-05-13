@@ -97,9 +97,6 @@
               <span class="icon9" style="" @click="refresh('/personal/Withdrawalrecords')">提现记录</span>
             </li>
             <li :style="sliderStyle">
-              <span class="icon10" style="" @click="refresh('/personal/orderInterval')">定时任务</span>
-            </li>
-            <li :style="sliderStyle">
               <span class="icon11" style="" @click="refresh('/personal/Userlogs')">用户日志</span>
             </li>
             <li :style="sliderStyle">

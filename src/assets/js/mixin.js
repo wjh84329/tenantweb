@@ -158,6 +158,64 @@ export default {
     },
     intNumber(num) {
       return num.replace(/[^\d]/g, '');
+    },
+    /**
+     * 轮询分区检测 Redis 状态（与首页单条下发一致：串行、1s、最多约 45 次）
+     */
+    pollPartitionCheckKey(keyValue) {
+      const maxAttempts = 45;
+      const pollIntervalMs = 1000;
+      return new Promise((resolve, reject) => {
+        let attempts = 0;
+        const poll = () => {
+          this.$api.groupmange
+            .timerCheck({ checkKey: keyValue })
+            .then(() => resolve())
+            .catch(() => {
+              attempts += 1;
+              if (attempts > maxAttempts) {
+                reject(new Error('分区检测失败'));
+                return;
+              }
+              setTimeout(poll, pollIntervalMs);
+            });
+        };
+        poll();
+      });
+    },
+    /**
+     * 下发充值前检测网关通讯：CheckPartition + CheckPartitionStatus；Web/通用等模板服务端直接返回 success 则跳过轮询。
+     */
+    ensurePartitionCommunication(partitionId) {
+      const pid = Number(partitionId);
+      if (!pid || pid <= 0) {
+        return Promise.reject(new Error('分区无效'));
+      }
+      return this.$api.groupmange.checkLink({ partitionId: pid }).then((res) => {
+        if (res.status !== 200) {
+          throw new Error('checkLink status');
+        }
+        const keyValue = res.data;
+        const skipPoll =
+          typeof keyValue === 'string' && keyValue.toLowerCase() === 'success';
+        if (skipPoll) {
+          return Promise.resolve();
+        }
+        if (!keyValue || typeof keyValue !== 'string') {
+          throw new Error('分区检测失败');
+        }
+        return this.pollPartitionCheckKey(keyValue);
+      });
+    },
+    /** 首页订单列表 body：兼容 axios.data 为数组或包裹对象 */
+    normalizeHomeOrderListPayload(body) {
+      if (Array.isArray(body)) {
+        return body;
+      }
+      if (body && Array.isArray(body.data)) {
+        return body.data;
+      }
+      return [];
     }
   },
   created() {

@@ -21,9 +21,8 @@
         <li>
           <span class='tit'>自动补发：</span>
           <span class="txtbox">
-            <el-date-picker v-model="datetime" size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
+            <el-date-picker v-model="datetime" size="small" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="不填立即补发；填写则定时">
             </el-date-picker>
-            <el-checkbox class="mgl10" v-model="checked"></el-checkbox>
           </span>
         </li>
         <li>
@@ -138,8 +137,7 @@ export default {
       isGiveAmount: false, // 不含赠送金额
       isRedPacketAmount: false, // 包含红包赠送
       gamearea: '', // 游戏分区
-      datetime: '', // 自动补发
-      checked: false, // 自动补发时间勾选
+      datetime: '', // 自动补发（有值则定时）
       time: [this.getCerentTime(true), this.getCerentTime(false)], // 日期
       extra: '', // 额外补发
       isLoadPartition: false,
@@ -249,6 +247,7 @@ export default {
         this.$messageError('额外补发必须为整数！');
         return;
       }
+      const wantSchedule = !!(this.datetime && String(this.datetime).trim());
       this.$api.reorder
         .allOrder({
           partitionId: this.gamearea,
@@ -261,13 +260,12 @@ export default {
           isIncludeRedPacket: this.isIncludeRedPacket,
           isIncludeGiveAmount: this.isIncludeGiveAmount,
           isOnlyYB: this.isOnlyYB,
-          isAutoReissue: this.checked
+          isAutoReissue: wantSchedule
         })
         .then((data) => {
           if (data.status === 200) {
             this.gamearea = ''; // 游戏分区
             this.datetime = ''; // 自动补发
-            this.checked = false;
             this.time = [this.getCerentTime(true), this.getCerentTime(false)]; // 日期
             this.extra = ''; // 额外补发
             this.isLoadPartition = false;
@@ -275,7 +273,7 @@ export default {
             this.isIncludeRedPacket = false;
             this.isIncludeGiveAmount = false;
             this.isOnlyYB = false;
-            this.$messageSuccess('补发成功！');
+            this.$messageSuccess(wantSchedule ? '定时任务已设置!' : '补发成功！');
           }
         })
         .catch((err) => {

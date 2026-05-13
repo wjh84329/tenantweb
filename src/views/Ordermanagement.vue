@@ -172,12 +172,14 @@
           </el-table-column>
           <el-table-column prop="playerAccount" label="充值账号" width="120">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="双击修改订单账号" placement="bottom">
-                <span v-if="scope.row.editing">
+              <el-tooltip class="item" effect="dark"
+                :content="scope.row.isTongQu ? '通区订单不支持修改充值账号' : '双击修改订单账号'" placement="bottom">
+                <span v-if="scope.row.editing && !scope.row.isTongQu">
                   <el-input v-model="scope.row.playerAccount" size="mini" @blur="updatePlayerAccount(scope.row)"
                     @keyup.enter.native="updatePlayerAccount(scope.row)" style="width:120px" autofocus></el-input>
                 </span>
-                <span v-else @dblclick="enableEdit(scope.row)" style="cursor:pointer;">
+                <span v-else @dblclick="enableEdit(scope.row)"
+                  :style="{ cursor: scope.row.isTongQu ? 'not-allowed' : 'pointer' }">
                   {{ scope.row.playerAccount }}
                 </span>
               </el-tooltip>
@@ -480,7 +482,11 @@ export default {
             this.tableData = [];
             this.total = 0;
           } else if (data.status === 200) {
-            this.tableData = data.data;
+            const rows = data.data || [];
+            this.tableData = rows.map((r) => ({
+              ...r,
+              isTongQu: r.isTongQu === true || r.IsTongQu === true
+            }));
             this.total = JSON.parse(data.headers['x-pagination']).TotalCount;
           }
         })
@@ -661,10 +667,19 @@ export default {
     },
     // 双击启用编辑
     enableEdit(row) {
+      if (row.isTongQu) {
+        this.$message.warning('通区订单不支持修改充值账号');
+        return;
+      }
       this.$set(row, 'editing', true);
     },
     // 更新游戏账号
     updatePlayerAccount(row) {
+      if (row.isTongQu) {
+        row.editing = false;
+        this.getlist();
+        return;
+      }
       this.loading = true;
       // 使用 id + playerAccount 作为请求体（如果后端需要 orderNumber，请改为 { orderNumber: row.orderNumber, playerAccount: row.playerAccount }）
       const payload = {

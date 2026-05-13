@@ -77,27 +77,33 @@
           </el-table-column>
           <el-table-column prop="id" label="编号" width="60">
           </el-table-column>
-          <el-table-column prop="name" label="名称" width="200">
+          <el-table-column prop="name" label="名称" width="160">
           </el-table-column>
           <el-table-column prop="currencyName" label="游戏币" width="80">
           </el-table-column>
-          <el-table-column prop="serverIp" label="服务器" width="120">
+          <el-table-column prop="serverIp" label="服务器" width="100">
           </el-table-column>
           <el-table-column prop="scriptPath" label="路径">
           </el-table-column>
           <el-table-column prop="scriptPath" label="是否通区" width='80'>
             <template slot-scope="scope">
-              <span v-if="scope.row.tongqu">是</span>
+              <span v-if="scope.row.tongQu">是</span>
               <span v-else>否</span>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="操作" width='340'>
+          <!-- <el-table-column label="充值方式" width="130">
+            <template slot-scope="scope">
+              {{ formatPartitionScanLabel(scope.row.scan != null ? scope.row.scan : scope.row.Scan) }}
+            </template>
+          </el-table-column> -->
+          <el-table-column prop="name" label="操作" width='370'>
             <template slot-scope="scope">
               <el-button-group>
                 <el-button size="mini" type="primary" @click="rechargeTeam(scope.row.uuid)">充值</el-button>
                 <el-button size="mini" type="primary" @click="checklink(scope.row.id, scope.$index)"
                   :loading="!checkflag && checkIndex === scope.$index">检测</el-button>
                 <el-button size="mini" type="primary" @click="editarea(scope.row.id)">编辑</el-button>
+                <el-button size="mini" type="primary" @click="openScriptPreview(scope.row)">脚本预览</el-button>
                 <el-button size="mini" type="primary" @click="showdialog(scope.row.id)">加载</el-button>
                 <el-button size="mini" type="primary" @click="areaClone(scope.row.id)">克隆</el-button>
                 <el-button size="mini" type="primary" @click="toOrderreissue(scope.row.id)">补发</el-button>
@@ -132,11 +138,18 @@
         <el-button size="small" type="primary" @click="loadingArea">确定</el-button>
       </p>
     </el-dialog>
+
+    <install-script-partition-preview-dialog ref="installScriptPartitionPreviewDialog" />
   </div>
 </template>
 
 <script>
+import InstallScriptPartitionPreviewDialog from '../components/InstallScriptPartitionPreviewDialog.vue';
+
 export default {
+  components: {
+    InstallScriptPartitionPreviewDialog
+  },
   data() {
     return {
       activeName: '0', // tab
@@ -173,6 +186,14 @@ export default {
     };
   },
   methods: {
+    /** 与网关 partition.Scan：0 仅游戏内扫码，1 网页+扫码，2 仅网页 */
+    formatPartitionScanLabel(scan) {
+      const n = scan === null || scan === undefined || scan === '' ? NaN : Number(scan);
+      if (n === 0) return '游戏内扫码';
+      if (n === 1) return '网页 + 游戏内扫码';
+      if (n === 2) return '网页充值';
+      return '—';
+    },
     // tab的切换
     handleClick() {
       this.pageIndex = 1;
@@ -182,7 +203,8 @@ export default {
       this.getlist();
     },
     Interval() {
-      this.$router.push({ path: '/personal/orderInterval' });
+      // 与首页快捷入口一致：走 /main 布局，避免进入「账户管理」个人中心
+      this.$router.push({ path: '/main/orderInterval' });
     },
     // 在加载前执行检测，返回 Promise（检测成功 resolve，失败 reject）
     checkBeforeLoad(id) {
@@ -430,6 +452,12 @@ export default {
     toOrderreissue(id) {
       this.$router.push({ path: '/main/Orderreissue', query: { id: id } });
     },
+    openScriptPreview(row) {
+      const dlg = this.$refs.installScriptPartitionPreviewDialog;
+      if (dlg && typeof dlg.open === 'function') {
+        dlg.open(row);
+      }
+    },
     // 分区检测
     checklink(id, index) {
       if (this.checkflag) {
@@ -550,4 +578,5 @@ export default {
 
     }
   }
-}</style>
+}
+</style>

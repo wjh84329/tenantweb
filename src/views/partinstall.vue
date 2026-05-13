@@ -135,17 +135,24 @@
         </dl>
         <dl class="clearfix" v-if="typeindex == 1 || typeindex == 2 || typeindex == 6">
           <p class="tip_red" style="margin: 0">
-            注意：创建分区前请先把客户端运行起来,网关标识即为客户端上的标识
+            <!-- 请填写网关对外 IP（与平台注册记录一致）及网关客户端上的 监听端口。保存时会与已注册设备匹配，匹配成功后使用设备实例作为消息下发标识（不再使用「网关标识」）。 -->
           </p>
-          <dt>网关标识：</dt>
+          <dt>网关 IP：</dt>
           <dd>
             <span class="inputbox">
-
-              <slect-drow :itemList="serverDrow" @delitem="delequipcode" :slect.sync="serverIp"
-                style="width: 250px"></slect-drow>
-
+              <el-input style="width: 280px" size="small" ref="gatewayIpInput" v-model="gatewayIp"
+                placeholder="公网 IP 或注册时使用的地址"></el-input>
             </span>
-            <span class="block_tip">安装分区前请先运行网关客户端</span>
+          </dd>
+        </dl>
+        <dl class="clearfix">
+          <dt style="padding-top: 8px">通讯端口：</dt>
+          <dd>
+            <span class="inputbox">
+              <el-input style="width: 160px" size="small" ref="gatewayPortInput" v-model="gatewayPort" type="number"
+                placeholder="如 9527"></el-input>
+            </span>
+            <span class="block_tip">须与网关设置中「监听端口」一致；请先开启网关完成注册</span>
           </dd>
         </dl>
         <dl class="clearfix">
@@ -194,7 +201,7 @@
             <span class="tip_red">选择游戏内扫码许下载补丁文件放入游戏中，补丁默认编号是44，序号是4</span>
           </dd>
         </dl>
-        <dl class="clearfix">
+        <dl class="clearfix" style="display: none;">
           <dt>分区公告：</dt>
           <dd>
             <span class="inputbox gs_textarea">
@@ -352,11 +359,7 @@
 </template>
 
 <script>
-import slectDrow from '../components/selcetDrow';
 export default {
-  components: {
-    slectDrow
-  },
   data() {
     return {
       installFlag: true, // 保存按钮中的防重复点击
@@ -372,8 +375,9 @@ export default {
         Options: [], // 分组的多选list
         isIndeterminate: true
       },
-      serverIp: '', // 机器码
-      serverDrow: [], // 机器码下拉
+      gatewayIp: '',
+      gatewayPort: '',
+      serverDrow: [], // 已注册网关列表（用于 IP+端口 匹配出 machineCode）
       // serverPort: 6379, // 通讯端口
       installPath: 'D:\\MirServer', // 安装路径
       installModel: '', // 模板
@@ -446,6 +450,36 @@ export default {
           this.$messageError(err.message);
         });
     },
+    normalizeGatewayIp(ip) {
+      let s = (ip || '').trim();
+      if (s.toLowerCase().startsWith('::ffff:')) {
+        s = s.substring(7);
+      }
+      return s.toLowerCase();
+    },
+    matchEquipByEndpoint(equipIp, equipPort, inputIp, inputPort) {
+      return this.normalizeGatewayIp(equipIp) === this.normalizeGatewayIp(inputIp) &&
+        Number(equipPort) === Number(inputPort);
+    },
+    resolveMachineCodeFromEndpoint() {
+      const inputIp = (this.gatewayIp || '').trim();
+      const portNum = parseInt(this.gatewayPort, 10);
+      if (!inputIp || Number.isNaN(portNum) || portNum < 1 || portNum > 65535) {
+        return { ok: false, message: '请填写有效的网关 IP 与 监听端口（1-65535）' };
+      }
+      const list = this.serverDrow || [];
+      const found = list.find(e => this.matchEquipByEndpoint(e.ip, e.port, inputIp, portNum));
+      if (!found) {
+        return {
+          ok: false,
+          message: '未找到与所填 IP、端口一致的已注册网关，请确认网关已运行且已在平台注册。'
+        };
+      }
+      return { ok: true, machineCode: found.machineCode };
+    },
+    gatewayTypesNeedEndpoint() {
+      return this.typeindex === 1 || this.typeindex === 2 || this.typeindex === 6;
+    },
     // 安装时，数据的检验
     dataChecked() {
       if (this.partName === '') {
@@ -463,19 +497,22 @@ export default {
       } else if (JSON.stringify(this.teamdata.teamlist) === '[]') {
         this.$messageError('请选择游戏分组！');
         return true;
-      } else if ((this.typeindex === 1 ||
-        this.typeindex === 2 ||
-        this.typeindex === 3) &&
-        this.serverIp === '') {
+      } else if (
+        this.gatewayTypesNeedEndpoint() &&
+        (!(this.gatewayIp || '').trim() ||
+          this.gatewayPort === '' ||
+          this.gatewayPort === null)
+      ) {
         this.$nextTick(() => {
-          this.$refs.serverIp.focus();
-          this.$messageError('请选择机器码！');
+          this.$refs.gatewayIpInput.focus();
+          this.$messageError('请填写网关 IP 与 监听端口！');
         });
         return true;
       } else if (
         (this.typeindex === 1 ||
           this.typeindex === 2 ||
-          this.typeindex === 3) &&
+          this.typeindex === 3 ||
+          this.typeindex === 6) &&
         this.installPath === ''
       ) {
         this.$nextTick(() => {
@@ -567,6 +604,16 @@ export default {
             this.installFlag = true;
             return;
           }
+          let batchMachineCode = '';
+          if (this.gatewayTypesNeedEndpoint()) {
+            const br = this.resolveMachineCodeFromEndpoint();
+            if (!br.ok) {
+              this.$messageError(br.message);
+              this.installFlag = true;
+              return;
+            }
+            batchMachineCode = br.machineCode;
+          }
           // 组装参数
           const names = this.batchList.map(item => item.name);
           const scriptPaths = this.batchList.map(item => item.path);
@@ -588,7 +635,7 @@ export default {
             useName: this.changeName,
             changeDate: this.changeTime,
             notice: this.notice,
-            machineCode: this.serverIp,
+            machineCode: batchMachineCode,
             successMark: this.webSet.successmark,
             useDate: this.setTime,
             webUrl: this.webSet.address,
@@ -623,6 +670,16 @@ export default {
             this.installFlag = true;
             return;
           }
+          let singleMachineCode = '';
+          if (this.gatewayTypesNeedEndpoint()) {
+            const sr = this.resolveMachineCodeFromEndpoint();
+            if (!sr.ok) {
+              this.$messageError(sr.message);
+              this.installFlag = true;
+              return;
+            }
+            singleMachineCode = sr.machineCode;
+          }
           this.$api.partinstall
             .partInstall({
               type: this.typeindex, // 分区类型
@@ -647,7 +704,7 @@ export default {
                 this.typeindex === 4 || this.typeindex === 5
                   ? ''
                   : this.installPath, // 安装路径
-              machineCode: this.serverIp, // 服务器ip
+              machineCode: singleMachineCode,
               // serverPort: 0, // 服务器端口 *页面无对应*
               // sort: 0, // 默认参数    *页面无对应*
               // state: true, // 默认参数    *页面无对应*
@@ -691,7 +748,8 @@ export default {
       this.teamdata.teamlist = [];
       this.teamdata.isIndeterminate = true;
 
-      this.serverIp = ''; // 服务器IP EMKEMEMM333336KCM32M19K2
+      this.gatewayIp = '';
+      this.gatewayPort = '';
       // this.serverPort = 6379; // 通讯端口
       this.installPath = 'D:\\MirServer'; // 安装路径
       this.installModel = ''; // 模板
@@ -735,21 +793,6 @@ export default {
           } else if (data.status === 204) {
             this.serverDrow = [];
           }
-        })
-        .catch((err) => {
-          this.$messageError(err.message);
-        });
-    },
-    // 删除机器码
-    delequipcode(data) {
-      this.$api.partinstall
-        .delMachineCode([data])
-        .then((data) => {
-          if ((this.serverIp = data)) {
-            this.serverIp = '';
-          }
-          this.getequipcode();
-          this.$messageSuccess('删除成功！');
         })
         .catch((err) => {
           this.$messageError(err.message);

@@ -36,9 +36,8 @@
           </el-form-item>
           <el-form-item label="自动补发：">
             <el-date-picker style="width:216px;" v-model="datetime" size="small" type="datetime"
-              value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
+              value-format="yyyy-MM-dd HH:mm:ss" placeholder="不填则立即补发；填写则到时执行">
             </el-date-picker>
-            <!-- <el-checkbox class="mgl10" v-model="checked"></el-checkbox> -->
           </el-form-item>
           <el-form-item label="日期：">
             <el-date-picker style="width:190px;" v-model="time1" size="small" type="datetime"
@@ -134,8 +133,7 @@ export default {
       isGiveAmount: false, // 不含赠送金额
       isRedPacketAmount: false, // 包含红包赠送
 
-      datetime: '', // 自动补发
-      checked: false, // 自动补发时间勾选
+      datetime: '', // 自动补发（有值则定时，空则立即）
       time1: this.getCerentTime(true), // 日期
       time2: this.getCerentTime(false), // 日期
       extra: '', // 额外补发
@@ -333,6 +331,7 @@ export default {
     },
     // 整区补单接口发送
     areaOrder() {
+      const wantSchedule = !!(this.datetime && String(this.datetime).trim());
       this.$api.reorder
         .allOrder({
           partitionId: this.gamearea, // 分区ID
@@ -345,7 +344,7 @@ export default {
           isIncludeRedPacket: this.isIncludeRedPacket, // 是否包含红包赠送
           isIncludeGiveAmount: this.isIncludeGiveAmount, // 是否包含赠送金额
           isOnlyYB: this.isOnlyYB, // 仅补发元宝
-          isAutoReissue: this.checked, // 是否定时任务
+          isAutoReissue: wantSchedule, // 与后端约定：填写自动补发时间即为定时任务
           isClose: this.isClose // 关闭转区点赠送
         })
         .then((data) => {
@@ -361,12 +360,11 @@ export default {
             this.isIncludeGiveAmount = false;
             this.isOnlyYB = false;
             this.areaFlag = false;
-            if (this.checked) {
+            if (wantSchedule) {
               this.$messageSuccess('定时任务已设置!');
             } else {
               this.$messageSuccess('补发成功!');
             }
-            this.checked = false;
             // this.getlist();
           }
         })

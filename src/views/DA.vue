@@ -219,14 +219,17 @@
                     </el-select>
                   </span>
                 </li> -->
-                <el-button size="small" type="primary" @click="checkdata4">查询</el-button>
+                <el-button size="small" type="primary" @click="checkdata7">查询</el-button>
               </ul>
               <div class="tablebox pdb15 pdt20">
                 <div class="gs_tablebox">
                   <el-table ref="moduleTable" size="mini" :data="tab7.tableData" border style="width: 100%" stripe>
                     <el-table-column type="index" label="序号" width="65">
                     </el-table-column>
-                    <el-table-column prop="templateName" label="模版名称">
+                    <el-table-column label="模版名称">
+                      <template slot-scope="scope">
+                        <span>{{ scope.row.templateName || scope.row.groupName }}</span>
+                      </template>
                     </el-table-column>
                     <el-table-column label="充值金额">
                       <template slot-scope="scope">
@@ -248,7 +251,7 @@
                   </el-table>
                 </div>
                 <div class="mgt15 pdl20">
-                  <el-pagination @size-change="handleSizeChange7" @current-change="handleCurrentChange4" background :page-sizes="[10, 20, 30, 40]" :current-page="tab7.pageIndex" :page-size="tab7.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tab7.total">
+                  <el-pagination @size-change="handleSizeChange7" @current-change="handleCurrentChange7" background :page-sizes="[10, 20, 30, 40]" :current-page="tab7.pageIndex" :page-size="tab7.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tab7.total">
                   </el-pagination>
                 </div>
               </div>
@@ -1264,6 +1267,12 @@ export default {
         });
       }
     },
+    checkdata7() {
+      this.tab7.pageIndex = 1;
+      this.$nextTick(() => {
+        this.getlist7();
+      });
+    },
     // 4当每页条数变化时
     handleSizeChange4(data) {
       this.tab4.pageSize = data;
@@ -1460,7 +1469,7 @@ export default {
     },
     // 6当前的页码变化时
     handleCurrentChange7(data) {
-      this.tab6.pageIndex = data;
+      this.tab7.pageIndex = data;
       this.getlist7();
     },
     handleSizeChange7(data) {

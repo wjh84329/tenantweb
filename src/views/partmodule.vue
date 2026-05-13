@@ -52,11 +52,12 @@
               <el-switch v-model="scope.row.giveState" active-color="#4a90e2" inactive-color="#e4eaec" @change="stateChange(scope.row.id,scope.row.giveState)"></el-switch>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="操作" width="200">
+          <el-table-column prop="name" label="操作" width="310">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button size="mini" type="info" @click="editModule(scope.row.id)">编辑</el-button>
                 <el-button size="mini" type="primary" @click="areaClone(scope.row.id)">克隆</el-button>
+                <el-button size="mini" type="success" plain @click="editScript(scope.row)">编辑脚本</el-button>
                 <el-button size="mini" type="danger" :disabled="scope.row.partitionsCount>0" @click="handleClose(scope.row.id)" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">删除</el-button>
               </el-button-group>
             </template>
@@ -164,6 +165,15 @@ export default {
     // 编辑模板
     editModule(id) {
       this.$router.push({ path: 'partmoduleEdit', query: { id: id } });
+    },
+    // 编辑安装脚本（按当前行的游戏引擎拉取合并后的脚本文件；列表无引擎字段时会进入页内再请求详情）
+    editScript(row) {
+      const q = { id: row.id, name: row.name || '' };
+      const ge = row.gameEngine || row.GameEngine;
+      if (ge) {
+        q.gameEngine = ge;
+      }
+      this.$router.push({ path: '/main/partmoduleScriptEdit', query: q });
     },
     // clone模板
     areaClone(id) {

@@ -230,6 +230,17 @@ const routes = [
         }
       },
       {
+        path: 'partmoduleScriptEdit',
+        name: 'partmoduleScriptEdit',
+        meta: {
+          requiresAuth: true,
+          role: ['SuperAdmin', 'Admin', 'Tenant', 'Agent', 'Employee']
+        },
+        component: resolve => {
+          require(['../views/partmoduleScriptEdit'], resolve);
+        }
+      },
+      {
         path: 'Replacementofrecords',
         name: 'Replacementofrecords',
         meta: {

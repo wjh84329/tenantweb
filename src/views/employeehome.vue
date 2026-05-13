@@ -373,42 +373,14 @@ export default {
           this.$messageError(err.message);
         });
     },
-    // 等待下发
+    // 等待下发（先发分区通讯检测，再调单条下发）
     waitSent(orderNum, id, index) {
       if (!this.waitTableFlag) {
         this.waitTableFlag = true;
         this.waitTableIndex = index;
-        // 分区检测
-        this.$api.groupmange
-          .checkLink({
-            partitionId: id
-          })
-          .then((data) => {
-            if (data.status === 200) {
-              let keyValue = data.data;
-              let indexNum = 0;
-              let handletimer = setInterval(() => {
-                this.$api.groupmange
-                  .timerCheck({
-                    checkKey: keyValue
-                  })
-                  .then((data) => {
-                    clearInterval(handletimer);
-                    handletimer = null;
-                    this.waitSendOrder(orderNum);
-                  })
-                  .catch(() => {
-                    indexNum++;
-                    if (indexNum > 6) {
-                      clearInterval(handletimer);
-                      handletimer = null;
-                      this.waitTableFlag = false;
-                      this.waitTableIndex = '';
-                      this.$messageError('分区检测失败！');
-                    }
-                  });
-              }, 500);
-            }
+        this.ensurePartitionCommunication(id)
+          .then(() => {
+            this.waitSendOrder(orderNum);
           })
           .catch(() => {
             this.waitTableFlag = false;
@@ -417,23 +389,62 @@ export default {
           });
       }
     },
-    // 等待下发全部
-    waitSentAll(id) {
+    // 等待下发全部：先通讯检测再批量下发
+    async waitSentAll() {
+      if (this.chargeInfoData.waitFlag) {
+        return;
+      }
       this.chargeInfoData.waitFlag = true;
-      this.$api.home
-        .waitSentAll()
-        .then((data) => {
-          if (data.status === 200) {
-            this.chargeInfoData.waitFlag = false;
-            this.$messageSuccess('下发成功');
-            this.orderList();
-            this.chargeInfo();
-          }
-        })
-        .catch(() => {
-          this.chargeInfoData.waitFlag = false;
-          this.$messageError('下发超时,请检测网关！');
+      try {
+        const listRes = await this.$api.home.orderList({
+          PageNumber: 1,
+          pageSize: 100
         });
+        if (listRes.status !== 200 && listRes.status !== 204) {
+          throw new Error('获取订单列表失败');
+        }
+        const rows = this.normalizeHomeOrderListPayload(listRes.data);
+        const partitionIds = [
+          ...new Set(
+            rows
+              .filter((r) => r.state === 2 && r.partitionId > 0)
+              .map((r) => r.partitionId)
+          )
+        ];
+        if (this.chargeInfoData.waitSend > 0 && partitionIds.length === 0) {
+          this.$messageError(
+            '未在列表中加载到待发送订单，请刷新页面后重试，或使用订单行的单条下发'
+          );
+          return;
+        }
+        for (let i = 0; i < partitionIds.length; i += 1) {
+          await this.ensurePartitionCommunication(partitionIds[i]);
+        }
+        const data = await this.$api.home.waitSentAll();
+        if (data.status === 200) {
+          const msg =
+            typeof data.data === 'string' ? data.data : '下发成功';
+          this.$messageSuccess(msg);
+          this.orderList();
+          this.chargeInfo();
+        } else {
+          this.$messageError('批量下发失败');
+        }
+      } catch (e) {
+        const m =
+          (e && e.message) ||
+          (e && e.Message) ||
+          '';
+        if (m === '分区检测失败' || m.indexOf('分区') >= 0) {
+          this.$messageError('分区检测失败！');
+        } else if (m) {
+          this.$messageError(m);
+        } else {
+          this.$messageError('下发超时,请检测网关！');
+        }
+      } finally {
+        this.chargeInfoData.waitFlag = false;
+      }
     }
 
   },

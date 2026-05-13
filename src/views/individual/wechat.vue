@@ -501,7 +501,18 @@
                 :header-cell-style="{ background: '#F8F8FA', color: '#606266' }" v-loading="qrcodeLoading"
                 empty-text="无数据">
                 <el-table-column prop="title" label="标题" align="center" min-width="100" />
-                <el-table-column prop="resourceCode" label="WII编号" align="center" min-width="80" />
+                <el-table-column label="类型" align="center" min-width="88">
+                  <template slot-scope="scope">
+                    {{ qrcodeTemplateKindLabel(scope.row.templateKind) }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="二维码" align="center" min-width="76">
+                  <template slot-scope="scope">
+                    <span v-if="Number(scope.row.templateKind) === 0">{{ scope.row.useStaticQrImage ? '静态' : '动态' }}</span>
+                    <span v-else>—</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="resourceCode" label="Wil编号" align="center" min-width="80" />
                 <el-table-column prop="imageCode" label="图片序号" align="center" min-width="80" />
                 <el-table-column prop="serial" label="尺寸" align="center" min-width="60" />
                 <el-table-column prop="xOffset" label="坐标X" align="center" min-width="60" />
@@ -522,33 +533,64 @@
                   style="display:inline-block;" />
               </div>
             </div>
-            <!-- 新增/编辑二维码模版弹窗 -->
-            <el-dialog :title="qrcodeDialog.isEdit ? '编辑' : '新增' + '/编辑'" :visible.sync="qrcodeDialog.visible"
-              width="480px" :close-on-click-modal="false" @close="closeQrcodeDialog">
+            <!-- 新增/编辑二维码模版弹窗（与运营端图示一致：类型 / 静态·动态 / Wil / 图序 / 尺寸 / 坐标） -->
+            <el-dialog
+              :title="qrcodeDialog.isEdit ? '编辑二维码模板' : '新增二维码模板'"
+              :visible.sync="qrcodeDialog.visible"
+              width="520px"
+              :close-on-click-modal="false"
+              @close="closeQrcodeDialog"
+            >
               <el-alert type="warning" :closable="false" show-icon style="margin-bottom: 18px;">
                 BLUEM2使用pic脚本自动显示二维码，无需设置WIL补丁编号和图片序号，设置为0即可。
               </el-alert>
-              <el-form ref="qrcodeForm" :model="qrcodeDialog.form" :rules="qrcodeDialog.rules" label-width="80px"
+              <el-form ref="qrcodeForm" :model="qrcodeDialog.form" :rules="qrcodeDialogRules" label-width="108px"
                 size="small" style="padding-right:12px;">
-                <el-form-item style="margin-top: 16px;" label="标题" prop="title">
-                  <el-input v-model="qrcodeDialog.form.title" placeholder="请输入标题" maxlength="30" />
+                <el-form-item style="margin-top: 8px;" label="标题" prop="title">
+                  <el-input v-model="qrcodeDialog.form.title" placeholder="如：GOM/GEE扫码" maxlength="30" />
                 </el-form-item>
-                <el-form-item style="margin-top: 16px;" label="Wii编号" prop="resourceCode">
-                  <el-input v-model="qrcodeDialog.form.resourceCode" placeholder="请输入WII编号" maxlength="20" />
+                <el-form-item label="类型" prop="templateKind">
+                  <el-radio-group v-model="qrcodeDialog.form.templateKind" size="small">
+                    <el-radio-button :label="0">微信密保</el-radio-button>
+                    <el-radio-button :label="1">扫码充值</el-radio-button>
+                  </el-radio-group>
                 </el-form-item>
-                <el-form-item style="margin-top: 16px;" label="图片序号" prop="imageCode">
-                  <el-input v-model="qrcodeDialog.form.imageCode" placeholder="请输入图片序号" maxlength="20" />
+                <el-form-item v-if="Number(qrcodeDialog.form.templateKind) === 0" prop="useStaticQrImage">
+                  <template slot="label">
+                    <span>二维码补丁</span>
+                    <el-tooltip placement="top" effect="dark">
+                      <div slot="content">
+                        使用静态图片需要自行导入公众号二维码，动态生成二维码可能部分玩家电脑存在兼容性问题。<br />
+                        选择静态图片时，平台不会向网关下发「微信密保」与「微信转区」目录下「本服公众号.txt」的公众号二维码文本，请自行维护。
+                      </div>
+                      <i class="el-icon-question" style="margin-left: 4px; color: #909399; cursor: help;" />
+                    </el-tooltip>
+                  </template>
+                  <el-radio-group v-model="qrcodeDialog.form.useStaticQrImage" size="small">
+                    <el-radio :label="true">静态图片</el-radio>
+                    <el-radio :label="false">动态生成</el-radio>
+                  </el-radio-group>
                 </el-form-item>
-                <el-form-item style="margin-top: 16px;" label="尺寸" prop="serial">
+                <el-form-item label="Wil编号" prop="resourceCode">
+                  <el-input v-model="qrcodeDialog.form.resourceCode" placeholder="Pay.Pak 资源编号" maxlength="20" />
+                </el-form-item>
+                <el-form-item label="图片序号" prop="imageCode">
+                  <el-input v-model="qrcodeDialog.form.imageCode" placeholder="图片序号" maxlength="20" />
+                </el-form-item>
+                <el-form-item
+                  v-if="qrcodeDialogShowSerial"
+                  label="尺寸"
+                  prop="serial"
+                >
                   <el-select v-model="qrcodeDialog.form.serial" placeholder="请选择尺寸" style="width:100%;">
-                    <el-option v-for="n in [3, 4, 5, 6]" :key="n" :label="n" :value="n" />
+                    <el-option v-for="n in [3, 4, 5, 6]" :key="n" :label="String(n)" :value="n" />
                   </el-select>
                 </el-form-item>
-                <el-form-item style="margin-top: 16px;" label="坐标X" prop="xOffset">
-                  <el-input v-model="qrcodeDialog.form.xOffset" placeholder="请输入坐标X" maxlength="10" />
+                <el-form-item label="坐标X" prop="xOffset">
+                  <el-input v-model="qrcodeDialog.form.xOffset" placeholder="坐标X" maxlength="10" />
                 </el-form-item>
-                <el-form-item style="margin-top: 16px;" label="坐标Y" prop="yOffset">
-                  <el-input v-model="qrcodeDialog.form.yOffset" placeholder="请输入坐标Y" maxlength="10" />
+                <el-form-item label="坐标Y" prop="yOffset">
+                  <el-input v-model="qrcodeDialog.form.yOffset" placeholder="坐标Y" maxlength="10" />
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
@@ -861,6 +903,39 @@ import { url, loginUrl } from '../../assets/js/version';
 
 import CryptoJS from 'crypto-js';
 export default {
+  computed: {
+    qrcodeDialogShowSerial() {
+      const f = this.qrcodeDialog.form;
+      const tk = Number(f.templateKind);
+      if (tk === 1) return true;
+      if (tk === 0 && !f.useStaticQrImage) return true;
+      return false;
+    },
+    qrcodeDialogRules() {
+      const self = this;
+      return {
+        title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
+        templateKind: [{ required: true, message: '请选择类型', trigger: 'change' }],
+        resourceCode: [{ required: true, message: '请输入Wil编号', trigger: 'blur' }],
+        imageCode: [{ required: true, message: '请输入图片序号', trigger: 'blur' }],
+        serial: [
+          {
+            validator(rule, value, callback) {
+              if (!self.qrcodeDialogShowSerial) return callback();
+              if (value === '' || value === null || value === undefined) {
+                callback(new Error('请选择尺寸'));
+              } else {
+                callback();
+              }
+            },
+            trigger: 'change'
+          }
+        ],
+        xOffset: [{ required: true, message: '请输入坐标X', trigger: 'blur' }],
+        yOffset: [{ required: true, message: '请输入坐标Y', trigger: 'blur' }]
+      };
+    }
+  },
   data() {
     return {
       loginUrls: '',
@@ -954,21 +1029,14 @@ export default {
         isEdit: false,
         loading: false,
         form: {
-          // id: null,
           title: '',
+          templateKind: 1,
+          useStaticQrImage: false,
           resourceCode: '',
           imageCode: '',
           serial: 3,
-          xOffset: '',
-          yOffset: ''
-        },
-        rules: {
-          title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
-          resourceCode: [{ required: true, message: '请输入WII编号', trigger: 'blur' }],
-          imageCode: [{ required: true, message: '请输入图片序号', trigger: 'blur' }],
-          serial: [{ required: true, message: '请选择尺寸', trigger: 'change' }],
-          xOffset: [{ required: true, message: '请输入坐标X', trigger: 'blur' }],
-          yOffset: [{ required: true, message: '请输入坐标Y', trigger: 'blur' }]
+          xOffset: '0',
+          yOffset: '0'
         }
       },
       // 微信密保模版相关
@@ -1601,20 +1669,30 @@ export default {
       this.qrcodePage = 1;
       this.getQrcodeList();
     },
+    qrcodeTemplateKindLabel(k) {
+      const n = Number(k);
+      if (n === 0) return '微信密保';
+      return '扫码充值';
+    },
     openQrcodeDialog(isEdit, row) {
       this.qrcodeDialog.visible = true;
       this.qrcodeDialog.isEdit = !!isEdit;
       if (isEdit && row) {
-        this.qrcodeDialog.form = { ...row };
+        this.qrcodeDialog.form = {
+          ...row,
+          templateKind: row.templateKind !== undefined && row.templateKind !== null ? Number(row.templateKind) : 1,
+          useStaticQrImage: !!row.useStaticQrImage
+        };
       } else {
         this.qrcodeDialog.form = {
-          // id: null,
           title: '',
+          templateKind: 1,
+          useStaticQrImage: false,
           resourceCode: '',
           imageCode: '',
           serial: 3,
-          xOffset: '',
-          yOffset: ''
+          xOffset: '0',
+          yOffset: '0'
         };
       }
       this.$nextTick(() => {
@@ -1628,13 +1706,29 @@ export default {
     saveQrcodeTemplate() {
       this.$refs.qrcodeForm.validate(async (valid) => {
         if (!valid) return;
+        if (this.qrcodeDialogShowSerial) {
+          const s = this.qrcodeDialog.form.serial;
+          if (s === '' || s === null || s === undefined) {
+            this.$messageError('请选择尺寸');
+            return;
+          }
+        }
+        const payload = { ...this.qrcodeDialog.form };
+        payload.templateKind = Number(payload.templateKind);
+        payload.xOffset = parseInt(payload.xOffset, 10);
+        payload.yOffset = parseInt(payload.yOffset, 10);
+        if (Number.isNaN(payload.xOffset)) payload.xOffset = 0;
+        if (Number.isNaN(payload.yOffset)) payload.yOffset = 0;
+        if (payload.templateKind === 0 && payload.useStaticQrImage) {
+          payload.serial = 0;
+        }
         this.qrcodeDialog.loading = true;
         let header = await mgr();
         const apiUrl = this.qrcodeDialog.isEdit
           ? '/api/WxUserValid/UpdateQrcodeTemplate'
           : '/api/WxUserValid/AddQrcodeTemplate';
         api
-          .post(apiUrl, this.qrcodeDialog.form, {
+          .post(apiUrl, payload, {
             headers: { Authorization: 'Bearer ' + header }
           })
           .then(() => {
