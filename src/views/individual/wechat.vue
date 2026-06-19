@@ -549,11 +549,14 @@
                 <el-form-item style="margin-top: 8px;" label="标题" prop="title">
                   <el-input v-model="qrcodeDialog.form.title" placeholder="如：GOM/GEE扫码" maxlength="30" />
                 </el-form-item>
-                <el-form-item label="类型" prop="templateKind">
+                <el-form-item v-if="qrcodeDialog.lockKind === null" label="类型" prop="templateKind">
                   <el-radio-group v-model="qrcodeDialog.form.templateKind" size="small">
                     <el-radio-button :label="0">微信密保</el-radio-button>
                     <el-radio-button :label="1">扫码充值</el-radio-button>
                   </el-radio-group>
+                </el-form-item>
+                <el-form-item v-else label="类型">
+                  <span class="qrcode-kind-readonly">{{ qrcodeTemplateKindLabel(qrcodeDialog.lockKind) }}</span>
                 </el-form-item>
                 <el-form-item v-if="Number(qrcodeDialog.form.templateKind) === 0" prop="useStaticQrImage">
                   <template slot="label">
@@ -672,7 +675,7 @@
                     </el-form-item>
                     <el-form-item label="二维码模版" prop="qrcodeType" style="margin-top:18px;">
                       <el-select v-model="wxmbDialog.form.qrcodeType" placeholder="请选择二维码模版">
-                        <el-option v-for="item in qrcodeTemplatesList" :key="item.id" :label="item.title"
+                        <el-option v-for="item in wxmbQrcodeTemplatesList" :key="item.id" :label="item.title"
                           :value="item.id"></el-option>
                       </el-select>
                     </el-form-item>
@@ -902,8 +905,19 @@ import api from '../../assets/js/apiRequestHandler';
 import { url, loginUrl } from '../../assets/js/version';
 
 import CryptoJS from 'crypto-js';
+import {
+  WXMB_QR_TEMPLATE_KIND,
+  SCAN_QR_TEMPLATE_KIND,
+  filterWxmbQrcodeTemplates,
+  qrcodeTemplateKindLabel as qrKindLabel,
+  defaultScanQrcodeForm,
+  defaultWxmbQrcodeForm
+} from '../../assets/js/qrcodeTemplateKind';
 export default {
   computed: {
+    wxmbQrcodeTemplatesList() {
+      return filterWxmbQrcodeTemplates(this.qrcodeTemplatesList);
+    },
     qrcodeDialogShowSerial() {
       const f = this.qrcodeDialog.form;
       const tk = Number(f.templateKind);
@@ -1028,6 +1042,7 @@ export default {
         visible: false,
         isEdit: false,
         loading: false,
+        lockKind: null,
         form: {
           title: '',
           templateKind: 1,
@@ -1670,30 +1685,35 @@ export default {
       this.getQrcodeList();
     },
     qrcodeTemplateKindLabel(k) {
-      const n = Number(k);
-      if (n === 0) return '微信密保';
-      return '扫码充值';
+      return qrKindLabel(k);
     },
-    openQrcodeDialog(isEdit, row) {
+    openQrcodeDialog(isEdit, row, lockKind) {
       this.qrcodeDialog.visible = true;
       this.qrcodeDialog.isEdit = !!isEdit;
+      let resolvedKind = lockKind;
+      if (resolvedKind === undefined) {
+        if (isEdit && row) {
+          resolvedKind = row.templateKind !== undefined && row.templateKind !== null
+            ? Number(row.templateKind)
+            : SCAN_QR_TEMPLATE_KIND;
+        } else {
+          resolvedKind = null;
+        }
+      }
+      this.qrcodeDialog.lockKind = resolvedKind;
       if (isEdit && row) {
+        const tk = resolvedKind !== null ? Number(resolvedKind) : SCAN_QR_TEMPLATE_KIND;
         this.qrcodeDialog.form = {
           ...row,
-          templateKind: row.templateKind !== undefined && row.templateKind !== null ? Number(row.templateKind) : 1,
+          templateKind: tk,
           useStaticQrImage: !!row.useStaticQrImage
         };
+      } else if (resolvedKind === WXMB_QR_TEMPLATE_KIND) {
+        this.qrcodeDialog.form = defaultWxmbQrcodeForm();
+      } else if (resolvedKind === SCAN_QR_TEMPLATE_KIND) {
+        this.qrcodeDialog.form = defaultScanQrcodeForm();
       } else {
-        this.qrcodeDialog.form = {
-          title: '',
-          templateKind: 1,
-          useStaticQrImage: false,
-          resourceCode: '',
-          imageCode: '',
-          serial: 3,
-          xOffset: '0',
-          yOffset: '0'
-        };
+        this.qrcodeDialog.form = defaultScanQrcodeForm();
       }
       this.$nextTick(() => {
         if (this.$refs.qrcodeForm) this.$refs.qrcodeForm.clearValidate();
@@ -1702,6 +1722,7 @@ export default {
     closeQrcodeDialog() {
       this.qrcodeDialog.visible = false;
       this.qrcodeDialog.loading = false;
+      this.qrcodeDialog.lockKind = null;
     },
     saveQrcodeTemplate() {
       this.$refs.qrcodeForm.validate(async (valid) => {
@@ -1714,7 +1735,9 @@ export default {
           }
         }
         const payload = { ...this.qrcodeDialog.form };
-        payload.templateKind = Number(payload.templateKind);
+        payload.templateKind = this.qrcodeDialog.lockKind !== null
+          ? Number(this.qrcodeDialog.lockKind)
+          : Number(payload.templateKind);
         payload.xOffset = parseInt(payload.xOffset, 10);
         payload.yOffset = parseInt(payload.yOffset, 10);
         if (Number.isNaN(payload.xOffset)) payload.xOffset = 0;
@@ -1879,7 +1902,7 @@ export default {
         const apiUrl = this.wxmbDialog.isEdit
           ? '/api/WxUserValid/UpdateWxmbTemplate'
           : '/api/WxUserValid/AddWxmbTemplate';
-          this.wxmbDialog.form.generateQrCode = this.wxmbDialog.form.generateQrCode || true; // 确保该字段有值，默认为 false
+        this.wxmbDialog.form.generateQrCode = this.wxmbDialog.form.generateQrCode || true; // 确保该字段有值，默认为 false
         api
           .post(apiUrl, this.wxmbDialog.form, {
             headers: { Authorization: 'Bearer ' + header }

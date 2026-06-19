@@ -141,7 +141,8 @@
           <dd>
             <span class="inputbox">
               <el-input style="width: 280px" size="small" ref="gatewayIpInput" v-model="gatewayIp"
-                placeholder="公网 IP 或注册时使用的地址"></el-input>
+                placeholder="公网 IP 或注册时使用的地址"
+                @blur="handleGatewayEndpointBlur"></el-input>
             </span>
           </dd>
         </dl>
@@ -150,9 +151,11 @@
           <dd>
             <span class="inputbox">
               <el-input style="width: 160px" size="small" ref="gatewayPortInput" v-model="gatewayPort" type="number"
-                placeholder="如 9527"></el-input>
+                placeholder="如 9527"
+                @blur="handleGatewayEndpointBlur"></el-input>
             </span>
             <span class="block_tip">须与网关设置中「监听端口」一致；请先开启网关完成注册</span>
+            <p v-if="gatewayEndpointHint" class="gateway-endpoint-hint">{{ gatewayEndpointHint }}</p>
           </dd>
         </dl>
         <dl class="clearfix">
@@ -359,7 +362,10 @@
 </template>
 
 <script>
+import gatewayEndpointMixin from '@/assets/js/gatewayEndpointMixin';
+
 export default {
+  mixins: [gatewayEndpointMixin],
   data() {
     return {
       installFlag: true, // 保存按钮中的防重复点击
@@ -414,6 +420,15 @@ export default {
     gorout() {
       this.$router.push({ path: '/personal/wechat', query: { tab: 'ewmmb' } });
     },
+    shouldRequireGatewayValidation() {
+      return this.iscreatjb !== 0;
+    },
+    handleGatewayEndpointBlur() {
+      if (!this.shouldRequireGatewayValidation()) {
+        return;
+      }
+      this.scheduleRefreshGatewayEquipList(true);
+    },
     // 分区类型的切换
     typeChange(index) {
       this.typeindex = index;
@@ -449,36 +464,6 @@ export default {
         .catch((err) => {
           this.$messageError(err.message);
         });
-    },
-    normalizeGatewayIp(ip) {
-      let s = (ip || '').trim();
-      if (s.toLowerCase().startsWith('::ffff:')) {
-        s = s.substring(7);
-      }
-      return s.toLowerCase();
-    },
-    matchEquipByEndpoint(equipIp, equipPort, inputIp, inputPort) {
-      return this.normalizeGatewayIp(equipIp) === this.normalizeGatewayIp(inputIp) &&
-        Number(equipPort) === Number(inputPort);
-    },
-    resolveMachineCodeFromEndpoint() {
-      const inputIp = (this.gatewayIp || '').trim();
-      const portNum = parseInt(this.gatewayPort, 10);
-      if (!inputIp || Number.isNaN(portNum) || portNum < 1 || portNum > 65535) {
-        return { ok: false, message: '请填写有效的网关 IP 与 监听端口（1-65535）' };
-      }
-      const list = this.serverDrow || [];
-      const found = list.find(e => this.matchEquipByEndpoint(e.ip, e.port, inputIp, portNum));
-      if (!found) {
-        return {
-          ok: false,
-          message: '未找到与所填 IP、端口一致的已注册网关，请确认网关已运行且已在平台注册。'
-        };
-      }
-      return { ok: true, machineCode: found.machineCode };
-    },
-    gatewayTypesNeedEndpoint() {
-      return this.typeindex === 1 || this.typeindex === 2 || this.typeindex === 6;
     },
     // 安装时，数据的检验
     dataChecked() {
@@ -580,7 +565,7 @@ export default {
       return false;
     },
     // 安装分区
-    partinstall() {
+    async partinstall() {
       if (this.installFlag) {
         this.installFlag = false;
         if (this.batchAdd) {
@@ -606,9 +591,8 @@ export default {
           }
           let batchMachineCode = '';
           if (this.gatewayTypesNeedEndpoint()) {
-            const br = this.resolveMachineCodeFromEndpoint();
+            const br = await this.ensureGatewayEndpointResolved();
             if (!br.ok) {
-              this.$messageError(br.message);
               this.installFlag = true;
               return;
             }
@@ -672,9 +656,8 @@ export default {
           }
           let singleMachineCode = '';
           if (this.gatewayTypesNeedEndpoint()) {
-            const sr = this.resolveMachineCodeFromEndpoint();
+            const sr = await this.ensureGatewayEndpointResolved();
             if (!sr.ok) {
-              this.$messageError(sr.message);
               this.installFlag = true;
               return;
             }
@@ -785,18 +768,11 @@ export default {
     },
     // 获取服务器机器码下拉
     getequipcode() {
-      this.$api.partinstall
-        .getMachineCode()
-        .then((data) => {
-          if (data.status === 200) {
-            this.serverDrow = data.data;
-          } else if (data.status === 204) {
-            this.serverDrow = [];
-          }
-        })
-        .catch((err) => {
-          this.$messageError(err.message);
-        });
+      if (!this.shouldRequireGatewayValidation()) {
+        this.serverDrow = [];
+        return;
+      }
+      this.refreshGatewayEquipList(false);
     },
     addBatch() {
       this.batchList.push({ name: '', path: 'D:\\MirServer' });
@@ -815,7 +791,6 @@ export default {
   created() {
     this.groupsdrow();
     this.modelDrowList();
-    this.getequipcode();
   }
 
 };
@@ -828,6 +803,13 @@ export default {
 .tip_red {
   color: red;
   padding: 10px 40px;
+}
+.gateway-endpoint-hint {
+  color: #f56c6c;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 6px 0 0;
+  clear: both;
 }
 
 .areaContainer {

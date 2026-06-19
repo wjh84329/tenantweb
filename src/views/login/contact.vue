@@ -1,42 +1,64 @@
 <template>
-  <div class="page-wrap">
-    <login-header style="position: fixed"></login-header>
-      <div class="head_box">
-      <div class="banner-box"></div>
-    </div>
+  <div class="contact-shell">
+    <login-header></login-header>
 
-      <div class="content-wrap">
-        <div class="section-title">商务联系</div>
-        <div class="section-subtitle">
-          商务排序不分先后，每个商务服务都非常到位且专业！
+    <main class="contact-main">
+      <section class="contact-hero">
+        <div class="contact-hero-copy">
+          <h1>商务联系</h1>
+          <p>专业团队为您提供高效、贴心的服务与支持<br />快速响应每一个问题，助力您的业务稳健增长</p>
         </div>
+        <img class="contact-visual-img" src="../../assets/newUi/contact-hero-visual.png" alt="" />
+      </section>
 
-        <div class="cards-wrap">
-          <div class="cards-grid" v-if="mail.length">
-            <div class="contact-card" v-for="(item, idx) in mail" :key="idx">
-              <div class="card-head">
-                <span class="card-dot"></span>
-                <span class="card-name">{{ item.name }}</span>
+      <section class="contact-content">
+        <aside class="contact-info-panel">
+          <h2>联系信息</h2>
+          <div class="contact-info-row">
+            <div class="contact-info-icon time"></div>
+            <div>
+              <span>服务时间</span>
+              <strong>周一至周日 00:00 - 24:00</strong>
+              <p>全年无休</p>
+            </div>
+          </div>
+        </aside>
+
+        <div class="contact-service-panel">
+          <div class="contact-section-head">
+            <h2>商务客服</h2>
+            <p>您可以直接联系在线客服，或选择合适的同事为您服务。</p>
+          </div>
+
+          <div class="contact-grid" v-if="contactCards.length">
+            <div class="contact-card" v-for="item in contactCards" :key="item.qq">
+              <img class="contact-avatar" :src="item.avatar" :alt="item.name" />
+              <div class="contact-info">
+                <h3>{{ item.name }}</h3>
+                <p>QQ：{{ item.qq }}</p>
+                <em>{{ item.label }}</em>
               </div>
-              <div class="card-body">
-                <div class="card-qq">{{ item.name }}：{{ item.qq }}</div>
-                <a
-                  class="qq-btn"
-                  :href="'tencent://message/?uin=' + item.qq + '&Site=xxx&Menu=yes'"
-                >
-                  QQ交谈
-                </a>
-              </div>
+              <a
+                class="contact-btn"
+                :href="'https://wpa.qq.com/msgrd?v=3&uin=' + item.qq + '&site=qq&menu=yes'"
+                target="_blank"
+                rel="noopener noreferrer"
+                @click.prevent="openQqChat(item.qq)"
+              >
+                <img src="../../assets/newUi/qq-chat-icon.svg" alt="" />
+                QQ交谈
+              </a>
             </div>
           </div>
 
-          <div class="empty-box" v-else>
-            暂无客服信息
+          <div class="contact-empty" v-else>
+            暂无可用的商务客服
           </div>
         </div>
-      </div>
+      </section>
+    </main>
 
-      <login-footer></login-footer>
+    <login-footer></login-footer>
     </div>
 </template>
 
@@ -51,25 +73,39 @@ export default {
   },
   data() {
     return {
-      address: '',
-      phone: '',
       mail: []
     };
   },
   computed: {
-    enterpriseQq() {
-      return this.mail.length ? this.mail[0].qq : '';
+    contactCards() {
+      const avatars = [
+        require('../../assets/newUi/contact-avatar-1.png'),
+        require('../../assets/newUi/contact-avatar-2.png'),
+        require('../../assets/newUi/contact-avatar-3.png'),
+        require('../../assets/newUi/contact-avatar-4.png')
+      ];
+      const labels = [
+        '商务合作 ｜ 平台入驻',
+        '产品咨询 ｜ 功能对接',
+        '技术支持 ｜ 接口对接',
+        '售后服务 ｜ 问题反馈'
+      ];
+      return this.mail.map((item, idx) => ({
+        ...item,
+        avatar: avatars[idx % avatars.length],
+        label: labels[idx % labels.length]
+      }));
     }
   },
   methods: {
+    openQqChat(qq) {
+      window.open(`https://wpa.qq.com/msgrd?v=3&uin=${qq}&site=qq&menu=yes`, '_blank', 'noopener,noreferrer');
+    },
     getinfo() {
       this.$api.login
         .contactinfo()
         .then((data) => {
           if (data.status === 200) {
-            this.address = data.data.companyAddress;
-            this.phone = data.data.servicePhone;
-
             let qqList = [];
             try {
               qqList = JSON.parse(data.data.serviceQq || '[]');
@@ -92,296 +128,341 @@ export default {
 </script>
 
 <style scoped>
-.contact-page {
+.contact-shell {
   min-height: 100vh;
-  background: #f5f7fb;
+  background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 56%, #ffffff 100%);
+  color: #17233c;
+  font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft Yahei", sans-serif;
 }
 
-.head_box {
-    background: url(../../assets/img/about.jpg) center center no-repeat;
-    height: 500px;
-    position: relative;
-    /* padding-top: 126px; */
-    /* background: #fff; */
+.contact-main {
+  padding-top: 88px;
 }
 
-.banner-box {
-    position: relative;
-    width: 100%;
-    max-width: 1300px;
-    margin: 0 auto;
-    height: 722px;
-}
-
-.main-wrap {
+.contact-hero {
   position: relative;
-  top: 126px;
-}
-
-.banner-wrap {
-  width: 1300px;
-  margin: 0 auto;
-}
-
-.banner {
-  height: 280px;
-  background-image: url('../../assets/img/about.jpg');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% 100%;
-}
-
-.content-wrap {
-  width: 1300px;
-  margin: 0 auto;
-  padding: 24px 0 120px;
-}
-
-.section-title {
-  text-align: center;
-  font-size: 32px;
-  font-weight: 700;
-  color: #1f8fff;
-  line-height: 1;
-  margin-top: 20px;
-}
-
-.section-subtitle {
-  text-align: center;
-  font-size: 15px;
-  color: #666;
-  margin-top: 12px;
-  margin-bottom: 34px;
-}
-
-.cards-wrap {
-  display: flex;
-  justify-content: center;
-}
-
-.cards-grid {
-  width: 1000px;
+  width: 100%;
+  min-height: 272px;
+  margin: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.contact-card {
-  position: relative;
-  background: #fff;
-  border-radius: 18px;
+  grid-template-columns: minmax(0, 1fr) 500px;
+  gap: 36px;
+  align-items: center;
+  padding: 46px max(24px, calc((100% - 1300px) / 2));
+  box-sizing: border-box;
+  background:
+    linear-gradient(120deg, rgba(242, 247, 255, 0.98) 0%, rgba(235, 243, 255, 0.94) 58%, rgba(244, 248, 255, 0.98) 100%);
+  border-bottom: 1px solid #dbe8f7;
   overflow: hidden;
-  box-shadow: 0 14px 34px rgba(34, 97, 176, 0.14);
 }
 
-.card-head {
+.contact-hero::before,
+.contact-hero::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.contact-hero::before {
+  left: -4%;
+  right: -4%;
+  bottom: 22px;
+  height: 110px;
+  background:
+    radial-gradient(80% 90% at 20% 0%, rgba(104, 164, 255, 0.12) 0%, rgba(104, 164, 255, 0.02) 65%, transparent 75%),
+    radial-gradient(70% 80% at 82% 10%, rgba(104, 164, 255, 0.1) 0%, rgba(104, 164, 255, 0.01) 62%, transparent 72%);
+}
+
+.contact-hero::after {
+  left: 24px;
+  top: 96px;
+  width: 94px;
+  height: 94px;
+  background-image: radial-gradient(rgba(70, 136, 255, 0.16) 2px, transparent 2px);
+  background-size: 18px 18px;
+}
+
+.contact-hero-copy {
   position: relative;
-  height: 78px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(180deg, #3799ef 0%, #2c8fec 100%);
   z-index: 1;
 }
 
-/* 中间那层：比标题层更浅一点，形成层次 */
-.card-head::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 9px;
-  height: 20px;
-  background: linear-gradient(180deg, #55b4ff 0%, #40a8fb 100%);
-  opacity: 0.65;
-  z-index: 0;
+.contact-hero h1 {
+  margin: 0 0 18px;
+  color: #10213d;
+  font-size: 48px;
+  line-height: 1.1;
+  letter-spacing: 0;
 }
 
-/* 底部白色斜切凸起层 */
-.card-head::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 22px;
-  background: #fff;
-  clip-path: polygon(0 55%, 100% 18%, 100% 100%, 0 100%);
-  z-index: 0;
-}
-
-.card-dot {
+.contact-hero p {
   position: relative;
-  z-index: 2;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  margin-right: 10px;
-  background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+  max-width: 620px;
+  margin: 0;
+  color: #60718a;
+  font-size: 16px;
+  line-height: 2;
 }
 
-.card-dot::after {
+.contact-hero p::after {
   content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #2f94ef;
-  transform: translate(-50%, -50%);
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 22px;
+  background: #126de8;
+  border-radius: 2px;
 }
 
-.card-name {
-  position: relative;
-  z-index: 2;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
-}
-
-.card-body {
+.contact-visual-img {
+  display: block;
+  width: min(610px, 100%);
+  margin-left: auto;
+  object-fit: contain;
   position: relative;
   z-index: 1;
-  padding: 30px 18px 24px;
-  text-align: center;
 }
 
-.card-qq {
-  font-size: 16px;
-  color: #333;
-  line-height: 30px;
-  min-height: 30px;
-  margin-bottom: 28px;
-  word-break: break-all;
+.contact-content {
+  width: min(1300px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 22px 0 78px;
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
 }
 
-.qq-btn {
-  display: inline-block;
-  width: 184px;
-  height: 42px;
-  line-height: 42px;
-  border-radius: 24px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(90deg, #2990f4 0%, #33a3ff 100%);
-  box-shadow: 0 8px 18px rgba(43, 142, 243, 0.28);
-}
-
-.qq-btn:hover {
-  opacity: 0.92;
-}
-
-.second-title {
-  margin-top: 34px;
-}
-
-.enterprise-wrap {
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.enterprise-box {
-  width: 720px;
-  height: 220px;
-  background-image: url('../../assets/img/contact2.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.enterprise-box a,
-.enterprise-box span {
-  font-size: 32px;
-  font-weight: 700;
-  color: #111;
-  text-decoration: none;
-}
-
-.empty-box {
-  width: 580px;
-  min-height: 120px;
+.contact-info-panel,
+.contact-service-panel {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 10px 24px rgba(34, 97, 176, 0.12);
+  border: 1px solid #dce8f6;
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgba(42, 91, 151, 0.08);
+}
+
+.contact-info-panel {
+  padding: 30px;
+}
+
+.contact-info-panel h2,
+.contact-service-panel h2 {
+  margin: 0;
+  color: #14233d;
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+.contact-info-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #666;
+  gap: 16px;
+  padding: 24px 0;
+  border-bottom: 1px solid #edf3fb;
+}
+
+.contact-info-row:last-child {
+  border-bottom: none;
+}
+
+.contact-info-icon {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  background: #eef6ff;
+  border: 1px solid #d9eafe;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.contact-info-icon::before,
+.contact-info-icon::after {
+  content: '';
+  position: absolute;
+}
+
+.contact-info-icon.time::before {
+  left: 17px;
+  top: 17px;
+  width: 24px;
+  height: 24px;
+  border: 3px solid #126de8;
+  border-radius: 50%;
+}
+
+.contact-info-icon.time::after {
+  left: 30px;
+  top: 23px;
+  width: 3px;
+  height: 13px;
+  background: #126de8;
+  border-radius: 2px;
+  box-shadow: -6px 6px 0 0 #126de8;
+  transform-origin: bottom center;
+}
+
+.contact-info-row span,
+.contact-info-row strong,
+.contact-info-row p {
+  display: block;
+}
+
+.contact-info-row span {
+  color: #53647d;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.contact-info-row strong {
+  margin-top: 8px;
+  color: #10213d;
+  font-size: 17px;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.contact-info-row p {
+  margin: 6px 0 0;
+  color: #6d7b91;
   font-size: 14px;
 }
 
-@media (max-width: 1360px) {
-  .banner-wrap,
-  .content-wrap {
-    width: 94%;
-  }
-
-  .cards-grid {
-    width: 100%;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .empty-box {
-    width: 100%;
-  }
+.contact-service-panel {
+  padding: 30px;
 }
 
-@media (max-width: 1100px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
+.contact-section-head {
+  text-align: left;
+  margin-bottom: 22px;
 }
 
-@media (max-width: 768px) {
-  .main-wrap {
-    top: 96px;
-  }
+.contact-section-head h2 {
+  margin: 0;
+  color: #14233d;
+  font-size: 28px;
+  line-height: 1.2;
+}
 
-  .banner {
-    height: 160px;
-  }
+.contact-section-head p {
+  margin: 10px 0 0;
+  color: #6d7b91;
+  font-size: 15px;
+}
 
-  .content-wrap {
-    padding-bottom: 80px;
-  }
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
 
-  .section-title {
-    font-size: 24px;
-  }
+.contact-card {
+  min-height: 118px;
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) 116px;
+  gap: 18px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e0eaf6;
+  border-radius: 8px;
+  box-shadow: 0 14px 36px rgba(50, 93, 152, 0.06);
+}
 
-  .section-subtitle {
-    font-size: 13px;
-    padding: 0 12px;
-    line-height: 22px;
-  }
+.contact-avatar {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
 
-  .cards-grid {
+.contact-info {
+  margin-top: 0;
+}
+
+.contact-info h3 {
+  margin: 0;
+  color: #14233d;
+  font-size: 18px;
+}
+
+.contact-info p {
+  margin: 8px 0 0;
+  color: #64758d;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.contact-info em {
+  display: block;
+  margin-top: 8px;
+  color: #6d7b91;
+  font-size: 13px;
+  font-style: normal;
+}
+
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  margin-top: 0;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #126de8 0%, #2d8cff 100%);
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(18, 109, 232, 0.18);
+}
+
+.contact-btn img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.contact-empty {
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #718098;
+  background: #fff;
+  border: 1px dashed #c8d9ee;
+  border-radius: 8px;
+}
+
+@media (max-width: 1080px) {
+  .contact-hero {
     grid-template-columns: 1fr;
   }
 
-  .card-head {
-    height: 64px;
-    font-size: 17px;
+  .contact-content {
+    grid-template-columns: 1fr;
   }
 
-  .card-qq {
-    font-size: 15px;
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .contact-hero,
+  .contact-content {
+    width: calc(100% - 28px);
   }
 
-  .qq-btn {
-    width: 150px;
-    font-size: 15px;
+  .contact-hero {
+    min-height: auto;
+    padding-top: 34px;
+  }
+
+  .contact-hero h1 {
+    font-size: 38px;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

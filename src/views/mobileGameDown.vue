@@ -45,6 +45,7 @@
 import axios from 'axios';
 import mgrs from '../assets/js/securityapi';
 import { netUrl } from '../assets/js/version';
+import { downloadFile } from '../utils/downloadFile';
 export default {
   data() {
     return {
@@ -94,18 +95,15 @@ export default {
         });
     },
     // 下载
-    loadzip(url) {
-      var eleLink = document.createElement('a');
-      eleLink.style.display = 'none';
-      eleLink.setAttribute('target', 'blank');
-      // 字符内容转变成blob地址
-      eleLink.href = url;
-      // 触发点击
-      document.body.appendChild(eleLink);
-      eleLink.click();
-      // 然后移除
-      this.dialog.show = false;
-      document.body.removeChild(eleLink);
+    async loadzip(url) {
+      if (!url) {
+        return;
+      }
+      try {
+        await downloadFile(url, '接口文件.zip');
+      } catch (err) {
+        this.$messageError((err && err.message) || '下载失败，请稍后再试');
+      }
     },
     // 弹框数据的初始化
     dialoginit() {

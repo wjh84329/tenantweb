@@ -1,0 +1,233 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>网关下载教程</title>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/document-description.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/doc-common.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/chmstyle.css" rel="stylesheet">
+    <script src="../Scripts/jquery-3.3.1.min.js"></script>
+    <script src="../Scripts/bootstrap.min.js"></script>
+    <style>
+        .doc-box .header {
+            height: 60px;
+        background: #fff;
+            overflow: hidden;
+        }
+
+        .doc-box .top {
+            padding-left: 140px
+        }
+
+        .doc-box .top .text {
+            font-size: 19px;
+            color: #066eed;
+            letter-spacing: 2px;
+        }
+
+        .index-content .middle {
+            margin: 20px auto;
+            border-radius: 15px;
+        }
+
+        .index-content .middle .control {
+            background: var(--theme-primary-600, #2563eb);
+        }
+
+        .index-content .middle .list-box {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+
+        .index-content .middle .list-box .control {
+            border-top-left-radius: 15px;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <div class="doc-box">
+        <div class="header ">
+            <div class="top min-width">
+                
+                <span class="text"> 七星技术服务7XPAY </span>
+                <div class="line"></div>
+                <div class="text">文档中心</div>
+            </div>
+        </div>
+        <div class="index-content">
+            <div class="middle min-width">
+                <div class="list-box">
+                    <p class="control">文档中心</p>
+                    <ul class="list nav nav-tabs" id="allMenu">
+                        <li class="list-check">
+                            <a class="nav-header" data-toggle="collapse" href="#docCourse" onclick="chevron_toggle(this)">教程文档<span class="pull-right icon icon-black-down"></span></a>
+                            <ul id="docCourse" class="nav nav-list in" style="height: auto;">
+                                
+                                <li>
+                                    <a class="nav-header" data-toggle="collapse" href="#docUseDetail" onclick="chevron_toggle(this)">使用详情<span class="pull-right icon icon-black-down"></span></a>
+                                    <ul id="docUseDetail" class="nav nav-list in" style="height: auto;">
+                                        <li class="page-url li-check-active" data-url="GatewayDownDoc.html">网关下载</li>
+                                        <li class="page-url" data-url="GroupManageDoc.html">分组管理</li>
+                                        <li class="page-url" data-url="TemplateDoc.html">比例模板</li>
+                                        <li class="page-url" data-url="AreaManageDoc.html">分区管理</li>
+                                        <li class="page-url" data-url="ReissueDoc.html">充值补发</li>
+                                        <li class="page-url" data-url="wechatmb.html">微信密保</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docWechat" onclick="chevron_toggle(this)">公众号设置<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docWechat" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="PlatformWechatDoc.html">平台公众号</li>
+                                        <li class="page-url" data-url="SelfWechatDoc.html">自己公众号</li>
+                                        <li class="page-url" data-url="SetWechatDoc.html">公众号配置</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="nav-header collapsed" data-toggle="collapse" href="#docApi" onclick="chevron_toggle(this)">接口文档<span class="pull-right icon icon-right"></span></a>
+                            <ul id="docApi" class="nav nav-list collapse">
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docDesc" onclick="chevron_toggle(this)">接口文档说明<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docDesc" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="ApiDesc.html">概述</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameArea" onclick="chevron_toggle(this)">分区相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameArea" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="AreaList.html">所有分区列表</li>
+                                        <li class="page-url" data-url="GetGameAreaById.html">获取指定分区</li>
+                                        <!-- <li class="page-url" data-url="GetGameAreaByGroupId.html">获取分组下的分区</li> -->
+                                        <li class="page-url" data-url="CreateArea.html">创建新分区</li>
+                                        <li class="page-url" data-url="UpdateArea.html">修改分区信息</li>
+                                        <li class="page-url" data-url="DeleteArea.html">删除分区</li>
+                                        <!-- <li class="page-url" data-url="CheckConnect.html">检测分区通讯</li> -->
+                                        <li class="page-url" data-url="LoadScript.html">加载分区脚本</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameGroup" onclick="chevron_toggle(this)">分组相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameGroup" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="GroupList.html">获取分组列表</li>
+                                        <!-- <li class="page-url" data-url="CreateGroup.html">创建新分组</li> -->
+                                        <!-- <li class="page-url" data-url="DeleteGroup.html">删除分组</li> -->
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#template" onclick="chevron_toggle(this)">模板相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="template" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="TemplateList.html">比例模板列表</li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#reissue" onclick="chevron_toggle(this)">补发相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="reissue" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="BatchPay.html">整区补发</li>
+                                        <!-- <li class="page-url" data-url="SinglePay.html">手动充值</li> -->
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#drawrecord" onclick="chevron_toggle(this)">充值相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="drawrecord" class="nav nav-list collapse">
+                                        <!-- <li class="page-url" data-url="DrawRecord.html">充值领取记录</li> -->
+                                        <!-- <li class="page-url" data-url="GetPayChannel.html">获取充值通道</li> -->
+                                        <li class="page-url" data-url="SubmitPay.html">订单支付</li>
+                                        <!-- <li class="page-url" data-url="QueryOrder.html">订单查询</li> -->
+                                        <!-- <li class="page-url" data-url="SendRedPacket.html">红包领取</li> -->
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="content" id="art-content">
+                        <!-- 内容 [[ -->
+                        <div class="content-hd">
+                            <h2 class="with-border">网关下载教程</h2>
+                        </div>
+                        <div class="content-bd">
+                            
+
+
+
+<table width="200" border="0" class="msgtable">
+    <tbody>
+        <tr>
+            <td>
+                <font style="BACKGROUND-COLOR: #00ff00" color="#555555">
+
+                    <h3><font color="#000000"><font size="4">1，网关下载</font>：</font></h3>
+                </font>
+                <p><img alt="" src="../Content/IwanPay2/image/course/xzwg.png"></p>
+            </td>
+        </tr>
+        <tr>
+            <td><br><font color="#ff00ff">登录后台控制面板，左侧导航，</font><font color="#ff0000"><font style="BACKGROUND-COLOR: #000000" color="#00ff00"><strong>下载网关&gt;点击<font style="">热血传奇</font>图标，</strong></font>选项（传奇世界）也一样。<br></font><font color="#555555"></font></td>
+        </tr><tr>
+            <td>
+                <p>
+                    <img alt="" src="../Content/IwanPay2/image/course/fwqwg.png">&nbsp; <br><font color="#ff0000">下载好的网关<font color="#ff00ff">放入服务器</font>，通讯，接口秘钥一致，端口，需自行修改保存，<font style="BACKGROUND-COLOR: #00ff00">启动即可。</font></font>
+                    <br>
+                </p>
+                <p>
+                </p><p>
+                    </p><hr>
+
+                <p></p><font style="BACKGROUND-COLOR: #00ff00">
+
+                    <h3><font color="#000000"><font size="4">2，配置网关秘钥</font>：</font></h3>
+                </font><br>
+                <img alt="" src="../Content/IwanPay2/image/course/txmy.png"><br><br>登录后台<font color="#ff0000">&gt;账户管理&gt;</font>通讯秘钥：<br>点击按钮可随机生成通讯秘钥，APIKEY秘钥，与服务器上网关对接一致，即可正常通讯。<br><br><br>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div></div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script src="../Content/IwanPay/js/index.js" charset="utf-8"></script>
+        <div class="footer min-width">
+    <div class="line"></div>
+    本站严禁一切的钓鱼、色情、赌博、私彩及违反国家法律法规等使用
+</div>
+
+    </div>
+    <script>
+        function chevron_toggle(obj) {
+            $(obj).find("span").toggleClass("icon-right");
+            $(obj).find("span").toggleClass("icon-black-down");
+        }
+
+        $(function () {
+            var url = window.location.href.replace(window.location.origin, "");
+            $("#allMenu").find("li").each(function () {
+                if ($(this).attr("data-url")) {
+                    if ($(this).attr("data-url").toLowerCase() == url.toLowerCase()) {
+                        $(this).parent().parent().closest("ul").prev().click();
+                        $(this).closest("ul").prev().click();
+                        $(this).addClass("li-check-active");
+                    }
+                }
+            });
+        });
+    </script>
+    
+
+
+
+</body></html>

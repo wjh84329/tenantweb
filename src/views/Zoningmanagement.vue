@@ -132,7 +132,10 @@
     <!-- 登录密码的修改弹框 -->
     <el-dialog title="加载分区" :visible.sync="dialog.show" @close="dialoginit" custom-class="gs_dialog" width="400px">
       <p class="mgb10 mgt10">
-        <el-checkbox v-model="dialog.checked" :true-label="2" :false-label="1">全部更新</el-checkbox>
+        <el-radio-group v-model="dialog.checked">
+          <el-radio :label="1">仅更新充值脚本</el-radio>
+          <el-radio :label="2">全部更新</el-radio>
+        </el-radio-group>
       </p>
       <p class="tc pdb10">
         <el-button size="small" type="primary" @click="loadingArea">确定</el-button>
@@ -385,7 +388,13 @@ export default {
     async showdialog(id) {
       try {
         await this.checkBeforeLoad(id);
+        const row = this.tableData.find(item => item.id === id);
+        const currentCmdType = row && row.partitionCmdType !== undefined && row.partitionCmdType !== null
+          ? Number(row.partitionCmdType)
+          : 1;
+        this.dialog.checked = Number.isNaN(currentCmdType) ? 1 : currentCmdType;
         this.dialog.id = id;
+        this.dialog.ids = [];
         this.dialog.show = true;
       } catch (err) {
         this.$messageError(err.message || '网关检测失败，无法加载分区');
@@ -403,6 +412,13 @@ export default {
         for (const id of ids) {
           await this.checkBeforeLoad(id);
         }
+        const selectedRows = this.tableData.filter(item => ids.includes(item.id));
+        const firstCmdType = selectedRows.length > 0 &&
+          selectedRows[0].partitionCmdType !== undefined &&
+          selectedRows[0].partitionCmdType !== null
+          ? Number(selectedRows[0].partitionCmdType)
+          : 1;
+        this.dialog.checked = Number.isNaN(firstCmdType) ? 1 : firstCmdType;
         // 全部检测通过，打开加载弹窗并记录 ids
         this.dialog.ids = ids;
         this.dialog.id = '';
@@ -440,7 +456,7 @@ export default {
     },
     // 弹框初始化
     dialoginit() {
-      this.dialog.checked = 0;
+      this.dialog.checked = 1;
       this.dialog.id = '';
       this.dialog.ids = [];
     },

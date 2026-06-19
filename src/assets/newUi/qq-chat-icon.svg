@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="qq-chat-gradient" x1="12" y1="8" x2="52" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#58A8FF"/>
+      <stop offset="1" stop-color="#126DE8"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#qq-chat-gradient)"/>
+  <path
+    d="M18 20H34C40.0751 20 45 24.9249 45 31V33C45 39.0751 40.0751 44 34 44H27.5L21 50V44H18C11.9249 44 7 39.0751 7 33V31C7 24.9249 11.9249 20 18 20Z"
+    fill="white"
+    fill-opacity="0.97"
+  />
+  <circle cx="24" cy="32" r="3" fill="#126DE8"/>
+  <circle cx="32" cy="32" r="3" fill="#126DE8"/>
+  <circle cx="40" cy="32" r="3" fill="#126DE8"/>
+</svg>

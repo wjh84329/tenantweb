@@ -113,7 +113,7 @@
               >
             </li> -->
             <li v-if="hasMenu(19) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
-              <span class="icon10" @click="download">下载网关</span>
+              <span class="icon10" @click="startGatewayDownload">下载网关</span>
             </li>
             <li :style="sliderStyle">
               <span class="icon13" @click="openApiDoc">教程文档</span>
@@ -133,72 +133,43 @@
         </div>
       </div>
     </div>
-    <!-- 网关下载弹框 -->
-    <el-dialog title="网关下载" :visible.sync="dialog.show" @close="dialoginit" custom-class="gs_dialog" width="350px">
-      <ul class="areaContainer clearfix">
-        <!-- <li>
-          <a href="http://192.168.1.80:5003/GateWay_Agent.rar">
-            <el-tooltip class="item" effect="dark" content="热血传奇" placement="bottom">
-              <div class="imgbox">
-                <img src="../assets/images/index.png" alt="">
-                <span class="mask">{{dialog.wg===''?'暂无下载':'点击下载'}}</span>
-              </div>
-            </el-tooltip>
-          </a>
-        </li> -->
-        <li>
-          <el-tooltip class="item" effect="dark" content="点击下载充值网关" placement="bottom">
-            <div class="imgbox">
-              <img src="../assets/images/index.png" alt="" />
-              <span class="mask" @click="loadzip(1)">{{
-                dialog.wg === '' ? '暂无下载' : '点击下载'
-              }}</span>
-            </div>
-          </el-tooltip>
-        </li>
-        <!-- <li>
-          <el-tooltip class="item" effect="dark" content="传奇世界" placement="bottom">
-            <div class="imgbox">
-              <img src="../assets/images/cs.png" alt="" />
-              <span class="mask" @click="loadzip(2)">{{
-                dialog.ty === '' ? '暂无下载' : '点击下载'
-                }}</span>
-            </div>
-          </el-tooltip>
-        </li> -->
-
-        <!-- <li>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="传奇三"
-            placement="bottom"
-          >
-            <div class="imgbox">
-              <img src="../assets/images/cq3.png" alt="" />
-              <span class="mask" @click="loadzip(3)">{{
-                dialog.cq3 === '' ? '暂无下载' : '点击下载'
-              }}</span>
-            </div>
-          </el-tooltip>
-        </li>
-         <li>
-          <el-tooltip class="item" effect="dark" content="奇迹MU" placement="bottom">
-            <div class="imgbox">
-              <img src="../assets/images/qiji.png" style="width: 96px;" alt="">
-              <span class="mask" @click="loadzip(1)">{{dialog.wg===''?'暂无下载':'点击下载'}}</span>
-            </div>
-          </el-tooltip>
-        </li> -->
-        <!-- <li :class="{on:typeindex===4}" @click="typeChange(4)">
-          <el-tooltip class="item" effect="dark" content="WEB通讯" placement="bottom">
-            <img src="../assets/images/web.png" alt="">
-          </el-tooltip>
-        </li> -->
-      </ul>
-    </el-dialog>
     <charge-link v-if="preview" :chargeUrl="chargeUrl" :styleNum="floatingpictures"
       :styletype="floatstyle"></charge-link>
+    <div v-if="showDownloadOverlay" class="gateway-download-overlay">
+      <div class="gateway-download-overlay__scrim"></div>
+      <div class="gateway-download-card" :class="`is-${downloadPhase}`">
+        <div class="gateway-download-card__top">
+          <div class="gateway-download-card__heading">
+            <div class="gateway-download-card__brand">商户中心</div>
+            <div class="gateway-download-card__title">{{ downloadStatusTitle }}</div>
+            <div class="gateway-download-card__subtitle">{{ downloadStatusText }}</div>
+          </div>
+          <div class="gateway-download-card__badge">{{ downloadPhaseLabel }}</div>
+        </div>
+        <div class="gateway-download-card__body">
+          <div class="gateway-download-card__icon">
+            <i :class="downloadStatusIcon"></i>
+          </div>
+          <div class="gateway-download-card__content">
+            <div class="gateway-download-card__file">
+              <span class="gateway-download-card__file-label">当前任务</span>
+              <span class="gateway-download-card__file-name">{{ downloadDisplayName || '网关压缩包.zip' }}</span>
+            </div>
+            <div class="gateway-download-card__bar">
+              <div class="gateway-download-card__track">
+                <div class="gateway-download-card__fill" :style="{ width: `${displayDownloadPercentage}%` }"></div>
+                <div class="gateway-download-card__glow" :style="{ width: `${displayDownloadPercentage}%` }"></div>
+              </div>
+              <div v-if="showDownloadPercentage" class="gateway-download-card__percent">{{ displayDownloadPercentage }}%</div>
+            </div>
+            <div class="gateway-download-card__meta">
+              <span>{{ downloadProgressText }}</span>
+              <span>{{ downloadMetaStatus }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- 右侧快捷浮窗（平台技术 / 微信验证 / 下载 / 回顶） -->
     <div class="merchant-float-dock" :class="{ 'is-collapsed': floatDockCollapsed }">
       <div class="merchant-float-dock__inner">
@@ -287,6 +258,7 @@ import Mgr from '../assets/js/SecurityService';
 import mgrs from '../assets/js/securityapi';
 import { loginUrl, netUrl } from '../assets/js/version';
 import axios from 'axios';
+import { appendQuery, downloadFile, normalizeDownloadUrl, probeDownloadFile } from '../utils/downloadFile';
 export default {
   name: 'Home',
   inject: ['reload'],
@@ -316,6 +288,13 @@ export default {
       activeNav: '/main/home', // 默认选中首页
       skinNum: Number(localStorage.getItem('skinNum')) || 0,
       hoverNav: '', // 当前 hover 的菜单 path
+      downloadLoading: false,
+      downloadPhase: 'idle',
+      downloadOverlayVisible: false,
+      downloadProgressPercentage: 0,
+      downloadProgressLoaded: 0,
+      downloadProgressTotal: 0,
+      downloadDisplayName: '',
       isDisablePayApi: false,
       floatDockCollapsed: false,
       // 微信验证 / 助手下载 / 备用下载 统一打开的站点
@@ -384,6 +363,114 @@ export default {
         case 6: return { background: '#b4b8ab', color: '#fff' }; // 莫兰迪灰加深
         default: return { background: '#a7c7e7', color: '#fff' };
       }
+    },
+    downloadProgressText() {
+      if (!this.showDownloadStatusBox) {
+        return '';
+      }
+      if (this.downloadPhase === 'ready') {
+        return this.downloadProgressTotal > 0
+          ? `即将下载 ${this.formatDownloadSize(this.downloadProgressTotal)}`
+          : '正在为你准备下载资源...';
+      }
+      if (this.downloadPhase === 'done') {
+        const finishedSize = this.downloadProgressLoaded || this.downloadProgressTotal;
+        if (this.downloadDisplayName) {
+          return `${this.downloadDisplayName} 已完成${finishedSize > 0 ? `，共 ${this.formatDownloadSize(finishedSize)}` : ''}`;
+        }
+        return `已完成 ${this.formatDownloadSize(finishedSize)}`;
+      }
+      if (this.downloadProgressTotal > 0) {
+        return `${this.formatDownloadSize(this.downloadProgressLoaded)} / ${this.formatDownloadSize(this.downloadProgressTotal)}`;
+      }
+      if (this.downloadProgressLoaded > 0) {
+        return `已下载 ${this.formatDownloadSize(this.downloadProgressLoaded)}`;
+      }
+      return '正在连接服务器...';
+    },
+    downloadProgressStatus() {
+      if (!this.showDownloadStatusBox) {
+        return '';
+      }
+      return this.downloadPhase === 'done' ? 'success' : '';
+    },
+    downloadStatusTitle() {
+      switch (this.downloadPhase) {
+        case 'ready':
+          return '网关下载准备中';
+        case 'done':
+          return '网关下载已完成';
+        default:
+          return '网关下载中';
+      }
+    },
+    downloadPhaseLabel() {
+      switch (this.downloadPhase) {
+        case 'ready':
+          return '准备下载';
+        case 'done':
+          return '下载完成';
+        default:
+          return '下载中';
+      }
+    },
+    downloadProgressColor() {
+      switch (this.downloadPhase) {
+        case 'done':
+          return '#13ce66';
+        case 'ready':
+          return '#e6a23c';
+        default:
+          return '#409eff';
+      }
+    },
+    showDownloadStatusBox() {
+      return this.downloadPhase !== 'idle';
+    },
+    showDownloadOverlay() {
+      return this.downloadOverlayVisible;
+    },
+    displayDownloadPercentage() {
+      if (this.downloadPhase === 'ready') {
+        return 0;
+      }
+      if (this.downloadPhase === 'done') {
+        return 100;
+      }
+      return Math.max(0, Math.min(100, this.downloadProgressPercentage || 0));
+    },
+    showDownloadPercentage() {
+      return this.downloadPhase !== 'ready';
+    },
+    downloadStatusText() {
+      switch (this.downloadPhase) {
+        case 'ready':
+          return '系统正在校验资源并准备下载链路，请稍候片刻';
+        case 'done':
+          return '资源包已传输完成，浏览器正在为你保存文件';
+        default:
+          return '下载任务正在稳定传输，请尽量保持当前页面不关闭';
+      }
+    },
+    downloadMetaStatus() {
+      switch (this.downloadPhase) {
+        case 'ready':
+          return '准备下载';
+        case 'done':
+          return '传输完成';
+        default:
+          return '正在传输';
+      }
+    },
+    downloadStatusIcon() {
+      switch (this.downloadPhase) {
+        case 'ready':
+          return 'el-icon-loading';
+        case 'done':
+          return 'el-icon-circle-check';
+        default:
+          return 'el-icon-download';
+      }
     }
   },
   watch: {
@@ -395,6 +482,9 @@ export default {
     }
   },
   methods: {
+    normalizeGatewayConfigUrl(url) {
+      return normalizeDownloadUrl(url || '');
+    },
     // 选中事件
     setActive(path) {
       // 只做路由跳转，active 由 updateActiveByRoute 统一计算
@@ -511,34 +601,38 @@ export default {
     },
     // 下载网关
     async download() {
-      this.dialog.show = true;
-      let header = await mgrs();
-      axios({
-        method: 'get',
-        url: netUrl + '/api/ManageResource/GetConfig',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + header
-        }
-      })
-        .then(data => {
-          if (data.status === 200) {
-            this.dialog.cq3 = data.data.cq3 === '' ? '' : data.data.cq3;
-            this.dialog.ty = data.data.ty === '' ? '' : data.data.ty;
-            this.dialog.wg = data.data.wg === '' ? '' : data.data.wg;
-            this.dialog.sql = data.data.sql === '' ? '' : data.data.sql;
-            this.dialog.ltcq = data.data.ltcq === '' ? '' : data.data.ltcq;
-            this.dialog.yktl = data.data.yktl === '' ? '' : data.data.yktl;
-            this.dialog.dslh = data.data.dslh === '' ? '' : data.data.dslh;
-            this.dialog.ymcq = data.data.ymcq === '' ? '' : data.data.ymcq;
-            this.dialog.cqby = data.data.cqby === '' ? '' : data.data.cqby;
-            this.dialog.xbnz = data.data.xbnz === '' ? '' : data.data.xbnz;
-            this.dialog.jxqy = data.data.jxqy === '' ? '' : data.data.jxqy;
+      try {
+        const header = await mgrs();
+        const data = await axios({
+          method: 'get',
+          url: netUrl + '/api/ManageResource/GetConfig',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + header
           }
-        })
-        .catch(err => {
-          this.$messageError(err.message);
         });
+
+        if (data.status === 200) {
+          this.dialog.cq3 = this.normalizeGatewayConfigUrl(data.data.cq3);
+          this.dialog.ty = this.normalizeGatewayConfigUrl(data.data.ty);
+          this.dialog.wg = this.normalizeGatewayConfigUrl(data.data.wg);
+          this.dialog.sql = this.normalizeGatewayConfigUrl(data.data.sql);
+          this.dialog.ltcq = this.normalizeGatewayConfigUrl(data.data.ltcq);
+          this.dialog.yktl = this.normalizeGatewayConfigUrl(data.data.yktl);
+          this.dialog.dslh = this.normalizeGatewayConfigUrl(data.data.dslh);
+          this.dialog.ymcq = this.normalizeGatewayConfigUrl(data.data.ymcq);
+          this.dialog.cqby = this.normalizeGatewayConfigUrl(data.data.cqby);
+          this.dialog.xbnz = this.normalizeGatewayConfigUrl(data.data.xbnz);
+          this.dialog.jxqy = this.normalizeGatewayConfigUrl(data.data.jxqy);
+          return true;
+        }
+
+        this.$messageError('下载配置获取失败，请稍后再试');
+        return false;
+      } catch (err) {
+        this.$messageError(err.message);
+        return false;
+      }
     },
     // 弹框初始化
     dialoginit() {
@@ -546,91 +640,107 @@ export default {
       this.dialog.ty = ''; // 传奇世界
       this.dialog.wg = ''; // 网关
       this.dialog.sql = ''; // sql
+      this.resetDownloadProgress();
+    },
+    getGatewayDownloadUrl(num) {
+      const map = {
+        1: this.dialog.wg,
+        2: this.dialog.ty,
+        3: this.dialog.cq3,
+        4: this.dialog.sql,
+        6: this.dialog.ltcq,
+        14: this.dialog.jxqy,
+        15: this.dialog.xbnz,
+        16: this.dialog.yktl,
+        17: this.dialog.dslh,
+        18: this.dialog.ymcq,
+        19: this.dialog.cqby
+      };
+      return this.normalizeGatewayConfigUrl(map[num]);
+    },
+    getGatewayFallbackName(num) {
+      const map = {
+        1: '网关压缩包.zip',
+        2: '兑换网关.zip',
+        3: '传奇3网关.zip',
+        4: 'SQL文件.zip'
+      };
+      return map[num] || '网关压缩包.zip';
     },
     // 下载
-    loadzip(num) {
-      let url = '';
-      if (num === 1) {
-        if (this.dialog.wg === '') {
-          return;
-        } else {
-          url = this.dialog.wg;
-        }
-      } else if (num === 2) {
-        if (this.dialog.ty === '') {
-          return;
-        } else {
-          url = this.dialog.ty;
-        }
-      } else if (num === 3) {
-        if (this.dialog.cq3 === '') {
-          return;
-        } else {
-          url = this.dialog.cq3;
-        }
-      } else if (num === 4) {
-        if (this.dialog.sql === '') {
-          return;
-        } else {
-          url = this.dialog.sql;
-        }
-      } else if (num === 6) {
-        if (this.dialog.ltcq === '') {
-          return;
-        } else {
-          url = this.dialog.ltcq;
-        }
-      } else if (num === 16) {
-        if (this.dialog.yktl === '') {
-          return;
-        } else {
-          url = this.dialog.yktl;
-        }
-      } else if (num === 17) {
-        if (this.dialog.dslh === '') {
-          return;
-        } else {
-          url = this.dialog.dslh;
-        }
-      } else if (num === 18) {
-        if (this.dialog.ymcq === '') {
-          return;
-        } else {
-          url = this.dialog.ymcq;
-        }
-      } else if (num === 19) {
-        if (this.dialog.cqby === '') {
-          return;
-        } else {
-          url = this.dialog.cqby;
-        }
-      } else if (num === 15) {
-        if (this.dialog.xbnz === '') {
-          return;
-        } else {
-          url = this.dialog.xbnz;
-        }
-      } else if (num === 14) {
-        if (this.dialog.jxqy === '') {
-          return;
-        } else {
-          url = this.dialog.jxqy;
-        }
+    async loadzip(num) {
+      if (this.downloadLoading) {
+        return;
       }
-      url = url + '&merchantId=' + this.id;
 
-      // 创建隐藏的可下载链接
-      var eleLink = document.createElement('a');
-      eleLink.style.display = 'none';
-      eleLink.setAttribute('target', 'blank');
-      // 字符内容转变成blob地址
-      eleLink.href = url;
-      // 触发点击
-      document.body.appendChild(eleLink);
-      eleLink.click();
-      // 然后移除
-      this.dialog.show = false;
-      document.body.removeChild(eleLink);
+      let url = this.getGatewayDownloadUrl(num || 1);
+      if (!url) {
+        this.$messageError('暂无可下载的网关资源');
+        return;
+      }
+      url = appendQuery(url, 'merchantId', this.id);
+
+      this.downloadLoading = true;
+      this.downloadOverlayVisible = true;
+      this.resetDownloadProgress();
+      this.downloadPhase = 'ready';
+      try {
+        const probe = await probeDownloadFile(url, {
+          fallbackName: this.getGatewayFallbackName(num)
+        }).catch(() => null);
+        if (probe) {
+          this.downloadDisplayName = probe.fileName || this.getGatewayFallbackName(num);
+          this.downloadProgressTotal = probe.total || 0;
+        } else {
+          this.downloadDisplayName = this.getGatewayFallbackName(num);
+        }
+        await downloadFile(url, this.getGatewayFallbackName(num), {
+          onProgress: progress => {
+            this.downloadPhase = 'downloading';
+            this.downloadProgressLoaded = progress.loaded || 0;
+            this.downloadProgressTotal = progress.total || 0;
+            this.downloadProgressPercentage = progress.percentage || 0;
+          }
+        });
+        if (this.downloadProgressPercentage < 100) {
+          this.downloadProgressPercentage = 100;
+        }
+        if (this.downloadProgressLoaded <= 0 && this.downloadProgressTotal > 0) {
+          this.downloadProgressLoaded = this.downloadProgressTotal;
+        }
+        this.downloadPhase = 'done';
+        window.setTimeout(() => {
+          this.downloadOverlayVisible = false;
+        }, 800);
+      } catch (err) {
+        this.downloadPhase = 'idle';
+        this.downloadOverlayVisible = false;
+        this.$messageError((err && err.message) || '下载失败，请稍后再试');
+      } finally {
+        window.setTimeout(() => {
+          this.downloadLoading = false;
+          if (this.downloadPhase === 'done') {
+            this.resetDownloadProgress();
+          }
+        }, this.downloadPhase === 'done' ? 800 : 0);
+      }
+    },
+    resetDownloadProgress() {
+      this.downloadPhase = 'idle';
+      this.downloadProgressPercentage = 0;
+      this.downloadProgressLoaded = 0;
+      this.downloadProgressTotal = 0;
+      this.downloadDisplayName = '';
+    },
+    formatDownloadSize(size) {
+      const value = Number(size) || 0;
+      if (value >= 1024 * 1024) {
+        return `${(value / (1024 * 1024)).toFixed(1)} MB`;
+      }
+      if (value >= 1024) {
+        return `${(value / 1024).toFixed(1)} KB`;
+      }
+      return `${value} B`;
     },
     // 跳转路由刷新
     refresh(path) {
@@ -682,6 +792,25 @@ export default {
       } else {
         window.scrollTo(0, 0);
       }
+    },
+    async startGatewayDownload() {
+      if (this.downloadLoading) {
+        return;
+      }
+
+      this.downloadOverlayVisible = true;
+      this.resetDownloadProgress();
+      this.downloadPhase = 'ready';
+      this.downloadDisplayName = '网关压缩包.zip';
+
+      const loaded = await this.download();
+      if (!loaded) {
+        this.downloadOverlayVisible = false;
+        this.resetDownloadProgress();
+        return;
+      }
+
+      await this.loadzip(1);
     }
   },
   created() {
@@ -992,45 +1121,297 @@ export default {
     }
   }
 
-  .areaContainer {
-    padding: 0 0 20px 15px;
+}
 
-    li {
-      position: relative;
-      float: left;
-      border: 1px solid #ddd;
-      padding: 4px;
-      cursor: pointer;
-      margin-right: 17px;
+.gateway-download-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  pointer-events: none;
 
-      .imgbox {
-        padding: 15px 8px;
-      }
+  &__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top, rgba(57, 148, 232, 0.14), transparent 40%),
+      linear-gradient(180deg, rgba(8, 54, 92, 0.16), rgba(7, 40, 74, 0.26));
+    backdrop-filter: blur(5px);
+  }
+}
 
-      .mask {
-        display: none;
-        position: absolute;
-        top: 4px;
-        left: 4px;
-        width: 112px;
-        height: 90px;
-        background: rgba(0, 0, 0, 0.7);
-        color: #fff;
-        text-align: center;
-        line-height: 90px;
-      }
+.gateway-download-card {
+  position: relative;
+  width: min(820px, calc(100vw - 64px));
+  padding: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 250, 255, 0.98));
+  box-shadow:
+    0 28px 60px rgba(13, 67, 114, 0.18),
+    0 8px 20px rgba(13, 67, 114, 0.08);
+  border: 1px solid rgba(60, 137, 216, 0.16);
+  pointer-events: auto;
 
-      &:hover {
-        border-color: #00b066;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 120px;
+    background: linear-gradient(90deg, rgba(3, 152, 214, 0.96), rgba(22, 113, 193, 0.92));
+  }
 
-        .mask {
-          display: block;
-        }
-      }
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 160px;
+    background: linear-gradient(180deg, rgba(235, 245, 255, 0), rgba(214, 232, 248, 0.45));
+  }
 
-      img {
-        display: block;
-      }
+  &.is-ready {
+    border-color: rgba(236, 184, 71, 0.32);
+  }
+
+  &.is-done {
+    border-color: rgba(54, 180, 112, 0.28);
+  }
+
+  &__top {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px 34px 26px;
+  }
+
+  &__heading {
+    min-width: 0;
+  }
+
+  &__brand {
+    position: relative;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+  }
+
+  &__badge {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    min-width: 104px;
+    height: 38px;
+    padding: 0 18px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  &__title {
+    position: relative;
+    margin-top: 12px;
+    color: #fff;
+    font-size: 34px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  &__subtitle {
+    position: relative;
+    margin-top: 12px;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 15px;
+    line-height: 1.8;
+    max-width: 560px;
+  }
+
+  &__body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 32px 34px 32px;
+  }
+
+  &__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 92px;
+    height: 92px;
+    border-radius: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #eef7ff, #dceefe);
+    border: 1px solid rgba(64, 142, 218, 0.18);
+    color: #2186d4;
+    font-size: 40px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.92),
+      0 10px 22px rgba(42, 120, 190, 0.14);
+  }
+
+  &__content {
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__file {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    min-width: 0;
+  }
+
+  &__file-label {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(3, 152, 214, 0.08);
+    color: #1177bf;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  &__file-name {
+    min-width: 0;
+    color: #2d4660;
+    font-size: 20px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+
+  &__track {
+    position: relative;
+    flex: 1;
+    height: 16px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #e4eef8, #d4e3f1);
+    box-shadow: inset 0 1px 5px rgba(54, 100, 146, 0.16);
+  }
+
+  &__fill,
+  &__glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: inherit;
+    transition: width 0.35s ease;
+  }
+
+  &__fill {
+    background: linear-gradient(90deg, #28b2ea 0%, #1d8bde 45%, #0f70ca 100%);
+  }
+
+  &__glow {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0));
+  }
+
+  &__percent {
+    min-width: 86px;
+    text-align: right;
+    color: #0f6dbd;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  &__meta {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 14px;
+    color: #6f86a0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 768px) {
+  .gateway-download-card {
+    width: calc(100vw - 28px);
+
+    &__top,
+    &__body {
+      padding-left: 22px;
+      padding-right: 22px;
+    }
+
+    &__top,
+    &__body,
+    &__bar,
+    &__meta,
+    &__file {
+      display: block;
+    }
+
+    &__badge,
+    &__icon {
+      margin-top: 16px;
+    }
+
+    &__title {
+      font-size: 28px;
+    }
+
+    &__icon {
+      width: 78px;
+      height: 78px;
+      font-size: 34px;
+    }
+
+    &__file {
+      margin-bottom: 14px;
+    }
+
+    &__file-name {
+      display: block;
+      margin-top: 8px;
+      font-size: 18px;
+      white-space: normal;
+    }
+
+    &__bar {
+      margin-top: 18px;
+    }
+
+    &__percent {
+      margin-top: 14px;
+      text-align: left;
+      font-size: 28px;
+    }
+
+    &__meta {
+      margin-top: 12px;
     }
   }
 }

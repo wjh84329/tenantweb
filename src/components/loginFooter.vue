@@ -1,14 +1,8 @@
 <template>
   <div class="footerbox">
-    <p>
-    {{ about }}
-    </p>
-    <p>
-      {{ copyright }}
-    </p>
-    <div style="padding-bottom: 25px;">
-      <img src="../assets/newLogin/sm.png" />
-      <img src="../assets/newLogin/m2.jpg" />
+    <div class="footer-inner">
+      <p v-if="displayAboutHtml" v-html="displayAboutHtml"></p>
+      <p v-if="displayCopyrightHtml" v-html="displayCopyrightHtml"></p>
     </div>
     <el-backtop target=".contentBox"></el-backtop>
   </div>
@@ -24,7 +18,70 @@ export default {
       about: ''
     };
   },
+  computed: {
+    displayAboutHtml() {
+      return this.renderFooterHtml(this.about);
+    },
+    displayCopyrightHtml() {
+      return this.renderFooterHtml(this.copyright);
+    }
+  },
   methods: {
+    escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    },
+    escapeAttr(text) {
+      return this.escapeHtml(text).replace(/`/g, '&#96;');
+    },
+    normalizeFooterText(text) {
+      return (text || '').replace(/钻石/g, '七星');
+    },
+    renderFooterHtml(raw) {
+      const normalized = this.normalizeFooterText(raw);
+      if (!normalized) {
+        return '';
+      }
+
+      if (typeof window === 'undefined' || typeof DOMParser === 'undefined') {
+        return this.escapeHtml(normalized).replace(/\r?\n/g, '<br>');
+      }
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(`<div>${normalized}</div>`, 'text/html');
+      const container = doc.body.firstElementChild;
+
+      const renderNode = (node) => {
+        if (node.nodeType === window.Node.TEXT_NODE) {
+          return this.escapeHtml(node.textContent);
+        }
+
+        if (node.nodeType !== window.Node.ELEMENT_NODE) {
+          return '';
+        }
+
+        const tagName = node.tagName.toLowerCase();
+        if (tagName === 'br') {
+          return '<br>';
+        }
+
+        if (tagName === 'a') {
+          const href = (node.getAttribute('href') || '').trim();
+          if (!/^https?:\/\//i.test(href)) {
+            return this.escapeHtml(node.textContent);
+          }
+          return `<a href="${this.escapeAttr(href)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(node.textContent)}</a>`;
+        }
+
+        return this.escapeHtml(node.textContent);
+      };
+
+      return Array.from(container.childNodes).map(renderNode).join('');
+    },
     // 获取注册页面的底部信息
     footerInfo() {
       this.$api.login
@@ -50,24 +107,36 @@ export default {
 
 <style scoped>
 .footerbox {
-  position: fixed;
-  left: 0;
-  bottom: 0;
   width: 100%;
-  z-index: 999;
-  background-color: #3e3e3e;
+  background: #f7faff;
+  border-top: 1px solid #e3edf9;
+}
+
+.footer-inner {
+  width: min(1300px, calc(100% - 48px));
+  min-height: 96px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 18px 0;
+  padding: 24px 0;
+  text-align: center;
 }
+
 .footerbox p {
-  /* margin: 15px 0; */
-  padding-top: 25px;
-  /* padding-bottom: 30px; */
-  color: #bbbbbb;
-  line-height: 20px;
+  margin: 4px 0;
+  color: #66758d;
+  line-height: 24px;
   font-size: 14px;
+}
+
+.footerbox p /deep/ a {
+  color: #1f6bff;
+  text-decoration: underline;
+}
+
+.footerbox p /deep/ a:hover {
+  color: #0d4ed8;
 }
 </style>

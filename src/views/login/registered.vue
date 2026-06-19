@@ -1,153 +1,160 @@
 <template>
-  <div class="register-page">
+  <div class="register-shell">
     <login-header></login-header>
 
-    <div class="page-body">
-      <!-- <div class="page-decor"></div> -->
-
-      <div class="register-panel">
-        <div class="panel-title">用户注册</div>
-
-        <div class="form-list">
-          <div class="form-item">
-            <div class="form-label">用户名</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="account"
-                  placeholder="用户名由3-18个英文字母或数字组成"
-                  @input="checkAccount"
-                  @blur="checkAccount1"
-                ></el-input>
+    <main class="register-main">
+      <section class="register-hero">
+        <div class="register-copy">
+          <h1>入驻流程</h1>
+          <p>简单三步，快速开启您的商户之旅</p>
+          <div class="register-flow">
+            <div class="register-flow-item">
+              <div class="register-flow-icon">
+                <img src="../../assets/newUi/register-flow-icon-1.png" alt="" />
+              </div>
+              <div class="register-flow-body">
+                <b>01</b>
+                <strong>填写资料</strong>
+                <span>填写商户基本信息，设置账号与联系方式</span>
+              </div>
+            </div>
+            <div class="register-flow-item">
+              <div class="register-flow-icon">
+                <img src="../../assets/newUi/register-flow-icon-2.png" alt="" />
+              </div>
+              <div class="register-flow-body">
+                <b>02</b>
+                <strong>身份校验</strong>
+                <span>完成信息校验，确保账户安全可靠</span>
+              </div>
+            </div>
+            <div class="register-flow-item">
+              <div class="register-flow-icon">
+                <img src="../../assets/newUi/register-flow-icon-3.png" alt="" />
+              </div>
+              <div class="register-flow-body">
+                <b>03</b>
+                <strong>等待审核</strong>
+                <span>提交资料后，工作人员将尽快审核</span>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="form-item">
-            <div class="form-label">商户昵称</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="niceName"
-                  placeholder="请输入商户昵称"
-                  @input="checkniceName"
-                  @blur="checkniceName1"
-                ></el-input>
-              </div>
-            </div>
+        <div class="register-panel">
+          <div class="register-panel-head">
+            <h2>创建商户账号</h2>
+            <p>请如实填写以下信息，带 <em>*</em> 为必填项</p>
           </div>
 
-          <div class="form-item">
-            <div class="form-label">密码</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  type="password"
-                  v-model="password"
-                  placeholder="密码由6-20个英文字母、数字或下划线组成"
-                  @input="checkpassword"
-                  @blur="checkpassword1"
-                ></el-input>
-              </div>
-            </div>
-          </div>
+          <div class="register-grid">
+            <label class="reg-field">
+              <span class="required">用户名</span>
+              <el-input
+                class="reg-input"
+                v-model="account"
+                placeholder="用户名由3-18个英文字母或数字组成"
+                @input="checkAccount"
+                @blur="checkAccount1"
+              ></el-input>
+              <em v-if="!checkflag1">用户名格式不正确</em>
+            </label>
 
-          <div class="form-item">
-            <div class="form-label">确认密码</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  type="password"
-                  v-model="surePassword"
-                  placeholder="请再次输入密码"
-                ></el-input>
-              </div>
-            </div>
-          </div>
+            <label class="reg-field">
+              <span class="required">商户昵称</span>
+              <el-input
+                class="reg-input"
+                v-model="niceName"
+                placeholder="请输入商户昵称（2-8个字符）"
+                @input="checkniceName"
+                @blur="checkniceName1"
+              ></el-input>
+              <em v-if="!checkflag2">商户昵称至少2个字符</em>
+            </label>
 
-          <div class="form-item">
-            <div class="form-label">QQ</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="qq"
-                  placeholder="请输入联系QQ"
-                  @input="qq = intNumber(qq)"
-                ></el-input>
-              </div>
-            </div>
-          </div>
+            <label class="reg-field">
+              <span class="required">密码</span>
+              <el-input
+                class="reg-input"
+                type="password"
+                v-model="password"
+                placeholder="密码长度6-20个字符"
+                @input="checkpassword"
+                @blur="checkpassword1"
+              ></el-input>
+              <em v-if="!checkflag3">密码长度需为6-20个字符</em>
+            </label>
 
-          <div class="form-item">
-            <div class="form-label">邮箱</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="mails"
-                  placeholder="请输入邮箱"
-                  @blur="checkmail"
-                ></el-input>
-              </div>
-              <p class="field-tip" v-if="!checkflag4" :class="{ wrong: !checkflag4 }">
-                邮箱格式不正确
-              </p>
-            </div>
-          </div>
+            <label class="reg-field">
+              <span class="required">确认密码</span>
+              <el-input
+                class="reg-input"
+                type="password"
+                v-model="surePassword"
+                placeholder="请再次输入密码"
+              ></el-input>
+            </label>
 
-          <div class="form-item">
-            <div class="form-label">手机号</div>
-            <div class="form-main">
-              <div class="field-box">
-                <el-input
-                  class="form-input"
-                  v-model="phone"
-                  placeholder="请输入常用手机号"
-                  @blur="checkphone"
-                ></el-input>
-              </div>
-              <p class="field-tip" v-if="!checkflag5" :class="{ wrong: !checkflag5 }">
-                手机格式不正确
-              </p>
-            </div>
-          </div>
+            <label class="reg-field">
+              <span>QQ</span>
+              <el-input
+                class="reg-input"
+                v-model="qq"
+                placeholder="请输入联系QQ（选填）"
+                @input="qq = intNumber(qq)"
+              ></el-input>
+            </label>
 
-          <div class="form-item captcha-item">
-            <div class="form-label">验证码</div>
-            <div class="form-main">
-              <div class="captcha-wrap">
-                <div class="field-box captcha-input-box">
-                  <el-input
-                    class="form-input"
-                    v-model="validcode"
-                    placeholder="请输入图形验证码"
-                  ></el-input>
-                </div>
-                <a class="captcha-box" href="javascript:;" @click.prevent="getRandomCode">
+            <label class="reg-field">
+              <span class="required">邮箱</span>
+              <el-input
+                class="reg-input"
+                v-model="mails"
+                placeholder="请输入邮箱"
+                @blur="checkmail"
+              ></el-input>
+              <em v-if="!checkflag4">邮箱格式不正确</em>
+            </label>
+
+            <label class="reg-field">
+              <span class="required">手机号</span>
+              <el-input
+                class="reg-input"
+                v-model="phone"
+                placeholder="请输入常用手机号"
+                @blur="checkphone"
+              ></el-input>
+              <em v-if="!checkflag5">手机格式不正确</em>
+            </label>
+
+            <label class="reg-field reg-captcha-field">
+              <span class="required">验证码</span>
+              <div class="reg-captcha">
+                <el-input
+                  class="reg-input"
+                  v-model="validcode"
+                  placeholder="请输入图形验证码"
+                ></el-input>
+                <a href="javascript:;" @click.prevent="getRandomCode">
                   <img class="yzm" id="code" :src="randomCode" alt="" />
                 </a>
               </div>
-            </div>
+            </label>
           </div>
 
-          <div class="action-row">
-            <el-button class="submit-btn1" type="primary" @click="submit">
+          <div class="register-actions">
+            <el-button class="register-submit" type="primary" @click="submit">
               立即注册
             </el-button>
-            <el-button class="submit-btn2" type="warning" @click="singin">
+            <el-button class="register-back" @click="singin">
               返回登录
             </el-button>
           </div>
         </div>
-      </div>
+      </section>
+    </main>
 
-      <login-footer></login-footer>
-    </div>
+    <login-footer></login-footer>
 
     <div class="dialogContainer" v-if="dialog.show">
       <div class="dialogbox">
@@ -241,7 +248,7 @@ export default {
       if (/\W/.test(this.password)) this.saferank++;
     },
     checkpassword1() {
-      let reg = /^[a-zA-Z0-9_]{6,20}$/;
+      let reg = /^[\s\S]{6,20}$/;
       this.checkflag3 = reg.test(this.password);
     },
     checkmail() {
@@ -377,212 +384,314 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.register-page {
+.register-shell {
   min-height: 100vh;
-  background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 58%, #ffffff 100%);
+  color: #17233c;
+  font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft Yahei", sans-serif;
 }
 
-.page-body {
+.register-main {
+  padding-top: 76px;
+}
+
+.register-hero {
+  width: min(1300px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 58px 0 78px;
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 44px;
+  align-items: stretch;
+}
+
+.register-copy {
   position: relative;
-  top: 126px;
-  min-height: calc(100vh - 126px);
-  padding: 36px 0 120px;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #dceafc;
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgba(42, 91, 151, 0.08);
   overflow: hidden;
 }
 
-.page-decor {
+.register-copy::before,
+.register-copy::after {
+  content: '';
   position: absolute;
-  left: 50%;
-  top: 140px;
-  width: 1200px;
-  height: 520px;
-  transform: translateX(-50%);
-  // background:
-  //   radial-gradient(circle at 18% 70%, rgba(225, 233, 247, 0.95) 0, rgba(225, 233, 247, 0.55) 18%, rgba(225, 233, 247, 0) 44%),
-  //   radial-gradient(circle at 76% 24%, rgba(236, 242, 252, 0.95) 0, rgba(236, 242, 252, 0.5) 22%, rgba(236, 242, 252, 0) 48%),
-  //   linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(235, 241, 250, 0.4) 100%);
-  // filter: blur(6px);
   pointer-events: none;
 }
 
-.register-panel {
+.register-copy::before {
+  left: -62px;
+  top: 52px;
+  width: 118px;
+  height: 118px;
+  border: 2px solid rgba(77, 147, 255, 0.28);
+  border-radius: 32px;
+  transform: rotate(42deg);
+}
+
+.register-copy::after {
+  left: 10px;
+  bottom: 96px;
+  width: 90px;
+  height: 64px;
+  background-image: radial-gradient(rgba(55, 132, 255, 0.18) 2px, transparent 2px);
+  background-size: 16px 16px;
+}
+
+.register-copy h1 {
+  margin: 18px 0 10px;
+  color: #10213d;
+  font-size: 32px;
+  line-height: 1.16;
+  letter-spacing: 0;
+}
+
+.register-copy p {
+  margin: 0;
+  color: #61718a;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.register-flow {
+  position: relative;
+  display: grid;
+  gap: 28px;
+  margin-top: 38px;
+  padding-bottom: 28px;
+  border-bottom: 1px dashed #cbd9ea;
+}
+
+.register-flow::before {
+  content: '';
+  position: absolute;
+  left: 37px;
+  top: 82px;
+  bottom: 92px;
+  border-left: 2px dotted rgba(18, 109, 232, 0.42);
+}
+
+.register-flow-item {
   position: relative;
   z-index: 1;
-  width: 920px;
-  margin: 0 auto;
-  padding: 34px 74px 44px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid #e5ebf4;
-  border-radius: 12px;
-  box-shadow: 0 24px 60px rgba(55, 98, 168, 0.08);
-  box-sizing: border-box;
-}
-
-.panel-title {
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 25px;
-  font-weight: 500;
-  color: #111;
-  letter-spacing: 1px;
-}
-
-.form-list {
-  width: 100%;
-}
-
-.form-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 18px;
-}
-
-.form-label {
-  width: 110px;
-  height: 52px;
-  line-height: 52px;
-  text-align: center;
-  font-size: 15px;
-  color: #1b1b1b;
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid #cfd4dc;
-  border-right: none;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.form-main {
-  flex: 1;
-  min-width: 0;
-}
-
-.field-box {
-  height: 52px;
-  border: 1px solid #cfd4dc;
-  background: rgba(255, 255, 255, 0.9);
-  box-sizing: border-box;
-}
-
-.form-input::v-deep .el-input__inner {
-  height: 50px;
-  line-height: 50px;
-  border: none;
-  border-radius: 0;
-  padding: 0 18px;
-  font-size: 15px;
-  color: #333;
-  background: transparent;
-}
-
-.form-input::v-deep .el-input__inner::placeholder {
-  color: #9aa3af;
-}
-
-.field-tip {
-  margin: 8px 0 0 0;
-  font-size: 14px;
-  line-height: 22px;
-  color: #6d7682;
-}
-
-.field-tip.wrong {
-  color: #f04848;
-}
-
-.safe-rank {
-  display: inline-flex;
-  margin-right: 10px;
-  overflow: hidden;
-  vertical-align: middle;
-  border-radius: 2px;
-}
-
-.safe-rank i {
-  min-width: 28px;
-  height: 20px;
-  line-height: 20px;
-  text-align: center;
-  font-style: normal;
-  font-size: 12px;
-  color: #fff;
-  background: #cfd5df;
-  border-right: 1px solid #fff;
-}
-
-.safe-rank i:last-child {
-  border-right: none;
-}
-
-.safe-rank i.on {
-  background: #f36b3a;
-}
-
-.captcha-item .form-main {
-  display: flex;
-  align-items: center;
-}
-
-.captcha-wrap {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
   gap: 18px;
-  width: 100%;
+  align-items: center;
 }
 
-.captcha-input-box {
-  width: 300px;
-  flex: none;
-}
-
-.captcha-box {
+.register-flow-icon {
+  width: 72px;
+  height: 72px;
+  background: #eef5ff;
+  border: 1px solid #dceafd;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 176px;
-  height: 52px;
-  text-decoration: none;
-  background: transparent;
 }
 
-.captcha-box img {
-  max-width: 100%;
-  max-height: 100%;
+.register-flow-icon img {
+  display: block;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.register-flow-body b,
+.register-flow-item strong,
+.register-flow-item span {
   display: block;
 }
 
-.action-row {
-  margin-top: 28px;
-  text-align: center;
+.register-flow-body b {
+  color: #126de8;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1;
 }
 
-.submit-btn {
-  width: 320px;
-  height: 52px;
-  border: none;
-  // border-radius: 28px;
-  background: linear-gradient(90deg, #178eef 0%, #33a6ff 100%);
-  box-shadow: 0 14px 30px rgba(29, 143, 239, 0.24);
+.register-flow-item strong {
+  margin-top: 10px;
+  color: #10213d;
   font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 1px;
 }
 
-.submit-btn:hover,
-.submit-btn:focus {
-  background: linear-gradient(90deg, #178eef 0%, #33a6ff 100%);
-  opacity: 0.96;
-}
-
-.login-entry {
-  margin-top: 18px;
-  text-align: center;
+.register-flow-item span {
+  margin-top: 8px;
+  color: #60718a;
   font-size: 14px;
-  color: #6a7480;
+  line-height: 1.7;
 }
 
-.login-entry span {
-  color: #168df0;
-  cursor: pointer;
+.register-panel {
+  padding: 30px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #dce8f6;
+  border-radius: 8px;
+  box-shadow: 0 24px 64px rgba(42, 91, 151, 0.1);
+}
+
+.register-panel-head {
+  display: block;
+  margin-bottom: 24px;
+}
+
+.register-panel-head h2 {
+  margin: 0;
+  color: #14233d;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.register-panel-head p {
+  margin: 10px 0 0;
+  color: #6d7b91;
+  font-size: 14px;
+}
+
+.register-panel-head em {
+  color: #ff5f46;
+  font-style: normal;
+}
+
+.register-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+.reg-field {
+  min-width: 0;
+  display: block;
+}
+
+.reg-field > span {
+  display: block;
+  margin-bottom: 8px;
+  color: #4d5d75;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.reg-field > span.required::before {
+  content: '*';
+  margin-right: 4px;
+  color: #ff5f46;
+}
+
+.reg-field em {
+  display: block;
+  margin-top: 6px;
+  color: #e54848;
+  font-style: normal;
+  font-size: 13px;
+}
+
+.reg-input::v-deep .el-input__inner {
+  height: 46px;
+  line-height: 46px;
+  color: #17233c;
+  background: #fff;
+  border: 1px solid #d8e4f2;
+  border-radius: 8px;
+}
+
+.reg-input::v-deep .el-input__inner:focus {
+  border-color: #2d8cff;
+}
+
+.reg-captcha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 10px;
+}
+
+.reg-captcha a {
+  height: 46px;
+  width: fit-content;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #d8e4f2;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.reg-captcha img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.register-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.register-submit,
+.register-back {
+  width: 100%;
+  height: 46px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.register-submit {
+  border: none;
+  background: linear-gradient(90deg, #126de8 0%, #2d8cff 100%);
+  box-shadow: 0 14px 28px rgba(18, 109, 232, 0.22);
+}
+
+.register-back {
+  color: #126de8;
+  background: #fff;
+  border: 1px solid #cfe3fb;
+}
+
+@media (max-width: 1040px) {
+  .register-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .register-hero {
+    width: calc(100% - 28px);
+    padding-top: 32px;
+  }
+
+  .register-copy,
+  .register-panel {
+    padding: 22px;
+  }
+
+  .register-grid,
+  .reg-captcha {
+    grid-template-columns: 1fr;
+  }
+
+  .register-actions {
+    flex-direction: column;
+  }
+
+  .register-submit,
+  .register-back {
+    width: 100%;
+  }
 }
 
 .dialogContainer {
@@ -653,67 +762,5 @@ export default {
 
 .service-qq img {
   margin-bottom: 8px;
-}
-
-@media (max-width: 1024px) {
-  .register-panel {
-    width: 94%;
-    padding: 28px 24px 36px;
-  }
-
-  .form-label {
-    width: 96px;
-    font-size: 18px;
-  }
-
-  .form-input::v-deep .el-input__inner {
-    font-size: 18px;
-  }
-}
-
-@media (max-width: 768px) {
-  .page-body {
-    top: 96px;
-    min-height: calc(100vh - 96px);
-    padding: 24px 0 80px;
-  }
-
-  .register-panel {
-    width: 94%;
-    padding: 24px 14px 30px;
-  }
-
-  .panel-title {
-    font-size: 24px;
-  }
-
-  .form-item {
-    flex-direction: column;
-    margin-bottom: 14px;
-  }
-
-  .form-label {
-    width: 100%;
-    border-right: 1px solid #cfd4dc;
-    border-bottom: none;
-  }
-
-  .field-box {
-    border-top: none;
-  }
-
-  .captcha-wrap {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .captcha-input-box,
-  .captcha-box {
-    width: 100%;
-  }
-
-  .submit-btn {
-    width: 100%;
-  }
 }
 </style>

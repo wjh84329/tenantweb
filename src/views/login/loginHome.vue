@@ -1,161 +1,151 @@
 <!-- eslint-disable eqeqeq -->
 <!-- eslint-disable no-dupe-keys -->
 <template>
-    <div class="page-wrap">
-        <login-header style="position: fixed"></login-header>
-        <div
-            style="position: fixed;top: 160px;background-color: #29A7E2;color: white;z-index: 999999;padding: 15px 10px;min-height: 180px;border-radius: 15px;">
-            <div style="display: flex;">
-                <div
-                    style="width: 35px;display: flex;flex-direction: column;align-items: center;align-content: center;justify-content: center;">
-                    <img src="../../assets/images/qq.png" style="width: 30px;height: 30px;" />
-                    <span style="font-size: 22px;text-align: center;">
-                        在线客服
-                    </span>
-                    <img v-if="qqShow" @click="qqShow = false" src="../../assets/images/right.png"
-                        style="width: 30px;height: 30px;" />
-                    <img v-if="!qqShow" @click="qqShow = true" src="../../assets/images/left.png"
-                        style="width: 30px;height: 30px;" />
-                </div>
-                <div v-if="qqShow"
-                    style="margin-left: 20px;background-color: white;color: grey;padding: 0 10px;justify-content: center;align-items: center;display: flex;flex-direction: column;border-radius: 15px;">
-                    <div style="font-size: 16px;text-align: center;">
-                        <span
-                            style="font-size: 18px;font-weight: bold;color: black;text-align: center;width: 100%;">在线客服</span>
-                    </div>
-                    <div v-for="item in serviceQq" :key="item.qq" style="margin-top: 10px;">
-                        <div
-                            style="margin-top: 5px;font-size: 16px;display: flex;align-items: center;border-bottom: 1px solid #E6E4E4;padding-bottom: 10px;">
-                            <span style="font-size: 14px;">{{ item.name }}:</span>
-                            <a :href="`tencent://message/?uin=${item.qq}&Site=xxx&Menu=yes`"
-                                style="margin-left: 10px;color: #29A7E2;font-weight: bold;">
-                                <img src="../../assets/images/online.png" style="vertical-align: middle;" />
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="lh-page">
+    <login-header></login-header>
+
+    <div class="lh-service" :class="{ open: qqShow }">
+      <div class="lh-service-card" v-if="qqShow">
+        <div class="lh-service-top">
+          <span class="lh-service-headset"></span>
+          <span>在线客服</span>
         </div>
-        <div class="head_box">
-            <div class="banner-box">
-                <!-- <span class="banner-link" target="_blank">
-                    <img src="../../assets/newLogin/banner-pic.png" class="banner-pic" />
-                </span> -->
-
-                <div class="width_new">
-                    <div class="login-box right">
-                        <!-- 账号登录 -->
-                        <div v-show="isPwdLoginShow" class="account-login" id="account-login">
-                            <div class="login-box-label">
-                                <div class="tab-item" :class="{ active: isPwdLoginShow }" @click="tab(1)">密码登录</div>
-                                <div class="tab-item" :class="{ active: isWxQrLoginShow }" @click="tab(2)">扫码登录</div>
-                            </div>
-
-                            <form @submit.prevent="singin">
-                                <div class="login-input">
-                                    <div class="login-image-box left">
-                                        <img src="../../assets/newLogin/icon4.png" alt="" />
-                                    </div>
-                                    <el-input placeholder="请输入登录帐号" v-model="form.username"
-                                        :disabled="false" @keyup.enter.native="singin"></el-input>
-                                </div>
-
-                                <div class="login-input">
-                                    <div class="login-image-box left">
-                                        <img src="../../assets/newLogin/icon5.png" alt="" />
-                                    </div>
-                                    <el-input placeholder="请输入密码" v-model="form.password" :disabled="false"
-                                        show-password @keyup.enter.native="singin"></el-input>
-                                </div>
-
-                                <div class="login-input code-row">
-                                    <div class="code-input-box left">
-                                        <div class="login-image-box left">
-                                            <img src="../../assets/newLogin/icon6.png" alt="" />
-                                        </div>
-                                        <!-- <div><input class="inputbox code" style="width: 100px;" id="Verify" maxlength="10" placeholder="验证码" v-model="form.code" /></div> -->
-                                    </div>
-                                    <el-input placeholder="请输入验证码" :disabled="false" v-model="form.code"
-                                        style="flex: 1" @keyup.enter.native="singin"></el-input>
-                                    <img class="qrcode" id="code" style="width: 100px; height: 38px;margin-left: 10px;" alt=""
-                                        :src="randomCode" v-on:click="getQrcode()" />
-                                </div>
-
-                                <button type="submit" class="submit-style" :disabled="isLoading">
-                                    {{ isLoading ? '登录中' : '登录' }}
-                                </button>
-
-                                <div class="login-input link-row">
-                                    <div class="left">
-                                        <span class="no_account">还没有账号？</span>
-                                        <span class="free_riget"
-                                            @click="$router.push('/login/loginregister')">免费注册</span>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- 二维码登录 -->
-                        <div v-show="isWxQrLoginShow" class="wetch-login" id="wetch-login">
-                            <div class="login-box-label">
-                                <div class="tab-item" :class="{ active: isPwdLoginShow }" @click="tab(1)">密码登录</div>
-                                <div class="tab-item" :class="{ active: isWxQrLoginShow }" @click="tab(2)">扫码登录</div>
-                            </div>
-
-                            <img class="wx-image" :src="qrCodeUrl || '../../assets/images/qrcode.png'" />
-
-                            <div class="login-input" style="margin-top: -10px;border: none;text-align: center">
-                                <span class="wetch-login-tip" style="text-align: center;width: 100%;">请先绑定公众号再使用</span>
-                            </div>
-
-                            <div class="qr-actions" v-if="qrCodeUrl">
-                                <button type="button" class="submit-style" @click="getwxqrImg">刷新二维码</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <section class="fixed-section free-benefit"
-            v-hover-active="{ inView: true, inViewAnimation: 'animate__animated animate__backInLeft', once: true }">
-            <div class="label_box">
-                <div class="label_title">选择我们的理由</div>
-                <div class="label_content"></div>
-            </div>
-            <div class="advantage_box">
-                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
-                    <img src="../../assets/newLogin/in_icon_1.png" />
-                    <div class="advantage_text">
-                        <h1>高效便捷</h1>
-                        <p>快速对接多种支付渠道，产品功能齐全，高效易管理的商户作业平台。</p>
-                    </div>
-                </div>
-                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
-                    <img src="../../assets/newLogin/in_icon_2.png" />
-                    <div class="advantage_text">
-                        <h1>降低成本</h1>
-                        <p>简单快速的接入方式，缩短开发周期降低研发成本，实现快速上线。</p>
-                    </div>
-                </div>
-                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
-                    <img src="../../assets/newLogin/in_icon_3.png" />
-                    <div class="advantage_text">
-                        <h1>轻松对账</h1>
-                        <p>轻松查看账户明细，降低企业在财务人员对账方面的投入，交易数据清晰明了。</p>
-                    </div>
-                </div>
-                <div class="advantage_item" v-hover-active="{ animation: 'advantages_item', enterDelay: 80 }">
-                    <img src="../../assets/newLogin/in_icon_5.png" />
-                    <div class="advantage_text">
-                        <h1>系统稳定</h1>
-                        <p>多机房异地容灾系统，专业的运维团队值守，稳如磐石的系统保障。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <login-footer></login-footer>
+        <div class="lh-service-title">QQ咨询</div>
+        <a
+          v-for="item in serviceQq"
+          :key="item.qq"
+          class="lh-service-link"
+          :href="`https://wpa.qq.com/msgrd?v=3&uin=${item.qq}&site=qq&menu=yes`"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click.prevent="openQqChat(item.qq)"
+        >
+          <span class="lh-qq-penguin">
+            <img src="../../assets/newUi/qq-chat-icon.svg" alt="" />
+          </span>
+          <strong>{{ item.qq }}</strong>
+        </a>
+        <div class="lh-service-empty" v-if="!serviceQq.length">暂无在线客服</div>
+        <button class="lh-service-close" type="button" @click="qqShow = false">
+          <span class="lh-service-close-icon">‹</span>
+          <span>收起</span>
+        </button>
+      </div>
+      <button v-else class="lh-service-mini" type="button" @click="qqShow = true">在线客服</button>
     </div>
+
+    <main class="lh-main">
+      <section class="lh-hero">
+        <div class="lh-hero-copy">
+          <h1><span>商户</span>中心</h1>
+          <p>
+            安全、稳定、清晰的商户作业入口
+          </p>
+          <img class="lh-hero-visual-img" src="../../assets/newUi/login-hero-visual.png" alt="" />
+        </div>
+
+        <div class="lh-login-card">
+          <div class="lh-login-tabs">
+            <button type="button" :class="{ active: isPwdLoginShow }" @click="tab(1)">密码登录</button>
+            <button type="button" :class="{ active: isWxQrLoginShow }" @click="tab(2)">扫码登录</button>
+          </div>
+
+          <form v-show="isPwdLoginShow" class="lh-form" @submit.prevent="singin">
+            <div class="lh-field">
+              <span class="lh-field-icon">
+                <img src="../../assets/newLogin/icon4.png" alt="" />
+              </span>
+              <el-input
+                placeholder="请输入登录账号"
+                v-model="form.username"
+                :disabled="false"
+                @keyup.enter.native="singin"
+              ></el-input>
+            </div>
+            <div class="lh-field lh-password-field">
+              <span class="lh-field-icon">
+                <img src="../../assets/newLogin/icon5.png" alt="" />
+              </span>
+              <el-input
+                placeholder="请输入密码"
+                v-model="form.password"
+                :type="showPassword ? 'text' : 'password'"
+                :disabled="false"
+                @keyup.enter.native="singin"
+              ></el-input>
+              <button
+                class="lh-password-toggle"
+                :class="{ active: showPassword }"
+                type="button"
+                :aria-label="showPassword ? '隐藏密码' : '显示密码'"
+                @click="togglePasswordVisibility"
+              >
+                <span class="lh-eye"></span>
+              </button>
+            </div>
+            <div class="lh-field captcha-field">
+              <span class="lh-field-icon">
+                <img src="../../assets/newLogin/icon6.png" alt="" />
+              </span>
+              <div class="lh-captcha-row">
+                <el-input
+                  placeholder="请输入验证码"
+                  :disabled="false"
+                  v-model="form.code"
+                  @keyup.enter.native="singin"
+                ></el-input>
+                <img class="lh-captcha" id="code" :src="randomCode" alt="" @click="getQrcode()" />
+              </div>
+            </div>
+            <button type="submit" class="lh-submit" :disabled="isLoading">
+              {{ isLoading ? '登录中' : '登录' }}
+            </button>
+            <div class="lh-register">
+              还没有账号？
+              <span @click="$router.push('/login/loginregister')">免费注册</span>
+            </div>
+          </form>
+
+          <div v-show="isWxQrLoginShow" class="lh-qr-login">
+            <div class="lh-qr-box">
+              <img class="lh-qr-image" :src="qrCodeUrl || qrPlaceholder" />
+            </div>
+            <p>请先绑定公众号再使用扫码登录</p>
+            <button type="button" class="lh-submit lh-refresh" @click="getwxqrImg">
+              刷新二维码
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="lh-benefits">
+        <div class="lh-section-head">
+          <h2>选择我们的理由</h2>
+          <p>围绕商户经营、成本、对账与稳定性提供持续服务。</p>
+        </div>
+        <div class="lh-benefit-grid">
+          <div class="lh-benefit-card">
+            <span>高效便捷</span>
+            <p>快速对接常用业务流程，减少重复操作，让商户作业更顺畅。</p>
+          </div>
+          <div class="lh-benefit-card">
+            <span>降低成本</span>
+            <p>缩短接入和运维时间，把更多精力留给实际运营。</p>
+          </div>
+          <div class="lh-benefit-card">
+            <span>轻松对账</span>
+            <p>账户明细与交易数据集中查看，财务处理更清楚。</p>
+          </div>
+          <div class="lh-benefit-card">
+            <span>系统稳定</span>
+            <p>多机房与专业运维保障，支持业务持续在线。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <login-footer></login-footer>
+  </div>
 </template>
 
 <script>
@@ -332,6 +322,7 @@ export default {
       wxQrSignin: '',
       isPwdLoginShow: true,
       isWxQrLoginShow: false,
+      showPassword: false,
       wxqrimgurl: '',
       wxvalidKey: '',
       randomCode:
@@ -339,7 +330,8 @@ export default {
       appid: 'wx937e63f717108262',
       scope: 'snsapi_login',
       redirect_uri: 'http://localhost:5000/External/WeixinOpen',
-      qrCodeUrl: '../../assets/images/qrcode.png',
+      qrCodeUrl: '',
+      qrPlaceholder: require('../../assets/img/qrcode.png'),
       returnUrl: '',
       code: '',
       qqShow: true
@@ -481,6 +473,18 @@ export default {
     },
     // === 核心：账号密码登录改造 ===
     async singin() {
+      const loginTraceStart = (typeof performance !== 'undefined' && performance.now)
+        ? performance.now()
+        : Date.now();
+      const trace = (stage) => {
+        const now = (typeof performance !== 'undefined' && performance.now)
+          ? performance.now()
+          : Date.now();
+        const elapsed = Math.round(now - loginTraceStart);
+        // 线上可直接在浏览器控制台看阶段耗时，不依赖服务端日志
+        console.warn(`[LoginTrace] ${stage} ${elapsed}ms`);
+      };
+
       // 简单前端校验
       if (!this.form.username || !this.form.password || !this.form.code) {
         this.$messageError('请输入账号、密码和验证码');
@@ -517,17 +521,31 @@ export default {
           rememberLogin: true,
           clientIp
         });
+        trace('LoginApiDone');
 
         // 2）根据角色/状态跳转，完全不再依赖 ReturnUrl/OIDC
         const user = result.user;
         const roles = user.roles || [];
+        const targetPath =
+          user.state === 'CustomRole' || roles.includes('CustomRole')
+            ? '/employeemain/employeehome'
+            : '/main/home';
 
-        if (user.state === 'CustomRole' || roles.includes('CustomRole')) {
-          this.$router.push('/employeemain/employeehome');
-        } else {
-          this.$router.push('/main/home');
-        }
+        // 先释放登录按钮状态，再切路由，让浏览器有机会先完成一次绘制
+        this.isLoading = false;
+        await this.$nextTick();
+        await new Promise((resolve) => {
+          if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+            window.requestAnimationFrame(() => resolve());
+            return;
+          }
+          setTimeout(resolve, 0);
+        });
+
+        trace(`RoutePush:${targetPath}`);
+        this.$router.push(targetPath);
       } catch (error) {
+        trace('LoginFailed');
         if (error.response && error.response.data) {
           this.$messageError(error.response.data.message || '登录失败');
         } else {
@@ -537,7 +555,9 @@ export default {
         // console.error(error);
       } finally {
         // 清理密码
-        this.isLoading = false;
+        if (this.isLoading) {
+          this.isLoading = false;
+        }
       }
     },
 
@@ -611,6 +631,12 @@ export default {
         this.isWxQrLoginShow = true;
         this.getwxqrImg();
       }
+    },
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
+    openQqChat(qq) {
+      window.open(`https://wpa.qq.com/msgrd?v=3&uin=${qq}&site=qq&menu=yes`, '_blank', 'noopener,noreferrer');
     }
   },
   beforeCreate() {
@@ -636,6 +662,611 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/newLogin/animate.min.css";
 // @import "../../assets/newLogin/index.css";
+
+.lh-page {
+  --hero-content-width: 1300px;
+  --hero-login-column-width: 520px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 52%, #ffffff 100%);
+  color: #17233c;
+  font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft Yahei", sans-serif;
+}
+
+.lh-main {
+  padding-top: 88px;
+}
+
+.lh-hero {
+  width: min(var(--hero-content-width), calc(100% - 48px));
+  min-height: 560px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--hero-login-column-width);
+  gap: 40px;
+  align-items: center;
+  padding: 24px 0 18px;
+}
+
+.lh-hero-copy {
+  padding-left: 110px;
+  box-sizing: border-box;
+}
+
+.lh-hero-copy h1 {
+  margin: 0 0 16px;
+  font-size: 62px;
+  line-height: 1.05;
+  letter-spacing: 0;
+  color: #10213d;
+}
+
+.lh-hero-copy h1 span {
+  color: #126de8;
+}
+
+.lh-hero-copy p {
+  max-width: 640px;
+  margin: 0;
+  color: #2f405d;
+  font-size: 21px;
+  line-height: 1.9;
+}
+
+.lh-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.lh-primary-action,
+.lh-secondary-action,
+.lh-submit {
+  height: 46px;
+  padding: 0 22px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.lh-primary-action,
+.lh-submit {
+  color: #fff;
+  background: linear-gradient(90deg, #126de8 0%, #2d8cff 100%);
+  box-shadow: 0 14px 28px rgba(18, 109, 232, 0.22);
+}
+
+.lh-secondary-action {
+  color: #126de8;
+  background: #fff;
+  border-color: #cfe3fb;
+}
+
+.lh-primary-action:hover,
+.lh-secondary-action:hover,
+.lh-submit:hover {
+  transform: translateY(-1px);
+}
+
+.lh-hero-visual-img {
+  display: block;
+  width: min(630px, 100%);
+  margin-top: 28px;
+  object-fit: contain;
+}
+
+.lh-login-card {
+  padding: 30px 28px;
+  min-height: 484px;
+  height: 484px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #dce8f6;
+  border-radius: 8px;
+  box-shadow: 0 26px 70px rgba(42, 91, 151, 0.14);
+  display: flex;
+  flex-direction: column;
+}
+
+.lh-login-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 0;
+  margin-bottom: 28px;
+  background: #fff;
+  border-bottom: 1px solid #dfe8f4;
+  border-radius: 0;
+}
+
+.lh-login-tabs button {
+  position: relative;
+  height: 50px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #2f405d;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lh-login-tabs button.active {
+  color: #126de8;
+  background: transparent;
+  box-shadow: none;
+}
+
+.lh-login-tabs button.active::after {
+  content: '';
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  bottom: -1px;
+  height: 3px;
+  border-radius: 2px;
+  background: #126de8;
+}
+
+.lh-form {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lh-field {
+  position: relative;
+  display: block;
+}
+
+.lh-field-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+}
+
+.lh-field-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.lh-field::v-deep .el-input__inner {
+  height: 56px;
+  line-height: 56px;
+  border: 1px solid #d8e4f2;
+  border-radius: 8px;
+  padding-left: 54px;
+  color: #17233c;
+  background: #fff;
+  font-size: 15px;
+}
+
+.lh-field::v-deep .el-input__inner:focus {
+  border-color: #2d8cff;
+}
+
+.lh-password-field::v-deep .el-input__inner {
+  padding-right: 52px;
+}
+
+.lh-password-toggle {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  z-index: 3;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.lh-eye {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 10px;
+  margin: 0 auto;
+  border: 2px solid #9baac0;
+  border-radius: 11px / 8px;
+  background: transparent;
+}
+
+.lh-eye::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background: #9baac0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.lh-eye::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: 2px;
+  height: 18px;
+  background: #c5d0df;
+  border-radius: 2px;
+  transform: translateX(-50%) rotate(38deg);
+}
+
+.lh-password-toggle.active .lh-eye {
+  border-color: #126de8;
+}
+
+.lh-password-toggle.active .lh-eye::before {
+  background: #126de8;
+}
+
+.lh-password-toggle.active .lh-eye::after {
+  opacity: 0;
+}
+
+.lh-captcha-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 166px;
+  gap: 10px;
+}
+
+.lh-captcha {
+  width: 166px;
+  height: 56px;
+  object-fit: contain;
+  background: #f7fbff;
+  border: 1px solid #d8e4f2;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.lh-submit {
+  width: 100%;
+  height: 58px;
+  margin-top: 8px;
+  font-size: 20px;
+}
+
+.lh-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  transform: none;
+}
+
+.lh-register {
+  margin-top: auto;
+  padding-top: 8px;
+  text-align: center;
+  color: #6d7b91;
+  font-size: 14px;
+}
+
+.lh-register span {
+  color: #126de8;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lh-qr-login {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
+
+.lh-qr-box {
+  width: 210px;
+  height: 210px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #dce8f6;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 6px #f5f9ff;
+}
+
+.lh-qr-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.lh-qr-login p {
+  margin: 18px 0 16px;
+  color: #687890;
+  font-size: 14px;
+}
+
+.lh-refresh {
+  margin-top: auto;
+  width: 210px;
+}
+
+.lh-benefits {
+  width: min(1300px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 18px 0 58px;
+}
+
+.lh-section-head {
+  text-align: center;
+}
+
+.lh-section-head h2 {
+  margin: 0;
+  color: #14233d;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.lh-section-head p {
+  margin: 10px 0 0;
+  color: #6d7b91;
+  font-size: 15px;
+}
+
+.lh-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.lh-benefit-card {
+  min-height: 132px;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #e0eaf6;
+  border-radius: 8px;
+  box-shadow: 0 14px 36px rgba(50, 93, 152, 0.06);
+}
+
+.lh-benefit-card span {
+  display: block;
+  color: #14233d;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.lh-benefit-card p {
+  margin: 10px 0 0;
+  color: #687890;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.lh-service {
+  position: fixed;
+  left: 18px;
+  top: 216px;
+  z-index: 9998;
+}
+
+.lh-service-card {
+  width: 128px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #d9e5f5;
+  border-radius: 8px;
+  box-shadow: 0 18px 42px rgba(29, 70, 126, 0.14);
+}
+
+.lh-service-top {
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(180deg, #126de8 0%, #237df6 100%);
+}
+
+.lh-service-top span:last-child {
+  position: relative;
+  margin-top: 8px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.lh-service-headset {
+  position: relative;
+  width: 34px;
+  height: 30px;
+  display: block;
+  border: 3px solid #fff;
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  box-sizing: border-box;
+}
+
+.lh-service-headset::before,
+.lh-service-headset::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  width: 8px;
+  height: 16px;
+  background: #fff;
+  border-radius: 6px;
+}
+
+.lh-service-headset::before {
+  left: -5px;
+}
+
+.lh-service-headset::after {
+  right: -5px;
+}
+
+.lh-service-headset + span::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 3px;
+  margin-left: -22px;
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 3px;
+}
+
+.lh-service-mini {
+  width: 42px;
+  min-height: 118px;
+  padding: 10px 8px;
+  color: #fff;
+  background: #126de8;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.2;
+  cursor: pointer;
+  writing-mode: vertical-rl;
+  letter-spacing: 2px;
+}
+
+.lh-service-empty {
+  padding: 12px 0 4px;
+  color: #7b8799;
+  font-size: 13px;
+  border-top: 1px solid #eef3fa;
+}
+
+.lh-service-title {
+  height: 38px;
+  line-height: 38px;
+  padding: 0 10px;
+  color: #4c5f78;
+  font-size: 12px;
+  background: #fff;
+  border-bottom: 1px solid #eef3fa;
+}
+
+.lh-service-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  color: #53647c;
+  text-decoration: none;
+  border-bottom: 1px solid #eef3fa;
+}
+
+.lh-qq-penguin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.lh-qq-penguin img {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.lh-service-link strong {
+  display: block;
+  color: #126de8;
+  font-size: 13px;
+  line-height: 20px;
+  word-break: break-all;
+}
+
+.lh-service-close {
+  width: calc(100% - 16px);
+  height: 32px;
+  margin: 10px 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #126de8;
+  font-size: 14px;
+  font-weight: 800;
+  background: #eef6ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.lh-service-close-icon {
+  display: block;
+  font-size: 15px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1100px) {
+  .lh-hero {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .lh-login-card {
+    max-width: 520px;
+  }
+
+  .lh-benefit-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .lh-main {
+    padding-top: 76px;
+  }
+
+  .lh-hero,
+  .lh-benefits {
+    width: calc(100% - 28px);
+  }
+
+  .lh-hero {
+    min-height: auto;
+    padding-top: 36px;
+  }
+
+  .lh-hero-copy {
+    padding-left: 0;
+  }
+
+  .lh-hero-copy h1 {
+    font-size: 42px;
+  }
+
+  .lh-actions {
+    flex-direction: column;
+  }
+
+  .lh-benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lh-service {
+    display: none;
+  }
+}
 
 /* 小屏下禁用位移（避免重叠） */
 @media (max-width: 1000px) {

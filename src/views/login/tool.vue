@@ -1,106 +1,52 @@
 <!-- src/views/login/tool.vue -->
 <template>
-  <div class="page-wrap">
-    <login-header style="position: fixed"></login-header>
+  <div class="tool-shell">
+    <login-header></login-header>
 
-    <div class="head_box">
-      <div class="banner-box"></div>
-    </div>
-
-    <!-- =============== 说明区（4 个图标 + 文字） =============== -->
-    <div class="service-box">
-      <div class="service">
-        <div class="service-list">
-          <div class="item">
-            <div class="icon icon1"></div>
-            <div class="title">自动开合区</div>
-            <div class="desc">
-              <p>自动开放测试区及正式区</p>
-              <p>自动备份合并数据及文本</p>
-              <p>自动合并登录器列表</p>
-              <p>自动合并充值链接</p>
-            </div>
+    <main class="tool-main">
+      <section class="tool-hero">
+        <div class="tool-copy">
+          <div class="tool-title-row">
+            <img src="../../assets/newUi/tool-rocket-icon.png" alt="" />
+            <h1>好开区助手</h1>
           </div>
-
-          <div class="item">
-            <div class="icon icon2"></div>
-            <div class="title">自动生成登录器列表</div>
-            <div class="desc">
-              <p>列表保存本地目录</p>
-              <p>上传FTP服务器</p>
-              <p>上传阿里云OSS</p>
-              <p>登录器列表自定义</p>
-            </div>
-          </div>
-
-          <div class="item">
-            <div class="icon icon3"></div>
-            <div class="title">自动安装平台</div>
-            <div class="desc">
-              <p>测试区多送20%</p>
-              <p>开区后自动修改充值分区名称</p>
-              <p>合区后自动修改充值分区名称</p>
-              <p>自动删除被合并分区充值链接</p>
-            </div>
-          </div>
-
-          <div class="item">
-            <div class="icon icon4"></div>
-            <div class="title">开区微信消息通知</div>
-            <div class="desc">
-              <p>开区信息实时微信通知</p>
-              <p>GM及时了解开区情况</p>
-            </div>
+          <h2>智能开区 · 自动合区 · 高效运维</h2>
+          <p>覆盖开区、合区、登录器列表、平台安装与通知流程，让日常运维更轻松。</p>
+          <div class="tool-actions">
+            <a class="tool-btn primary" href="https://haozs.com" target="_blank" rel="noopener noreferrer">
+              <span class="tool-btn-icon tool-btn-icon-download"></span>
+              点击下载
+            </a>
+            <a class="tool-btn secondary" href="https://haozs.com" target="_blank" rel="noopener noreferrer">
+              <span class="tool-btn-icon tool-btn-icon-log"></span>
+              更新日志
+            </a>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- =============== 下载卡片区（3 个卡片） =============== -->
-    <div class="ability-box">
-      <div class="service">
-        <div class="service-list">
-          <div class="item bg1">
-            <div class="info">
-              <div class="title">好开区助手 - 下载地址</div>
-              <div class="desc">
-                支持多引擎，全智能开合区，智能辅助，释放双手，解决GM一切烦恼
-              </div>
-              <div class="btn-box">
-                <button class="btn primary">点击下载</button>
-                <button class="btn secondary">更新日志</button>
-              </div>
-            </div>
-          </div>
+        <div class="tool-visual">
+          <img src="../../assets/newUi/tool-hero-visual.png" alt="" />
+        </div>
+      </section>
 
-          <div class="item bg2">
-            <div class="info">
-              <div class="title">好跨服助手 - 下载地址</div>
-              <div class="desc">
-                支持多引擎，全智能跨服合区，智能辅助，释放双手，解决GM一切烦恼
-              </div>
-              <div class="btn-box">
-                <button class="btn primary">点击下载</button>
-                <button class="btn secondary">更新日志</button>
-              </div>
-            </div>
-          </div>
+      <section class="tool-capability">
+        <div class="tool-section-head">
+          <h2>核心能力</h2>
+          <p>全链路自动化能力，帮助 GM 节省时间，提升运营效率。</p>
+        </div>
 
-          <div class="item bg3">
-            <div class="info">
-              <div class="title">GM工具箱 - 下载地址</div>
-              <div class="desc">
-                文件同步、文本搜索替换，版本占用率查询，数据编辑，一个工具搞定！
-              </div>
-              <div class="btn-box">
-                <button class="btn primary">点击下载</button>
-                <button class="btn secondary">更新日志</button>
-              </div>
+        <div class="tool-grid">
+          <div class="tool-card" v-for="item in toolFeatures" :key="item.no">
+            <div class="tool-card-head">
+              <span class="tool-badge">{{ item.no }}</span>
+              <img class="tool-icon" :src="item.icon" :alt="item.title" />
             </div>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.desc }}</p>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
 
     <login-footer></login-footer>
   </div>
@@ -117,7 +63,33 @@ export default {
   },
   data() {
     return {
-      webName: '' // 网站信息
+      webName: '', // 网站信息
+      toolFeatures: [
+        {
+          no: '01',
+          title: '自动开合区',
+          desc: '自动开放测试区及正式区，自动备份合并数据及文本，自动合并登录器列表和充值链接。',
+          icon: require('../../assets/img/service-icon-22.png')
+        },
+        {
+          no: '02',
+          title: '自动生成登录器列表',
+          desc: '列表保存本地目录，支持上传 FTP 服务器、阿里云 OSS，并支持登录器列表自定义。',
+          icon: require('../../assets/img/service-icon-11.png')
+        },
+        {
+          no: '03',
+          title: '自动安装平台',
+          desc: '支持测试区配置，开区/合区后自动修改充值分区名称，自动删除被合并分区充值链接。',
+          icon: require('../../assets/img/service-icon-33.png')
+        },
+        {
+          no: '04',
+          title: '开区微信消息通知',
+          desc: '开区信息实时微信通知，GM 可及时了解开区情况。',
+          icon: require('../../assets/img/service-icon-44.png')
+        }
+      ]
     };
   }
 };
@@ -126,258 +98,294 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/newLogin/animate.min.css";
 
-// -------------- 通用字体 / 颜色 --------------
-.page-wrap {
+.tool-shell {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 56%, #ffffff 100%);
+  color: #17233c;
   font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft Yahei", sans-serif;
-  background: #fff;
-  color: #333;
-}
-.head_box {
-    background: url(../../assets/img/banner02.jpg) center center no-repeat;
-    height: 500px;
-    position: relative;
-    // padding-top: 126px;
-    // background: #fff;
 }
 
-.banner-box {
-    position: relative;
-    width: 100%;
-    max-width: 1300px;
-    margin: 0 auto;
-    height: 722px;
+.tool-main {
+  padding-top: 88px;
 }
 
-.banner-link {
-    position: absolute;
-    top: 166px;
-    left: 6%;
-    display: block;
-}
-
-.banner-pic {
-    max-width: 760px;
-    display: block;
-}
-
-a {
-  color: inherit;
-}
-
-/* ============ 4 个图标说明块 ============ */
-.service-box {
-  background: #fff;
-  // padding: 92px 0 92px;
-}
-.service-box .service {
-  width: 1100px;
-  max-width: 100%;
+.tool-hero {
+  width: min(1300px, calc(100% - 48px));
+  min-height: 376px;
   margin: 0 auto;
-}
-.service-box .service .navtitle {
-  margin-bottom: 56px;
-  text-align: center;
-}
-.service-box .service .navtitle .title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #1aad5b;
-  margin-bottom: 10px;
-}
-.service-box .service .navtitle .small {
-  font-size: 14px;
-  color: #666;
-}
-.service-box .service .service-list {
   display: grid;
-  grid-template-columns: repeat(4, minmax(240px, 1fr));
-  gap: 22px;
-  justify-items: center;
+  grid-template-columns: minmax(0, 1fr) 520px;
+  gap: 60px;
+  align-items: center;
+  padding: 46px 0 18px;
 }
-.service-box .service .service-list .item {
-  width: 260px;
-  // background: #fff;
-  border-radius: 18px;
-  padding: 26px 24px 22px;
-  // box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
-  text-align: center;
-}
-.service-box .service .service-list .item .icon {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 18px;
-  border-radius: 50%;
-}
-.service-box .service .service-list .item .icon1 {
-  background-image: url('../../assets/img/service-icon-11.png');
-  background-size: 72px 72px;
-}
-.service-box .service .service-list .item .icon2 {
-  background-image: url('../../assets/img/service-icon-22.png');
-  background-size: 72px 72px;
-}
-.service-box .service .service-list .item .icon3 {
-  background-image: url('../../assets/img/service-icon-33.png');
-  background-size: 72px 72px;
-}
-.service-box .service .service-list .item .icon4 {
-  background-image: url('../../assets/img/service-icon-44.png');
-  background-size: 72px 72px;
-}
-.service-box .service .service-list .item .title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #1aad5b;
-  margin: 0 auto 12px;
-  line-height: 1.3;
-  position: relative;
-}
-.service-box .service .service-list .item .title::after {
-  content: "";
-  display: block;
-  width: 48px;
-  height: 2px;
-  margin: 10px auto 0;
-  border-radius: 1px;
-  background: rgba(26, 173, 91, 0.3);
-}
-.service-box .service .service-list .item .desc {
-  margin-top: 14px;
-  color: #555;
-  font-size: 13px;
-  line-height: 1.8;
-  max-width: 180px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-.service-box .service .service-list .item .desc p {
-  margin: 6px 0;
-  word-break: keep-all;
-}
-/* ============ 下载工具卡片区 ============ */
-.ability-box {
-  background: #fff;
-  // padding: 100px 0 120px;
-}
-.ability-box .service {
-  width: 1100px;
-  max-width: 100%;
-  margin: 0 auto;
-}
-.ability-box .service .navtitle {
-  margin-bottom: 56px;
-  text-align: center;
-}
-.ability-box .service .navtitle .title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #1aad5b;
-  margin-bottom: 10px;
-}
-.ability-box .service .navtitle .small {
-  font-size: 14px;
-  color: #666;
-}
-.ability-box .service .service-list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(260px, 1fr));
-  gap: 22px;
-  justify-items: center;
-}
-.ability-box .service .service-list .item {
-  width: 320px;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  transition: transform 0.28s ease, box-shadow 0.28s ease;
-}
-.ability-box .service .service-list .item:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 28px 48px rgba(0, 0, 0, 0.14);
-}
-.ability-box .service .service-list .item .info {
-  position: relative;
-  padding: 32px 22px 26px;
+
+.tool-title-row {
   display: flex;
-  flex-direction: column;
-  // min-height: 320px;
+  align-items: center;
+  gap: 24px;
+  margin: 0 0 12px;
 }
-.ability-box .service .service-list .item .info::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 82px;
-  background: linear-gradient(90deg, #1a6bf8, #2fb2ff);
-  clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
+
+.tool-title-row img {
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
-.ability-box .service .service-list .item .info .title {
-  position: relative;
-  z-index: 1;
+
+.tool-copy h1 {
+  margin: 0;
+  color: #10213d;
+  font-size: 58px;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.tool-copy h2 {
+  margin: 0 0 20px;
+  color: #126de8;
+  font-size: 28px;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.tool-copy p {
+  max-width: 620px;
+  margin: 0;
+  color: #60718a;
+  font-size: 17px;
+  line-height: 1.9;
+}
+
+.tool-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 58px;
+  min-width: 178px;
+  padding: 0 28px;
+  border-radius: 8px;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 800;
+  text-decoration: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tool-btn-icon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+}
+
+.tool-btn-icon::before,
+.tool-btn-icon::after {
+  content: '';
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.tool-btn-icon-download::before {
+  clip-path: polygon(50% 100%, 0 55%, 28% 55%, 28% 0, 72% 0, 72% 55%, 100% 55%);
+  width: 18px;
+  height: 12px;
+  left: 0;
+  top: 1px;
+  background: currentColor;
+}
+
+.tool-btn-icon-download::after {
+  left: 2px;
+  bottom: 0;
+  width: 14px;
+  height: 4px;
+  border: 2px solid currentColor;
+  border-top: 0;
+  border-radius: 0 0 4px 4px;
+  background: transparent;
+}
+
+.tool-btn-icon-log {
+  border: 2px solid currentColor;
+  border-radius: 5px;
+}
+
+.tool-btn-icon-log::before {
+  left: 7px;
+  top: 3px;
+  width: 2px;
+  height: 8px;
+  background: currentColor;
+}
+
+.tool-btn-icon-log::after {
+  left: 4px;
+  top: 6px;
+  width: 8px;
+  height: 2px;
+  background: currentColor;
+}
+
+.tool-btn.primary {
   color: #fff;
-  margin-bottom: 12px;
+  background: linear-gradient(90deg, #126de8 0%, #2d8cff 100%);
+  border: none;
+  box-shadow: 0 14px 28px rgba(18, 109, 232, 0.22);
+}
+
+.tool-btn.secondary {
+  color: #126de8;
+  background: #fff;
+  border: 1px solid #cfe3fb;
+}
+
+.tool-btn:hover {
+  transform: translateY(-1px);
+}
+
+.tool-visual {
+  position: relative;
+  min-height: 300px;
+}
+
+.tool-visual::before {
+  content: none;
+}
+
+.tool-visual img {
+  display: block;
+  width: min(800px, 100%);
+  object-fit: contain;
+}
+
+.tool-capability {
+  width: min(1300px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 8px 0 78px;
+}
+
+.tool-section-head {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.tool-section-head h2 {
+  margin: 0;
+  color: #14233d;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.tool-section-head p {
+  margin: 10px 0 0;
+  color: #6d7b91;
+  font-size: 15px;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.tool-card {
+  min-height: 228px;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #e0eaf6;
+  border-radius: 8px;
+  box-shadow: 0 14px 36px rgba(50, 93, 152, 0.06);
+}
+
+.tool-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.tool-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 30px;
+  padding: 0 8px;
+  color: #126de8;
+  font-size: 12px;
+  font-weight: 800;
+  background: #eef6ff;
+  border: 1px solid #d7e8fd;
+  border-radius: 8px;
+}
+
+.tool-icon {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+}
+
+.tool-card h3 {
+  margin: 18px 0 10px;
+  color: #14233d;
+  font-size: 18px;
   line-height: 1.4;
 }
-.ability-box .service .service-list .item .info .desc {
-  position: relative;
-  z-index: 1;
-  margin-top: 42px;
+
+.tool-card p {
+  margin: 0;
+  color: #687890;
   font-size: 14px;
-  color: #333;
   line-height: 1.8;
 }
-.ability-box .service .service-list .item .info .btn-box {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  gap: 12px;
-  // margin-top: auto;
-}
-.ability-box .service .service-list .item .info .btn {
-  width: 120px;
-  padding: 10px 0;
-  border-radius: 999px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.22s ease, filter 0.22s ease;
-  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
-}
-.ability-box .service .service-list .item .info .btn.primary {
-  background: linear-gradient(90deg, #1a6bf8, #2fb2ff);
-  color: #fff;
-}
-.ability-box .service .service-list .item .info .btn.secondary {
-  background: rgba(0, 0, 0, 0.22);
-  color: rgba(255, 255, 255, 0.92);
-}
-.ability-box .service .service-list .item .info .btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.05);
-}
-
-// ============ 响应式 ============
 
 @media (max-width: 1100px) {
-  .service-box .service .service-list,
-  .ability-box .service .service-list {
-    grid-template-columns: repeat(2, minmax(240px, 1fr));
+  .tool-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .tool-visual {
+    max-width: 560px;
+  }
+
+  .tool-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 780px) {
-  .service-box .service,
-  .ability-box .service {
-    width: 90%;
+@media (max-width: 680px) {
+  .tool-hero,
+  .tool-capability {
+    width: calc(100% - 28px);
   }
 
-  .service-box .service .service-list,
-  .ability-box .service .service-list {
+  .tool-hero {
+    min-height: auto;
+    padding-top: 34px;
+  }
+
+  .tool-copy h1 {
+    font-size: 40px;
+  }
+
+  .tool-actions {
+    flex-direction: column;
+  }
+
+  .tool-btn {
+    width: 100%;
+  }
+
+  .tool-grid {
     grid-template-columns: 1fr;
   }
 }

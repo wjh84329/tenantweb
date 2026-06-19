@@ -878,8 +878,8 @@
             <el-select v-model="wxmbDialog.form.qrcodeType" placeholder="请选择二维码模版">
               <!-- <el-option label="BLUE密保" value="BLUE密保"/>
                 <el-option label="GOM/GEE密保" value="GOM/GEE密保"/> -->
-              <el-option v-for="(item, i) in qrcodeTemplatesList" :key="i" :label="item.title"
-                :value="item.title"></el-option>
+              <el-option v-for="item in wxmbQrcodeTemplatesList" :key="item.id" :label="item.title"
+                :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <!-- 传奇世界专属：补丁下载 -->
@@ -1048,8 +1048,19 @@
 </template>
 
 <script>
+import {
+  SCAN_QR_TEMPLATE_KIND,
+  filterScanQrcodeTemplates,
+  filterWxmbQrcodeTemplates,
+  defaultScanQrcodeForm
+} from '../assets/js/qrcodeTemplateKind';
 // import { gameEngine, gameEngine1 } from '../assets/js/version';
 export default {
+  computed: {
+    wxmbQrcodeTemplatesList() {
+      return filterWxmbQrcodeTemplates(this.qrcodeTemplatesList);
+    }
+  },
   data() {
     return {
       editFlag: true, // 编辑请求flag防呆
@@ -2404,7 +2415,8 @@ export default {
     getScanTemplates() {
       this.$api.groupmange.getQrcodeTemplates().then(res => {
         if (res && res.status === 200) {
-          this.scanModelDrow = res.data || res;
+          const raw = res.data || res;
+          this.scanModelDrow = filterScanQrcodeTemplates(Array.isArray(raw) ? raw : []);
         }
       });
     },
@@ -2412,18 +2424,12 @@ export default {
     openQrcodeDialog(isEdit, template) {
       this.qrcodeDialog.isEdit = isEdit;
       if (isEdit) {
-        // 编辑
-        this.qrcodeDialog.form = { ...template };
-      } else {
-        // 新增
         this.qrcodeDialog.form = {
-          title: '',
-          resourceCode: '',
-          imageCode: '',
-          serial: 3,
-          xOffset: '',
-          yOffset: ''
+          ...template,
+          templateKind: SCAN_QR_TEMPLATE_KIND
         };
+      } else {
+        this.qrcodeDialog.form = defaultScanQrcodeForm();
       }
       this.qrcodeDialog.visible = true;
     },
@@ -2438,7 +2444,8 @@ export default {
         if (!valid) return;
         this.qrcodeDialog.loading = true;
         const { isEdit, form } = this.qrcodeDialog;
-        this.$api.groupmange[isEdit ? 'editQrcodeTemplate' : 'addQrcodeTemplate'](form)
+        const payload = { ...form, templateKind: SCAN_QR_TEMPLATE_KIND };
+        this.$api.groupmange[isEdit ? 'editQrcodeTemplate' : 'addQrcodeTemplate'](payload)
           .then((res) => {
             this.qrcodeDialog.loading = false;
             if (res.status === 200) {

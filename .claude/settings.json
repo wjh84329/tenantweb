@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep -l \"Install\\\\|install\")",
+      "Bash(xargs grep -l \"LoadPartition\")",
+      "Bash(cmake --build out/build/release --config Release)",
+      "PowerShell(cmake --build d:\\\\7xNew\\\\gateway\\\\out\\\\build_static_release --config Release 2>&1)",
+      "PowerShell($vsPath = & \"${env:ProgramFiles\\(x86\\)}\\\\Microsoft Visual Studio\\\\Installer\\\\vswhere.exe\" -latest -property installationPath 2>$null; Write-Output $vsPath)",
+      "PowerShell(cmd /c \"d:\\\\7xNew\\\\gateway\\\\scripts\\\\rebuild_gateway_static_release_qt5.bat\" 2>&1)",
+      "Bash(scripts\\\\rebuild_gateway_static_release_qt5.bat)"
+    ]
+  }
+}

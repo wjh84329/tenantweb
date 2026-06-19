@@ -652,21 +652,34 @@ export default {
         skinNums: 0
       },
 
-      bank: [],
+      bank: {
+        realName: '未知户'
+      },
       pageLoading: false, // 新增全局loading状态
       isQY: false, // 是否强制签约
-      showChannelSettingEntry: false
+      showChannelSettingEntry: false,
+      homeTraceStartAt: 0
     };
   },
   methods: {
-    loadAllData() {
+    traceHomeStage(stage) {
+      if (!this.homeTraceStartAt) {
+        return;
+      }
+      const now = (typeof performance !== 'undefined' && performance.now)
+        ? performance.now()
+        : Date.now();
+      const elapsed = Math.round(now - this.homeTraceStartAt);
+      console.warn(`[HomeTrace] ${stage} ${elapsed}ms`);
+    },
+    loadAllData(accountPromise) {
       this.pageLoading = true;
-      Promise.all([
+      return Promise.all([
         this.$api.home.getUserinfo(),
         this.$api.home.chargeInfo(),
-        this.$api.home.promateLink()
+        accountPromise || this.getAccountInfo()
       ])
-        .then(([userRes, chargeRes, linkRes]) => {
+        .then(([userRes, chargeRes]) => {
           // 用户信息
           if (userRes.status === 200) {
             this.userInfo.id = userRes.data.id;
@@ -703,18 +716,32 @@ export default {
             this.chargeInfoData.yesterdayPayAmount = chargeRes.data.yesterdayPayAmount.toFixed(2);
             this.chargeInfoData.yesterdayProfit = chargeRes.data.yesterdayProfit.toFixed(2);
           }
-          // 推广链接（仅代理用户显示）
-          if (this.userInfo.type && linkRes.status === 200) {
-            this.functionSet.linkurl = linkRes.data;
-          }
           console.log(this.$store.state);
+          this.traceHomeStage('CoreDataDone');
         })
         .catch((err) => {
           this.$messageError(err.message);
+          this.traceHomeStage('CoreDataFailed');
         })
         .finally(() => {
           this.pageLoading = false;
+          this.traceHomeStage('CoreLoadingEnd');
         });
+    },
+    loadDeferredData() {
+      this.traceHomeStage('DeferredStart');
+      this.cashWithdraw();
+      this.getNotice();
+      this.orderList();
+      this.servicePhone();
+      this.getMessageCount();
+      this.getUserProfit();
+      this.getInfo();
+      this.getMimicharge();
+      this.getlist();
+      if (this.userInfo.type) {
+        this.getlink();
+      }
     },
     // 获取用户图像
     getUserProfit() {
@@ -1463,24 +1490,28 @@ export default {
     }
   },
   created() {
-    this.loadAllData();
+    this.homeTraceStartAt = (typeof performance !== 'undefined' && performance.now)
+      ? performance.now()
+      : Date.now();
+    this.traceHomeStage('Created');
+    const accountPromise = this.getAccountInfo();
+    this.loadAllData(accountPromise);
     // 等待获取账户信息后再检查是否需要弹签约提示，避免竞态
-    this.getAccountInfo().then(() => {
+    accountPromise.then(() => {
+      this.traceHomeStage('AccountInfoDone');
       this.checkpersonInfo();
     }).catch(() => {
       // 即使获取账户信息失败，也仍然尝试检查个人信息（可选）
+      this.traceHomeStage('AccountInfoFailed');
       this.checkpersonInfo();
     });
-    this.cashWithdraw();
-    this.getNotice();
-    this.orderList();
-    this.servicePhone();
-    this.getMessageCount();
-    this.getUserProfit();
-    this.getInfo();
+    // 首屏只等核心信息，其他数据延后加载，避免“已登录但首页长时间白屏/卡住”的体感
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.loadDeferredData();
+      }, 0);
+    });
     // this.checkpersonInfo(); 已移动到 getAccountInfo 完成后调用
-    this.getMimicharge();
-    this.getlist();
     // 获取当前角色所有菜单权限 id 数组
     // const menuIds = (this.$store.state.roleInfo || '').split(',').map(id => Number(id));
     // // this.getSkin();

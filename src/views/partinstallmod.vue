@@ -824,7 +824,7 @@
           </el-form-item>
           <el-form-item label="二维码模版" prop="qrcodeType" style="margin-top:18px;">
             <el-select v-model="wxmbDialog.form.qrcodeType" placeholder="请选择二维码模版" style="width:100%;">
-              <el-option v-for="item in qrcodeTemplatesList" :key="item.id" :label="item.title" :value="item.id" />
+              <el-option v-for="item in wxmbQrcodeTemplatesList" :key="item.id" :label="item.title" :value="item.id" />
             </el-select>
           </el-form-item>
           <el-form-item label="是否进行强制验证" prop="isForce">
@@ -970,7 +970,18 @@
 </template>
 
 <script>
+import {
+  SCAN_QR_TEMPLATE_KIND,
+  filterScanQrcodeTemplates,
+  filterWxmbQrcodeTemplates,
+  defaultScanQrcodeForm
+} from '../assets/js/qrcodeTemplateKind';
 export default {
+  computed: {
+    wxmbQrcodeTemplatesList() {
+      return filterWxmbQrcodeTemplates(this.qrcodeTemplatesList);
+    }
+  },
   data() {
     return {
       editFlag: true, // 编辑请求flag防呆
@@ -2294,7 +2305,9 @@ export default {
             tongQuDir: this.baseInfo.tongQuDir,
             payDir: this.baseInfo.payDir,
             isShowGlod: this.baseInfo.isShowGlod,
-            dir: 'D',
+            dir: (this.baseInfo.tongQuDir && /^([A-Za-z]):/.test(this.baseInfo.tongQuDir))
+              ? this.baseInfo.tongQuDir.match(/^([A-Za-z]):/)[1].toUpperCase()
+              : 'D',
             isDir: this.baseInfo.isDir,
             safetyMoney: this.baseInfo.safetyMoney,
             isTest: this.baseInfo.isTest,
@@ -2375,23 +2388,19 @@ export default {
     getScanTemplates() {
       this.$api.groupmange.getQrcodeTemplates().then(res => {
         if (res && res.status === 200) {
-          this.scanModelDrow = res.data || [];
+          this.scanModelDrow = filterScanQrcodeTemplates(res.data || []);
         }
       });
     },
     openQrcodeDialog(isEdit, template) {
       this.qrcodeDialog.isEdit = isEdit;
       if (isEdit) {
-        this.qrcodeDialog.form = { ...template };
-      } else {
         this.qrcodeDialog.form = {
-          title: '',
-          resourceCode: '',
-          imageCode: '',
-          serial: 3,
-          xOffset: '',
-          yOffset: ''
+          ...template,
+          templateKind: SCAN_QR_TEMPLATE_KIND
         };
+      } else {
+        this.qrcodeDialog.form = defaultScanQrcodeForm();
       }
       this.qrcodeDialog.visible = true;
     },
@@ -2404,7 +2413,8 @@ export default {
         if (!valid) return;
         this.qrcodeDialog.loading = true;
         const { isEdit, form } = this.qrcodeDialog;
-        this.$api.groupmange[isEdit ? 'editQrcodeTemplate' : 'addQrcodeTemplate'](form)
+        const payload = { ...form, templateKind: SCAN_QR_TEMPLATE_KIND };
+        this.$api.groupmange[isEdit ? 'editQrcodeTemplate' : 'addQrcodeTemplate'](payload)
           .then(() => {
             this.getAllQrcodeTemplates();
             this.qrcodeDialog.visible = false;

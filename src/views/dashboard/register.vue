@@ -38,7 +38,7 @@
                                 <i :class="{ on: this.saferank > 1 }">中</i>
                                 <i :class="{ on: this.saferank > 0 }">弱</i>
                             </span>
-                            密码由6~20个英文字母，数字或下划线组成
+                            密码长度6~20个字符
                         </p>
                     </div>
                 </li>
@@ -812,7 +812,7 @@ export default {
       if (/\W/.test(this.password)) this.saferank++; // 特殊字符
     },
     checkpassword1() {
-      let reg = /^[a-zA-Z0-9_]{6,20}$/;
+      let reg = /^[\s\S]{6,20}$/;
       this.checkflag3 = reg.test(this.password);
     },
     // 校验邮箱

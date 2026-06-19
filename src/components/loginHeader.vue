@@ -1,34 +1,18 @@
 <template>
-  <div :class="{ 'header-top': true, fixed: true }">
-    <div  class="contanct1">
-      <span class="tel">七星传奇游戏技术服务平台   |   7x24服务客服电话:{{ servicePhone }}</span>
-    </div>
-    <div class="contanct">
-      <img src="../assets/img/logo2.png" style="width: 166px;height: 50px;" class="logo" />
+  <div class="login-site-header">
+    <div class="header-inner">
+      <router-link class="brand" to="/login/loginHome">
+        <img src="../assets/img/logo2.png" class="logo" />
+      </router-link>
       <ul class="menu">
         <router-link tag="li" to="/login/loginHome" :class="{ on: $route.path.indexOf('loginHome') > 0 }">
           官方首页
-          <div class="after"></div>
         </router-link>
-        <!-- <router-link tag="li" to="/login/loginRecharge" :class="{ on: $route.path.indexOf('loginRecharge') > 0 }">
-          新闻公告
-          <div class="after"></div>
-        </router-link> -->
-        <!-- <router-link tag="li" to="/login/loginregister" :class="{ on: $route.path.indexOf('loginregister') > 0 }">
-          商户注册
-          <div class="after"></div>
-        </router-link> -->
         <router-link tag="li" to="/login/loginTool" :class="{ on: $route.path.indexOf('loginTool') > 0 }">
           开区助手
-          <div class="after"></div>
         </router-link>
-        <!-- <router-link tag="li" to="/login/brows" :class="{ on: $route.path.indexOf('brows') > 0 }">
-          服务介绍
-          <div class="after"></div>
-        </router-link> -->
         <router-link tag="li" to="/login/logincontact" :class="{ on: $route.path.indexOf('logincontact') > 0 }">
           联系我们
-          <div class="after"></div>
         </router-link>
       </ul>
     </div>
@@ -36,7 +20,6 @@
 </template>
 
 <script>
-import Mgr from '../assets/js/SecurityService';
 export default {
   data() {
     return {
@@ -59,11 +42,6 @@ export default {
         this.height = el.scrollTop;
       }
     },
-    singin() {
-      let mgr = new Mgr();
-      mgr.signIn();
-      // mgr.popupLayer();
-    },
     // 获取注册页面的底部信息
     footerInfo() {
       this.$api.login
@@ -84,106 +62,115 @@ export default {
 </script>
 
 <style scoped>
-.header-top {
-  /* display: flex; */
-  /* justify-content: center; */
-  /* align-items: center; */
-  margin: 0 0 0 0;
-  /* padding: 15px 0; */
-  width: 100%;
-}
-
-.fixed {
+.login-site-header {
+  --hero-content-width: 1300px;
+  --hero-login-column-width: 520px;
   position: fixed;
-  /* background-color: rgba(0, 0, 0, 0.5); */
-  background-color: white;
+  top: 0;
+  left: 0;
+  width: 100%;
   z-index: 9999;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid #e5edf8;
+  box-shadow: 0 10px 28px rgba(27, 83, 154, 0.06);
+  backdrop-filter: blur(12px);
 }
 
-.header-top .menu {
-  display: flex;
-  margin-left: 50px;
-}
-
-.header-top .menu li {
-  /* color: #fff; */
-  color: #333;
-  cursor: pointer;
-  margin: 0 40px;
-}
-
-.header-top .menu li:hover {
-  color: #0195ff;
-}
-
-.header-top .menu li.on {
-  color: #0195ff;
-  display: flex;
-  flex-direction: column;
+.header-inner {
+  width: min(var(--hero-content-width), calc(100% - 48px));
+  height: 88px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--hero-login-column-width);
   align-items: center;
-  position: relative;
+  column-gap: 40px;
 }
 
-.header-top .menu li.on .after {
-  height: 3px;
-  width: 30px;
-  background-color: #0195ff;
-  margin-top: 10px;
-}
-
-.header-top .contanct {
-  position: relative;          /* 让 logo 绝对定位的容器可用 */
-  display: flex;
-  justify-content: flex-end;   /* 菜单靠右 */
+.brand {
+  display: inline-flex;
   align-items: center;
-  padding: 15px 400px;          /* 适当内边距，保证菜单靠右有间距 */
+  justify-self: start;
+  text-decoration: none;
 }
-.header-top .contanct .logo {
-  position: absolute;
-  left: 30%;
-  transform: translateX(-50%);
+
+.logo {
   width: 166px;
   height: 50px;
-}
-.header-top .contanct1 {
-  background-color: #333;
-  color: #fff;
-  font-size: 16px;
-  text-align: right;
-  /* padding: 0 360px; */
-  padding-right: 15%;
-  line-height: 30px;
-  font-size: 14px;
-  /* margin-right: 30px; */
+  object-fit: contain;
+  display: block;
 }
 
-.header-top .contanct .tel {
-  margin-right: 10px;
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  margin-left: 0;
+  padding: 0;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  list-style: none;
+  flex: 1;
 }
 
-.header-top .contanct .btn1 {
-  background-color: #0096ff;
-  color: #333;
-  border-radius: 20px;
-  border: #fff 2px solid;
-  margin-right: 20px;
-  width: 80px;
-  height: 30px;
+.menu li {
+  position: relative;
+  flex: 1 1 0;
+  height: 88px;
+  line-height: 88px;
   text-align: center;
-  line-height: 30px;
+  color: #25324a;
+  font-size: 18px;
+  font-weight: 600;
   cursor: pointer;
+  border-radius: 0;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
-.header-top .contanct .btn2 {
-  background-color: #0fb203;
-  color: #fff;
-  border-radius: 20px;
-  border: #fff 2px solid;
-  margin-right: 20px;
-  width: 80px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  cursor: pointer;
+.menu li:hover {
+  color: #126de8;
+  background: transparent;
+}
+
+.menu li.on {
+  color: #126de8;
+  background: transparent;
+}
+
+.menu li.on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 3px;
+  width: 78px;
+  border-radius: 2px;
+  background: #126de8;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 900px) {
+  .header-inner {
+    width: calc(100% - 28px);
+    display: flex;
+    gap: 18px;
+    height: 76px;
+  }
+
+  .menu {
+    width: auto;
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+
+  .menu li {
+    min-width: 74px;
+    flex: 0 0 auto;
+    font-size: 14px;
+    height: 76px;
+    line-height: 76px;
+  }
 }
 </style>
