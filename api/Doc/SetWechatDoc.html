@@ -1,0 +1,263 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>公众号配置教程</title>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/document-description.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/doc-common.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/chmstyle.css" rel="stylesheet">
+    <script src="../Scripts/jquery-3.3.1.min.js"></script>
+    <script src="../Scripts/bootstrap.min.js"></script>
+    <style>
+        .doc-box .header {
+            height: 60px;
+        background: #fff;
+            overflow: hidden;
+        }
+
+        .doc-box .top {
+            padding-left: 140px
+        }
+
+        .doc-box .top .text {
+            font-size: 19px;
+            color: #066eed;
+            letter-spacing: 2px;
+        }
+
+        .index-content .middle {
+            margin: 20px auto;
+            border-radius: 15px;
+        }
+
+        .index-content .middle .control {
+            background: var(--theme-primary-600, #2563eb);
+        }
+
+        .index-content .middle .list-box {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+
+        .index-content .middle .list-box .control {
+            border-top-left-radius: 15px;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <div class="doc-box">
+        <div class="header ">
+            <div class="top min-width">
+                
+                <span class="text"> 七星技术服务7XPAY </span>
+                <div class="line"></div>
+                <div class="text">文档中心</div>
+            </div>
+        </div>
+        <div class="index-content">
+            <div class="middle min-width">
+                <div class="list-box">
+                    <p class="control">文档中心</p>
+                    <ul class="list nav nav-tabs" id="allMenu">
+                        <li class="list-check">
+                            <a class="nav-header" data-toggle="collapse" href="#docCourse" onclick="chevron_toggle(this)">教程文档<span class="pull-right icon icon-black-down"></span></a>
+                            <ul id="docCourse" class="nav nav-list in" style="height: auto;">
+                                
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docUseDetail" onclick="chevron_toggle(this)">使用详情<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docUseDetail" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="GatewayDownDoc.html">网关下载</li>
+                                        <li class="page-url" data-url="GroupManageDoc.html">分组管理</li>
+                                        <li class="page-url" data-url="TemplateDoc.html">比例模板</li>
+                                        <li class="page-url" data-url="AreaManageDoc.html">分区管理</li>
+                                        <li class="page-url" data-url="ReissueDoc.html">充值补发</li>
+                                        <li class="page-url" data-url="wechatmb.html">微信密保</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header" data-toggle="collapse" href="#docWechat" onclick="chevron_toggle(this)">公众号设置<span class="pull-right icon icon-black-down"></span></a>
+                                    <ul id="docWechat" class="nav nav-list in" style="height: auto;">
+                                        <li class="page-url" data-url="PlatformWechatDoc.html">平台公众号</li>
+                                        <li class="page-url" data-url="SelfWechatDoc.html">自己公众号</li>
+                                        <li class="page-url li-check-active" data-url="SetWechatDoc.html">公众号配置</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="nav-header collapsed" data-toggle="collapse" href="#docApi" onclick="chevron_toggle(this)">接口文档<span class="pull-right icon icon-right"></span></a>
+                            <ul id="docApi" class="nav nav-list collapse">
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docDesc" onclick="chevron_toggle(this)">接口文档说明<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docDesc" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="ApiDesc.html">概述</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameArea" onclick="chevron_toggle(this)">分区相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameArea" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="AreaList.html">所有分区列表</li>
+                                        <li class="page-url" data-url="GetGameAreaById.html">获取指定分区</li>
+                                        <!-- <li class="page-url" data-url="GetGameAreaByGroupId.html">获取分组下的分区</li> -->
+                                        <li class="page-url" data-url="CreateArea.html">创建新分区</li>
+                                        <li class="page-url" data-url="UpdateArea.html">修改分区信息</li>
+                                        <li class="page-url" data-url="DeleteArea.html">删除分区</li>
+                                        <!-- <li class="page-url" data-url="CheckConnect.html">检测分区通讯</li> -->
+                                        <li class="page-url" data-url="LoadScript.html">加载分区脚本</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameGroup" onclick="chevron_toggle(this)">分组相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameGroup" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="GroupList.html">获取分组列表</li>
+                                        <!-- <li class="page-url" data-url="CreateGroup.html">创建新分组</li> -->
+                                        <!-- <li class="page-url" data-url="DeleteGroup.html">删除分组</li> -->
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#template" onclick="chevron_toggle(this)">模板相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="template" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="TemplateList.html">比例模板列表</li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#reissue" onclick="chevron_toggle(this)">补发相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="reissue" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="BatchPay.html">整区补发</li>
+                                        <!-- <li class="page-url" data-url="SinglePay.html">手动充值</li> -->
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#drawrecord" onclick="chevron_toggle(this)">充值相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="drawrecord" class="nav nav-list collapse">
+                                        <!-- <li class="page-url" data-url="DrawRecord.html">充值领取记录</li> -->
+                                        <!-- <li class="page-url" data-url="GetPayChannel.html">获取充值通道</li> -->
+                                        <li class="page-url" data-url="SubmitPay.html">订单支付</li>
+                                        <!-- <li class="page-url" data-url="QueryOrder.html">订单查询</li> -->
+                                        <!-- <li class="page-url" data-url="SendRedPacket.html">红包领取</li> -->
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="content" id="art-content">
+                        <!-- 内容 [[ -->
+                        <div class="content-hd">
+                            <h2 class="with-border">公众号配置教程</h2>
+                        </div>
+                        <div class="content-bd">
+                            
+
+
+
+<h3><font color="#ff00ff"><font color="#555555">平台自己公众号配置</font>详情教程：</font></h3>
+<p></p>
+<table class="msgtable" border="0" width="200">
+    <tbody><tr>
+        <td>
+
+            <font color="#ff00ff"><strong><font color="#ff0000">&nbsp;1、</font></strong>登录后台首页，上方导航，</font>
+            <font color="#ff0000">
+                <font>
+                    <strong>账户管理&gt;微信密保</strong>
+                </font>
+            </font>
+
+
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><font color="#ff0000"><img alt="" src="../Content/IwanPay2/image/course/zjgzhpz.png"></font>
+            </p><p><font color="#ff0000"><strong><font>账户管理&gt;微信密保，</font></strong></font><font color="#ff0000"><strong><font>选项第二个，自己公众号</font></strong></font>
+            </p><p><font color="#000000"><font color="#ff0000">公众号类型：</font>说明:</font>
+            </p><p><font color="#000000">订阅号：用于普通推送消息，验证码获取</font>
+            </p><p><font color="#ff0000"><font color="#000000">服务号：用于设定消息关键词菜单回复，验证码获取。</font></font>
+            </p><p><font color="#ff0000"><font color="#000000">认证服务号：</font> 绑定微信平台登录，<font color="#000000">消息关键词菜单回复，验证码获取。</font></font>
+            </p><p><strong><font color="#000000"><font>公众号的Appid，AppSecret，原始ID，Token，</font></font><font color="#ff0000">公众平台的开发者中心配置项获取：</font></strong>
+            </p><p><font color="#ff0000"><font color="#000000"><font><strong>公众号Appid：</strong></font>这里填写<font><strong>AppID</strong></font>，</font><font color="#000000"><strong>在公众平台上的<font color="#ff0000">（开发者中心）</font>，开发者应用ID</strong></font></font>
+            </p><p><font color="#ff0000"><font color="#000000"><font><strong>公众号AppSecret：</strong></font>这里填写<font><strong>AppSecret</strong></font>，</font><font color="#000000"><strong>在公众平台上的<font color="#ff0000">（开发者中心）</font>，开发者应用密钥</strong></font></font>
+            </p><p><font color="#000000"><font><strong>公众号原始ID：</strong></font>这里填写<font><strong>公众号原始ID</strong></font>，</font><font><strong>是注册公众号账号原始ID</strong></font>
+            </p><p><font color="#000000"><font><strong>通讯Token：</strong></font>这里的<font><strong>通讯Token</strong></font>，是平台随机生成之后，对接在微信公众号上，找到公众平台<font color="#ff0000"><strong>（开发者中心）</strong></font>服务器配置下列中的：<font><strong>令牌（Token）填写即可。</strong></font></font>
+            </p><p><font color="#000000"><font><strong>被关注回复：</strong></font>自定义随意回复，<strong><font color="#000000">这里是微信扫码用户关注后，自动回复消息</font></strong></font><font color="#000000"> </font>
+            </p><p><font color="#ff0000"><strong><font>GOM、GEE脚本下载：</font><font size="+0"><font><font size="+0"><font size="+0"><font>安装到传奇服务端游戏NPC，2个地地图，默认新人接待，土城地图，其他地图自行修改，  此脚本文件，用于扫码绑定微信回复验证码，新人微信密保登陆。</font></font></font></font></font></strong></font>
+            </p><p>
+                <font color="#ff0000">
+                    <strong><font>GOM、GEE脚本下载：</font><font size="+0"><font><font size="+0"><font size="+0"><font>安装到传奇服务端游戏NPC，2个地地图，默认新人接待，土城地图，其他地图自行修改，  此脚本文件，用于扫码绑定微信回复验证码，新人微信密保登陆。</font></font></font></font></font></strong>
+                    </font></p><hr><font color="#ff0000">
+                </font>
+            <p><font color="#ff0000">&nbsp;<strong>2、</strong></font><strong><font>公众号菜单设置</font></strong></p>
+            <p><img alt="" src="../Content/IwanPay2/image/course/gzhcd.png"></p>
+            <p><font color="#000000">&nbsp;这里是<font><strong>公众号菜单选项</strong></font>，用户关注可以点击菜单，获取验证码回复，查看。</font></p>
+            <p><font color="#000000">&nbsp;菜单上有3个配置，同时分为3个<font color="#ff0000"><strong>（验证码，文字，跳转链接网址）</strong></font>回复选择菜单。</font></p>
+            <p>
+                <font color="#000000">
+                    <font><strong>配置介绍：</strong></font>
+                    只支持设置一级菜单，并且只能设置“跳转链接”、“回复文字”两种类型
+                </font>
+            </p>
+            <p><font color="#000000"><font color="#ff0000"><strong>提示：</strong></font> <font color="#ff0000">菜单名全部不填，则为删除所有菜单，</font>因微信自身缓存，保存菜单数据后，需等待几分钟，公众号菜单才会变化。</font></p>
+            <p>
+                </p><hr><font color="#ff0000">
+                    <font color="#000000">
+                        <strong><font color="#ff0000">&nbsp;3、</font><font>自定义回复关键词，</font></strong>如下图:
+                    </font>
+            <p></p>
+            <p>
+                <img alt="" src="../Content/IwanPay2/image/course/hhgjc.png">
+
+                <br><br><font color="#000000">
+                    &nbsp;自定义关键词回复，使用逗号,分隔添加您自己需求的关键词。
+                </font>
+            </p><p><font color="#000000">&nbsp;</font></p></font>
+        </td>
+    </tr>
+</tbody></table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script src="../Content/IwanPay/js/index.js" charset="utf-8"></script>
+        <div class="footer min-width">
+    <div class="line"></div>
+    本站严禁一切的钓鱼、色情、赌博、私彩及违反国家法律法规等使用
+</div>
+
+    </div>
+    <script>
+        function chevron_toggle(obj) {
+            $(obj).find("span").toggleClass("icon-right");
+            $(obj).find("span").toggleClass("icon-black-down");
+        }
+
+        $(function () {
+            var url = window.location.href.replace(window.location.origin, "");
+            $("#allMenu").find("li").each(function () {
+                if ($(this).attr("data-url")) {
+                    if ($(this).attr("data-url").toLowerCase() == url.toLowerCase()) {
+                        $(this).parent().parent().closest("ul").prev().click();
+                        $(this).closest("ul").prev().click();
+                        $(this).addClass("li-check-active");
+                    }
+                }
+            });
+        });
+    </script>
+    
+
+
+
+</body></html>

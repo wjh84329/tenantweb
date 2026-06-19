@@ -1,0 +1,573 @@
+﻿<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>订单支付</title>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/document-description.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/doc-common.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/chmstyle.css" rel="stylesheet">
+    <script src="../Scripts/jquery-3.3.1.min.js"></script>
+    <script src="../Scripts/bootstrap.min.js"></script>
+    <style>
+        .doc-box .header {
+            height: 60px;
+        background: #fff;
+            overflow: hidden;
+        }
+
+        .doc-box .top {
+            padding-left: 140px
+        }
+
+        .doc-box .top .text {
+            font-size: 19px;
+            color: #066eed;
+            letter-spacing: 2px;
+        }
+
+        .index-content .middle {
+            margin: 20px auto;
+            border-radius: 15px;
+        }
+
+        .index-content .middle .control {
+            background: var(--theme-primary-600, #2563eb);
+        }
+
+        .index-content .middle .list-box {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+
+        .index-content .middle .list-box .control {
+            border-top-left-radius: 15px;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <div class="doc-box">
+        <div class="header ">
+            <div class="top min-width">
+                
+                <span class="text"> 七星技术服务7XPAY </span>
+                <div class="line"></div>
+                <div class="text">文档中心</div>
+            </div>
+        </div>
+        <div class="index-content">
+            <div class="middle min-width">
+                <div class="list-box">
+                    <p class="control">文档中心</p>
+                    <ul class="list nav nav-tabs" id="allMenu">
+                        <li>
+                            <a class="nav-header collapsed" data-toggle="collapse" href="#docCourse" onclick="chevron_toggle(this)">教程文档<span class="pull-right icon icon-right"></span></a>
+                            <ul id="docCourse" class="nav nav-list collapse">
+                                
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docUseDetail" onclick="chevron_toggle(this)">使用详情<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docUseDetail" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="GatewayDownDoc.html">网关下载</li>
+                                        <li class="page-url" data-url="GroupManageDoc.html">分组管理</li>
+                                        <li class="page-url" data-url="TemplateDoc.html">比例模板</li>
+                                        <li class="page-url" data-url="AreaManageDoc.html">分区管理</li>
+                                        <li class="page-url" data-url="ReissueDoc.html">充值补发</li>
+                                        <li class="page-url" data-url="wechatmb.html">微信密保</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docWechat" onclick="chevron_toggle(this)">公众号设置<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docWechat" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="PlatformWechatDoc.html">平台公众号</li>
+                                        <li class="page-url" data-url="SelfWechatDoc.html">自己公众号</li>
+                                        <li class="page-url" data-url="SetWechatDoc.html">公众号配置</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="list-check">
+                            <a class="nav-header" data-toggle="collapse" href="#docApi" onclick="chevron_toggle(this)">接口文档<span class="pull-right icon icon-black-down"></span></a>
+                            <ul id="docApi" class="nav nav-list in" style="height: auto;">
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docDesc" onclick="chevron_toggle(this)">接口文档说明<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docDesc" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="ApiDesc.html">概述</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameArea" onclick="chevron_toggle(this)">分区相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameArea" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="AreaList.html">所有分区列表</li>
+                                        <li class="page-url" data-url="GetGameAreaById.html">获取指定分区</li>
+                                        <!-- <li class="page-url" data-url="GetGameAreaByGroupId.html">获取分组下的分区</li> -->
+                                        <li class="page-url" data-url="CreateArea.html">创建新分区</li>
+                                        <li class="page-url" data-url="UpdateArea.html">修改分区信息</li>
+                                        <li class="page-url" data-url="DeleteArea.html">删除分区</li>
+                                        <!-- <li class="page-url" data-url="CheckConnect.html">检测分区通讯</li> -->
+                                        <li class="page-url" data-url="LoadScript.html">加载分区脚本</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameGroup" onclick="chevron_toggle(this)">分组相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameGroup" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="GroupList.html">获取分组列表</li>
+                                        <!-- <li class="page-url" data-url="CreateGroup.html">创建新分组</li> -->
+                                        <!-- <li class="page-url" data-url="DeleteGroup.html">删除分组</li> -->
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#template" onclick="chevron_toggle(this)">模板相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="template" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="TemplateList.html">比例模板列表</li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#reissue" onclick="chevron_toggle(this)">补发相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="reissue" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="BatchPay.html">整区补发</li>
+                                        <!-- <li class="page-url" data-url="SinglePay.html">手动充值</li> -->
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header" data-toggle="collapse" href="#drawrecord" onclick="chevron_toggle(this)">充值相关接口<span class="pull-right icon icon-black-down"></span></a>
+                                    <ul id="drawrecord" class="nav nav-list in" style="height: auto;">
+                                        <!-- <li class="page-url" data-url="DrawRecord.html">充值领取记录</li> -->
+                                        <!-- <li class="page-url" data-url="GetPayChannel.html">获取充值通道</li> -->
+                                        <li class="page-url li-check-active" data-url="SubmitPay.html">订单支付</li>
+                                        <!-- <li class="page-url" data-url="QueryOrder.html">订单查询</li> -->
+                                        <!-- <li class="page-url" data-url="SendRedPacket.html">红包领取</li> -->
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="content" id="art-content">
+                        <!-- 内容 [[ -->
+                        <div class="content-hd">
+                            <h2 class="with-border">订单支付</h2>
+                        </div>
+                        <div class="content-bd">
+                            
+
+
+
+<div class="data-box with-padding">
+    <div class="data-hd">
+        <h3>
+            <a name="1"></a>应用场景
+        </h3>
+    </div>
+    <div class="data-bd">
+        <p>该接口可供第三方自动开区工具等，进行订单支付。 </p>
+    </div>
+</div>
+<div class="data-box with-padding">
+    <div class="data-hd">
+        <h3>
+            <a name="1-1"></a>签名规则
+        </h3>
+    </div>
+    <div class="data-bd">
+        <p>以下内容为返回结果验签规则（用于防篡改验证）：</p>
+        <ol>
+            <li>Version + MerId + TransNo + OrderAmount + PayChannel +
+                             PostBackUrl + Remark;</li>
+            <li>在拼接字符串末尾直接追加商户密钥（MD5 Key）</li>
+            <li>对整个字符串做 MD5 计算，并将结果转换为 <strong>32 位大写</strong> 作为最终的 <code>Sign</code>。</li>
+        </ol>
+        <p>示例（伪示例，仅供理解）：</p>
+        <pre>
+MerId=merchant-uuid-123&OrderAmount=100.00&PayChannel=alipay&TransNo=EXT20251029001&TransTime=20250308123045{MD5Key}
+        </pre>
+        <p>计算 MD5 并转换为大写后，即为返回的 <code>Sign</code> 值。</p>
+    </div>
+</div>
+<div class="data-box with-padding">
+    <div class="data-hd">
+        <h3>
+            <a name="2"></a>接口链接
+        </h3>
+    </div>
+    <div class="data-bd">
+        <p class="mb20">请求方式：支持GET和POST</p>
+        <p class="mb20">URL地址：http://newapi.7xpay.com/api/Cashier/Index</p>
+    </div>
+</div>
+<div class="data-box with-padding">
+    <div class="data-hd">
+        <h3>
+            <a name="3"></a>请求参数
+        </h3>
+    </div>
+    <div class="data-bd">
+        <div class="table-wrp with-border">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="name">字段名</th>
+                        <th class="var">变量名</th>
+                        <th class="require">必填</th>
+                        <th class="type">类型</th>
+                        <th class="example">示例值</th>
+                        <th class="description">描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>版本 </td>
+                        <td>Version </td>
+                        <td>是 </td>
+                        <td>String </td>
+                        <td>1.0</td>
+                        <td>协议版本，例如："1.0" </td>
+                    </tr>
+                    <tr>
+                        <td>字符集 </td>
+                        <td>Charset </td>
+                        <td>否 </td>
+                        <td>string </td>
+                        <td>utf-8</td>
+                        <td> 字符集（示例：utf-8）</td>
+                    </tr>
+                    <tr>
+                        <td>商户标识</td>
+                        <td>MerId </td>
+                        <td>是 </td>
+                        <td>String </td>
+                        <td>xxxx</td>
+                        <td> 平台分配</td>
+                    </tr>
+                    <tr>
+                        <td>商户订单号</td>
+                        <td>TransNo </td>
+                        <td>是 </td>
+                        <td>String </td>
+                        <td>xxxx</td>
+                        <td> 最大 50 字符</td>
+                    </tr>
+                    <tr>
+                        <td>商品/游戏名称</td>
+                        <td>ProductName</td>
+                        <td>是</td>
+                        <td>string </td>
+                        <td>XX充值</td>
+                        <td>商品/游戏名称</td>
+                    </tr>
+                    <tr>
+                        <td>充值金额</td>
+                        <td>OrderAmount </td>
+                        <td>是 </td>
+                        <td>string </td>
+                        <td>100.00</td>
+                        <td> 金额字符串，例如 "100.00"</td>
+                    </tr>
+                    <tr>
+                        <td>支付渠道</td>
+                        <td>PayChannel </td>
+                        <td>是 </td>
+                        <td>string </td>
+                        <td>alipay</td>
+                        <td> 支付渠道，如 alipay / wechat</td>
+                    </tr>
+                    <tr>
+                        <td>玩家账号/标识</td>
+                        <td>UserInfo</td>
+                        <td>是</td>
+                        <td>String </td>
+                        <td>abcd1234</td>
+                        <td>玩家账号/标识</td>
+                    </tr>
+                    <tr>
+                        <td>异步通知地址</td>
+                        <td>PostBackUrl </td>
+                        <td>是 </td>
+                        <td>String </td>
+                        <td>http%3a%2f%2fwww.xxx.com%2fxxx%2fxxx</td>
+                        <td>
+                            服务端异步通知地址（平台支付结果会回调该地址）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>前端回跳/展示地址 </td>
+                        <td>NotifyUrl </td>
+                        <td>否 </td>
+                        <td>String </td>
+                        <td>http%3a%2f%2fwww.xxx.com%2fxxx%2fxxx</td>
+                        <td>
+                            前端回跳/展示地址（可选）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>扩展字段 </td>
+                        <td>Remark </td>
+                        <td>否 </td>
+                        <td>String </td>
+                        <td>123</td>
+                        <td>
+                            扩展字段，平台会在返回中原样返回
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>联系方式 </td>
+                        <td>Contact </td>
+                        <td>否 </td>
+                        <td>String </td>
+                        <td>12300000000</td>
+                        <td>
+                            联系方式
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>请求签名 </td>
+                        <td>Sign </td>
+                        <td>是 </td>
+                        <td>String </td>
+                        <td>A1B2C3D4E5F6...</td>
+                        <td>
+                            请求签名（MD5 32 位大写），用于平台校验请求来源
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>支付方式 </td>
+                        <td>Type </td>
+                        <td>是 </td>
+                        <td>Int </td>
+                        <td>0</td>
+                        <td>
+                            1为手机支付，0为网页支付，返回字段中的qrCode，如果是手机端返回二维码源，如果是网页返回收银台地址
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>玩家充值IP4地址 </td>
+                        <td>PlayerIp </td>
+                        <td>是 </td>
+                        <td>string </td>
+                        <td>8.8.8.8</td>
+                        <td>
+                            玩家充值真实外网地址
+                        </td>
+                    </tr>
+	    <tr>
+                        <td>充值产品编号 </td>
+                        <td>Mark </td>
+                        <td>否 </td>
+                        <td>string </td>
+                        <td>wechat1</td>
+                        <td>
+                            如果指定产品，则使用指定产品发起支付
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb10">举例如下： </p>
+        <div class="guide-msg mb10">
+            <p>http://newapi.7xpay.com/api/Cashier/Index?Version=1.0&amp;MerId=merchant-uuid-123&amp;TransNo=EXT20251029001&amp;ProductName=充值100元&amp;OrderAmount=100.00&amp;PayChannel=alipay&amp;UserInfo=player123&amp;PostBackUrl=http%3a%2f%2fwww.xxx.com%2fxxx%2fxxx&amp;NotifyUrl=https://third.example.com/notify-ui&amp;Remark=123&amp;Sign=A1B2C3D4E5F6...&amp;Type=0&amp;PlayerIp=8.8.8.8</p>
+        </div>
+    </div>
+</div>
+<div class="data-box with-padding">
+  <div class="data-hd">
+    <h3>
+      <a name="4"></a>异步通知返回字段说明
+    </h3>
+  </div>
+  <div class="data-bd">
+    <div class="table-wrp with-border">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="name">字段名</th>
+            <th class="var">变量名</th>
+            <th class="require">必回</th>
+            <th class="type">类型</th>
+            <th class="example">示例值</th>
+            <th class="description">说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>版本</td>
+            <td>Version</td>
+            <td>是</td>
+            <td>string</td>
+            <td>1.0</td>
+            <td>协议版本</td>
+          </tr>
+          <tr>
+            <td>商户标识</td>
+            <td>MerId</td>
+            <td>是</td>
+            <td>string</td>
+            <td>xxxx</td>
+            <td>平台分配的商户编号</td>
+          </tr>
+          <tr>
+            <td>商品/游戏名称</td>
+            <td>ProductName</td>
+            <td>否</td>
+            <td>string</td>
+            <td>XX充值</td>
+            <td>原样返回</td>
+          </tr>
+          <tr>
+            <td>调用方订单号</td>
+            <td>TransNo</td>
+            <td>是</td>
+            <td>string</td>
+            <td>EXT20251029001</td>
+            <td>调用方上送的订单号</td>
+          </tr>
+          <tr>
+            <td>金额</td>
+            <td>OrderAmount</td>
+            <td>是</td>
+            <td>string</td>
+            <td>100.00</td>
+            <td>金额字符串</td>
+          </tr>
+          <tr>
+            <td>支付渠道</td>
+            <td>PayChannel</td>
+            <td>是</td>
+            <td>string</td>
+            <td>alipay</td>
+            <td>支付渠道标识</td>
+          </tr>
+          <tr>
+            <td>扩展字段</td>
+            <td>Remark</td>
+            <td>否</td>
+            <td>string</td>
+            <td>123</td>
+            <td>原样返回</td>
+          </tr>
+          <tr>
+            <td>平台订单号</td>
+            <td>TrxNo</td>
+            <td>是</td>
+            <td>string</td>
+            <td>202503081234567890</td>
+            <td>平台生成的订单号（用于对账）</td>
+          </tr>
+          <tr>
+            <td>支付状态</td>
+            <td>Status</td>
+            <td>是</td>
+            <td>string</td>
+            <td>1</td>
+            <td>1=成功，0=失败</td>
+          </tr>
+          <tr>
+            <td>状态说明</td>
+            <td>Msg</td>
+            <td>否</td>
+            <td>string</td>
+            <td>成功</td>
+            <td>失败时返回错误说明</td>
+          </tr>
+          <tr>
+            <td>二维码/跳转地址</td>
+            <td>QrCode</td>
+            <td>否</td>
+            <td>string</td>
+            <td>https://...</td>
+            <td>创建订单时返回，用于扫码/跳转支付</td>
+          </tr>
+          <tr>
+            <td>支付时间</td>
+            <td>TransTime</td>
+            <td>是</td>
+            <td>string</td>
+            <td>20250308123045</td>
+            <td>格式 yyyyMMddHHmmss</td>
+          </tr>
+          <tr>
+            <td>签名</td>
+            <td>Sign</td>
+            <td>是</td>
+            <td>string</td>
+            <td>3A1B2C...（32位大写）</td>
+            <td>MD5签名，用于验签</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+                                
+  <div class="data-hd">
+    <h3>
+      <a name="4-1"></a>返回示例
+    </h3>
+  </div>
+  <div class="data-bd">
+    <div class="guide-msg mb10">
+      <pre>
+{
+  "Version": "1.0",
+  "MerId": "merchant-uuid-123",
+  "ProductName": "充值100元",
+  "TransNo": "EXT20251029001",
+  "OrderAmount": "100.00",
+  "PayChannel": "alipay",
+  "Remark": "123",
+  "TrxNo": "202503081234567890",
+  "Status": "1",
+  "Msg": "成功",
+  "QrCode": "https://pay.example.com/qrcode?data=...",
+  "TransTime": "20250308123045",
+  "Sign": "A1B2C3D4E5F6..."
+}
+      </pre>
+    </div>
+  </div>
+</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script src="../Content/IwanPay/js/index.js" charset="utf-8"></script>
+        <div class="footer min-width">
+    <div class="line"></div>
+    本站严禁一切的钓鱼、色情、赌博、私彩及违反国家法律法规等使用
+</div>
+
+    </div>
+    <script>
+        function chevron_toggle(obj) {
+            $(obj).find("span").toggleClass("icon-right");
+            $(obj).find("span").toggleClass("icon-black-down");
+        }
+
+        $(function () {
+            var url = window.location.href.replace(window.location.origin, "");
+            $("#allMenu").find("li").each(function () {
+                if ($(this).attr("data-url")) {
+                    if ($(this).attr("data-url").toLowerCase() == url.toLowerCase()) {
+                        $(this).parent().parent().closest("ul").prev().click();
+                        $(this).closest("ul").prev().click();
+                        $(this).addClass("li-check-active");
+                    }
+                }
+            });
+        });
+    </script>
+    
+
+
+
+</body></html>

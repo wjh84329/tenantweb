@@ -9,7 +9,7 @@
   <div class="main">
     <div class="header" :style="headerStyle">
       <div class="headbox clearfix" :style="headerStyle"  style="display: flex;">
-        <div class="logo"><img src="../../assets/img/logo3.png" style="width: 154px;height: 40px;" alt="" /></div>
+        <div class="logo"><site-logo variant="logo3" style="width: 154px;height: 40px;" alt="网站logo" /></div>
         <ul class="navbox clearfix" style="width: 75%;">
           <li :class="{ active: activeNav === '/behalf/baseInfo' }"
           :style="activeNav === '/behalf/baseInfo' ? activeNavStyle : (hoverNav === '/behalf/baseInfo' ? hoverNavStyle : null)"

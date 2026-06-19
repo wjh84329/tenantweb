@@ -9,7 +9,7 @@
   <div class="main">
     <div class="header">
       <div class="headbox clearfix">
-        <div class="logo"><img src="../assets/images/logo.png" alt="" /></div>
+        <div class="logo"><site-logo variant="legacy" alt="网站logo" /></div>
         <ul class="navbox clearfix">
           <li>
             <span class="icon1" @click="refresh('/employeemain/employeehome')">首页</span>

@@ -37,10 +37,12 @@
     <main class="lh-main">
       <section class="lh-hero">
         <div class="lh-hero-copy">
-          <h1><span>商户</span>中心</h1>
-          <p>
-            安全、稳定、清晰的商户作业入口
-          </p>
+          <div class="lh-hero-intro">
+            <h1><span>商户</span>中心</h1>
+            <p>
+              安全、稳定、清晰的商户作业入口
+            </p>
+          </div>
           <img class="lh-hero-visual-img" src="../../assets/newUi/login-hero-visual.png" alt="" />
         </div>
 
@@ -107,8 +109,21 @@
           </form>
 
           <div v-show="isWxQrLoginShow" class="lh-qr-login">
-            <div class="lh-qr-box">
-              <img class="lh-qr-image" :src="qrCodeUrl || qrPlaceholder" />
+            <div class="lh-qr-box" :class="{ 'is-expired': qrExpired }">
+              <img v-if="qrCodeUrl" class="lh-qr-image" :src="qrCodeUrl" />
+              <div v-else class="lh-qr-loading">
+                <span class="lh-qr-spinner"></span>
+                <span>{{ qrLoading ? '二维码生成中...' : '点击刷新二维码' }}</span>
+              </div>
+              <button
+                v-if="qrExpired"
+                type="button"
+                class="lh-qr-expired-mask"
+                @click="getwxqrImg"
+              >
+                <strong>二维码已过期</strong>
+                <span>点击刷新</span>
+              </button>
             </div>
             <p>请先绑定公众号再使用扫码登录</p>
             <button type="button" class="lh-submit lh-refresh" @click="getwxqrImg">
@@ -330,8 +345,8 @@ export default {
       appid: 'wx937e63f717108262',
       scope: 'snsapi_login',
       redirect_uri: 'http://localhost:5000/External/WeixinOpen',
+      qrLoading: false,
       qrCodeUrl: '',
-      qrPlaceholder: require('../../assets/img/qrcode.png'),
       returnUrl: '',
       code: '',
       qqShow: true
@@ -402,6 +417,7 @@ export default {
             if (res.status === 'expired') {
               this.$messageError('二维码已过期，请刷新二维码！');
               this.qrExpired = true;
+              this.qrLoading = false;
               if (this.timer) {
                 clearInterval(this.timer);
                 this.timer = null;
@@ -452,16 +468,20 @@ export default {
         this.timer = null;
       }
       this.qrExpired = false;
+      this.qrLoading = true;
+      this.qrCodeUrl = '';
       this.$api.login.getLoginQrCode({
         returnUrl: ReturnUrl
       }).then((res) => {
         // console.log(res);
         this.qrCodeUrl = res.data.qrCodeUrl;
+        this.qrLoading = false;
         this.code = res.data.code;
         this.timer = setInterval(() => {
           this.checkBindWeixi();
         }, 1000);
       }).catch((err) => {
+        this.qrLoading = false;
         this.loading = false;
         if (err.response) {
           console.log(err.response.data);
@@ -688,8 +708,13 @@ export default {
 }
 
 .lh-hero-copy {
-  padding-left: 110px;
+  max-width: 688px;
+  padding-left: 0;
   box-sizing: border-box;
+}
+
+.lh-hero-intro {
+  padding-left: 6px;
 }
 
 .lh-hero-copy h1 {
@@ -705,7 +730,7 @@ export default {
 }
 
 .lh-hero-copy p {
-  max-width: 640px;
+  max-width: 630px;
   margin: 0;
   color: #2f405d;
   font-size: 21px;
@@ -752,7 +777,7 @@ export default {
 
 .lh-hero-visual-img {
   display: block;
-  width: min(630px, 100%);
+  width: min(648px, 100%);
   margin-top: 28px;
   object-fit: contain;
 }
@@ -974,13 +999,19 @@ export default {
 }
 
 .lh-qr-box {
-  width: 210px;
-  height: 210px;
-  padding: 12px;
+  position: relative;
+  width: 190px;
+  height: 190px;
+  padding: 0;
   background: #fff;
   border: 1px solid #dce8f6;
   border-radius: 8px;
-  box-shadow: inset 0 0 0 6px #f5f9ff;
+  box-shadow: inset 0 0 0 1px #f5f9ff;
+  overflow: hidden;
+}
+
+.lh-qr-box.is-expired .lh-qr-image {
+  filter: grayscale(0.15) blur(0.4px);
 }
 
 .lh-qr-image {
@@ -988,6 +1019,73 @@ export default {
   height: 100%;
   object-fit: contain;
   display: block;
+}
+
+.lh-qr-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #7a8aa3;
+  font-size: 13px;
+  background:
+    linear-gradient(180deg, #fbfdff 0%, #f4f8fe 100%);
+}
+
+.lh-qr-expired-mask {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  background: rgba(18, 33, 61, 0.62);
+  border: none;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+}
+
+.lh-qr-expired-mask strong {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.lh-qr-expired-mask span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lh-qr-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #d8e4f2;
+  border-top-color: #2d8cff;
+  border-radius: 50%;
+  animation: lh-qr-spin 0.9s linear infinite;
+}
+
+@keyframes lh-qr-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .lh-qr-login p {
@@ -1248,6 +1346,10 @@ export default {
   }
 
   .lh-hero-copy {
+    padding-left: 0;
+  }
+
+  .lh-hero-intro {
     padding-left: 0;
   }
 

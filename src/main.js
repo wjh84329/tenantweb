@@ -13,6 +13,7 @@ import './assets/css/main.css';
 import echarts from 'echarts';
 import mixin from './assets/js/mixin';
 import api from './api/index';
+import SiteLogo from './components/SiteLogo.vue';
 
 // // 从 localStorage 恢复优先，其次是 store，再次是默认色
 // let savedColor = localStorage.getItem('themeColor');
@@ -63,6 +64,7 @@ store.watch(
 Vue.config.productionTip = false;
 Vue.prototype.$api = api;
 Vue.mixin(mixin);
+Vue.component('SiteLogo', SiteLogo);
 Vue.use(ElementUI);
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$messageSuccess = function(text) {

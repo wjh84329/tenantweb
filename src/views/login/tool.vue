@@ -17,9 +17,9 @@
               <span class="tool-btn-icon tool-btn-icon-download"></span>
               点击下载
             </a>
-            <a class="tool-btn secondary" href="https://haozs.com" target="_blank" rel="noopener noreferrer">
+            <a class="tool-btn secondary" href="http://sms.haozs.com/web/#/615082456/257759853" target="_blank" rel="noopener noreferrer">
               <span class="tool-btn-icon tool-btn-icon-log"></span>
-              更新日志
+              帮助文档
             </a>
           </div>
         </div>
@@ -216,24 +216,28 @@ export default {
 }
 
 .tool-btn-icon-log {
+  position: relative;
   border: 2px solid currentColor;
   border-radius: 5px;
+  overflow: hidden;
 }
 
 .tool-btn-icon-log::before {
-  left: 7px;
-  top: 3px;
-  width: 2px;
+  right: -1px;
+  top: -1px;
+  width: 8px;
   height: 8px;
-  background: currentColor;
+  background: linear-gradient(135deg, transparent 48%, currentColor 49%, currentColor 100%);
 }
 
 .tool-btn-icon-log::after {
   left: 4px;
-  top: 6px;
-  width: 8px;
+  top: 5px;
+  width: 7px;
   height: 2px;
   background: currentColor;
+  border-radius: 2px;
+  box-shadow: 0 4px 0 currentColor;
 }
 
 .tool-btn.primary {

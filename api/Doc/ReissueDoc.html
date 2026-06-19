@@ -1,0 +1,282 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>充值补发教程</title>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/document-description.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/doc-common.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/chmstyle.css" rel="stylesheet">
+    <script src="../Scripts/jquery-3.3.1.min.js"></script>
+    <script src="../Scripts/bootstrap.min.js"></script>
+    <style>
+        .doc-box .header {
+            height: 60px;
+        background: #fff;
+            overflow: hidden;
+        }
+
+        .doc-box .top {
+            padding-left: 140px
+        }
+
+        .doc-box .top .text {
+            font-size: 19px;
+            color: #066eed;
+            letter-spacing: 2px;
+        }
+
+        .index-content .middle {
+            margin: 20px auto;
+            border-radius: 15px;
+        }
+
+        .index-content .middle .control {
+            background: var(--theme-primary-600, #2563eb);
+        }
+
+        .index-content .middle .list-box {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+
+        .index-content .middle .list-box .control {
+            border-top-left-radius: 15px;
+        }
+    </style>
+    
+    <style>
+        img {
+            width:100%;
+            }
+        </style>
+
+</head>
+
+<body>
+    <div class="doc-box">
+        <div class="header ">
+            <div class="top min-width">
+                
+                <span class="text"> 七星技术服务7XPAY </span>
+                <div class="line"></div>
+                <div class="text">文档中心</div>
+            </div>
+        </div>
+        <div class="index-content">
+            <div class="middle min-width">
+                <div class="list-box">
+                    <p class="control">文档中心</p>
+                    <ul class="list nav nav-tabs" id="allMenu">
+                        <li class="list-check">
+                            <a class="nav-header" data-toggle="collapse" href="#docCourse" onclick="chevron_toggle(this)">教程文档<span class="pull-right icon icon-black-down"></span></a>
+                            <ul id="docCourse" class="nav nav-list in" style="height: auto;">
+                                
+                                <li>
+                                    <a class="nav-header" data-toggle="collapse" href="#docUseDetail" onclick="chevron_toggle(this)">使用详情<span class="pull-right icon icon-black-down"></span></a>
+                                    <ul id="docUseDetail" class="nav nav-list in" style="height: auto;">
+                                        <li class="page-url" data-url="GatewayDownDoc.html">网关下载</li>
+                                        <li class="page-url" data-url="GroupManageDoc.html">分组管理</li>
+                                        <li class="page-url" data-url="TemplateDoc.html">比例模板</li>
+                                        <li class="page-url" data-url="AreaManageDoc.html">分区管理</li>
+                                        <li class="page-url li-check-active" data-url="ReissueDoc.html">充值补发</li>
+                                        <li class="page-url" data-url="wechatmb.html">微信密保</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docWechat" onclick="chevron_toggle(this)">公众号设置<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docWechat" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="PlatformWechatDoc.html">平台公众号</li>
+                                        <li class="page-url" data-url="SelfWechatDoc.html">自己公众号</li>
+                                        <li class="page-url" data-url="SetWechatDoc.html">公众号配置</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="nav-header collapsed" data-toggle="collapse" href="#docApi" onclick="chevron_toggle(this)">接口文档<span class="pull-right icon icon-right"></span></a>
+                            <ul id="docApi" class="nav nav-list collapse">
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docDesc" onclick="chevron_toggle(this)">接口文档说明<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docDesc" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="ApiDesc.html">概述</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameArea" onclick="chevron_toggle(this)">分区相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameArea" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="AreaList.html">所有分区列表</li>
+                                        <li class="page-url" data-url="GetGameAreaById.html">获取指定分区</li>
+                                        <!-- <li class="page-url" data-url="GetGameAreaByGroupId.html">获取分组下的分区</li> -->
+                                        <li class="page-url" data-url="CreateArea.html">创建新分区</li>
+                                        <li class="page-url" data-url="UpdateArea.html">修改分区信息</li>
+                                        <li class="page-url" data-url="DeleteArea.html">删除分区</li>
+                                        <!-- <li class="page-url" data-url="CheckConnect.html">检测分区通讯</li> -->
+                                        <li class="page-url" data-url="LoadScript.html">加载分区脚本</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameGroup" onclick="chevron_toggle(this)">分组相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameGroup" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="GroupList.html">获取分组列表</li>
+                                        <!-- <li class="page-url" data-url="CreateGroup.html">创建新分组</li> -->
+                                        <!-- <li class="page-url" data-url="DeleteGroup.html">删除分组</li> -->
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#template" onclick="chevron_toggle(this)">模板相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="template" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="TemplateList.html">比例模板列表</li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#reissue" onclick="chevron_toggle(this)">补发相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="reissue" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="BatchPay.html">整区补发</li>
+                                        <!-- <li class="page-url" data-url="SinglePay.html">手动充值</li> -->
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#drawrecord" onclick="chevron_toggle(this)">充值相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="drawrecord" class="nav nav-list collapse">
+                                        <!-- <li class="page-url" data-url="DrawRecord.html">充值领取记录</li> -->
+                                        <!-- <li class="page-url" data-url="GetPayChannel.html">获取充值通道</li> -->
+                                        <li class="page-url" data-url="SubmitPay.html">订单支付</li>
+                                        <!-- <li class="page-url" data-url="QueryOrder.html">订单查询</li> -->
+                                        <!-- <li class="page-url" data-url="SendRedPacket.html">红包领取</li> -->
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="content" id="art-content">
+                        <!-- 内容 [[ -->
+                        <div class="content-hd">
+                            <h2 class="with-border">充值补发教程</h2>
+                        </div>
+                        <div class="content-bd">
+                            
+
+
+<table width="200" border="0" class="msgtable">
+    <tbody>
+        <tr>
+            <td>
+                <font style="BACKGROUND-COLOR: #00ff00" color="#ff0000">
+                    <h3><font color="#000000"><font size="4">1，手动充值补发</font>：</font></h3>
+                    </font><p><font style="BACKGROUND-COLOR: #00ff00" color="#ff0000"><img alt="" src="../Content/IwanPay2/image/course/sdcz.png">
+                </font>&nbsp; <br></p>
+                <p>
+                </p><p>
+                    </p><hr>
+                    <font color="#ff00ff">登录后台控制面板，左侧导航，</font><font style="BACKGROUND-COLOR: #000000" color="#00ff00">
+                        <strong>
+                            点击手动充值。
+                        </strong>
+                    </font>
+                    <hr>
+                    游戏账号：补发账号，一定要输入正确，输错，游戏角色无法领取。<br>分区：选择补发游戏分区，一定要正确，否则无法领取，或者玩家有多个账号在其他区，都可以领取的到。<br>充值金额：补发充值多少，补发多少，自己定义。<br>充值方式：<font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">选择补发支付渠道，</font>支付宝，微信，qq钱包，花呗，银联扫码，网银。<br>关闭赠送：勾选后，补发时，<font color="#ff0000"><font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">关闭全部附加赠送，激励赠送，装备赠送，积分赠送比例，充值渠道。</font><br></font>额外补发只补发元宝：勾选后，<font style="BACKGROUND-COLOR: #00ff00" color="#ff0000">补发时只补发元宝，充值渠道赠送，</font>无其他赠送。<br>补发原因：<font color="#ff0000">任意字母数字</font><br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <font color="#ff0000">
+                    <font style="BACKGROUND-COLOR: #00ff00" color="#ff0000">
+                        <h3><font color="#000000"><font size="4">2，查询充值补发记录</font>：</font></h3>
+                    </font><img alt="" src="../Content/IwanPay2/image/course/bfcx.png">
+                </font>
+            </td>
+        </tr><tr>
+            <td>
+                <p>
+                    查询时，<font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">可选按照分类选择查询，游戏账号，所属分区，补发类型。</font><font style="BACKGROUND-COLOR: #ffff00" color="#ff0000"><br></font>查询补发记录，查询后显示手动充值，<font color="#ff0000">流水号，游戏分区，充值方式，金额，账号，IP，时间</font>都有明细的详情。
+                    </p><hr>
+                <p></p>
+                <font style="BACKGROUND-COLOR: #00ff00">
+                    <font color="#ff0000">
+                        <p>
+                            </p><h3><font color="#000000"><font size="4">3，整区补发</font>：</font></h3>
+                        <p></p>
+                    </font><p><br><img alt="" src="../Content/IwanPay2/image/course/zqbf.png"><br><br></p><p>
+                        </p><hr>
+                        <strong><font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">登录后台控制面板，左侧导航，</font><font style="BACKGROUND-COLOR: #000000" color="#00ff00">整区补发。</font></strong><font color="#ff0000">
+                            <hr>整区自动补发，<br>
+                        </font><font color="#000000">
+                            <font style="BACKGROUND-COLOR: #ffffff">
+                                分区：选择你要补发的游戏开区版本的分区。<br>
+                            </font><font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">勾选</font><font style="BACKGROUND-COLOR: #ffffff">
+                                开启自动整区补发：<br>
+                                自动补发时间： 设置开区之后的时间，自动补发
+                            </font>
+                            <font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">注意时间不能小于开区的时间。</font>
+                            <br><font style="BACKGROUND-COLOR: #ffffff">测试区开放时段：选择开区测试时间段，在这个时间段之内的充值成功订单的玩家，进行补发，每次补发，选择的时间段，</font>
+                            <font color="#ff0000"><font style="BACKGROUND-COLOR: #ffffff">3天之内时间段有效。<br></font><font style="BACKGROUND-COLOR: #ffffff"><font color="#000000">额外补发：<font color="#ff0000">自行定义</font>补发额外赠送比例。<br>基础选<font color="#ff0000"><font color="#000000">项</font>手动充值：</font>勾选后补发时会补发，包含<font color="#ff0000">手动充值过的订单。</font><br>清理未领取玩家账号：勾选时，<font color="#ff0000">清理玩家的充值账号文件记录</font>，</font><font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">此操作会重新刷新生成新的充值脚本文件，清空数据。</font><br></font></font>
+                        </font>预览：<font style="BACKGROUND-COLOR: #ffffff" color="#000000">设置选项时间段后，<font color="#ff0000">点击预览，</font>查看，您选择的时间段里，能补发多少个充值订单的，账号记录详情。</font>
+                        <hr>
+                    <p></p>
+                </font><font style="BACKGROUND-COLOR: #00ff00" color="#ff0000">
+                    <p>
+                        </p><h3><font color="#000000"><font size="4">4，开启整区自动补发</font>：</font></h3>
+                    <p></p>
+                </font><p>
+                    <font style="BACKGROUND-COLOR: #00ff00"><img alt="" src="../Content/IwanPay2/image/course/qqzdbfsj.png"><br></font><font style="BACKGROUND-COLOR: #00ff00" color="#ff0000">开启整区自动补发，</font><br><font color="#000000">
+                        分区：选择你要补发的游戏分区。<br><font color="#ff0000">勾选</font>
+                        开启自动整区补发：<br>
+                        自动补发时间： 设置开区之后的时间，自动补发<font color="#ff0000">注意时间不能小于开区的时间。</font>
+                        <br>
+                        测试区开放时段：选择开区测试时间段，在这个时间段之内的充值成功订单的玩家，进行补发，每次补发，选择的时间段，<font color="#ff0000">3天之内时间段有效。</font> <br>其他选项：<font color="#ff0000">额外补发，基础选项包括手动充值，清理未领取的玩家账号，补发原因</font>，同上面一样的操作，不在重复。
+                    </font>
+                    </p><hr>
+                <p></p><p><img alt="" src="../Content/IwanPay2/image/course/qqdjs.png"><br><font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">补发后：</font>补发任务里，会显示<font color="#ff0000">自动倒计时，详情待补发分区名字，时间，赠送的另外比例。</font><br></p><p>
+                    </p><hr>
+                <p></p><p><br>同时：<font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">补发任务记录，</font>也会显示，您设定的时间，分区名字，补发额外比例，<font style="BACKGROUND-COLOR: #ffff00" color="#ff0000">状态：，待补发：完成记录。<br></font><br></p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div></div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script src="../Content/IwanPay/js/index.js" charset="utf-8"></script>
+        <div class="footer min-width">
+    <div class="line"></div>
+    本站严禁一切的钓鱼、色情、赌博、私彩及违反国家法律法规等使用
+</div>
+
+    </div>
+    <script>
+        function chevron_toggle(obj) {
+            $(obj).find("span").toggleClass("icon-right");
+            $(obj).find("span").toggleClass("icon-black-down");
+        }
+
+        $(function () {
+            var url = window.location.href.replace(window.location.origin, "");
+            $("#allMenu").find("li").each(function () {
+                if ($(this).attr("data-url")) {
+                    if ($(this).attr("data-url").toLowerCase() == url.toLowerCase()) {
+                        $(this).parent().parent().closest("ul").prev().click();
+                        $(this).closest("ul").prev().click();
+                        $(this).addClass("li-check-active");
+                    }
+                }
+            });
+        });
+    </script>
+    
+
+
+
+</body></html>

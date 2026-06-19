@@ -1,0 +1,438 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>发放红包</title>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/document-description.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/doc-common.css" rel="stylesheet">
+    <link href="../Content/IwanPay/css/chmstyle.css" rel="stylesheet">
+    <script src="../Scripts/jquery-3.3.1.min.js"></script>
+    <script src="../Scripts/bootstrap.min.js"></script>
+    <style>
+        .doc-box .header {
+            height: 60px;
+        background: #fff;
+            overflow: hidden;
+        }
+
+        .doc-box .top {
+            padding-left: 140px
+        }
+
+        .doc-box .top .text {
+            font-size: 19px;
+            color: #066eed;
+            letter-spacing: 2px;
+        }
+
+        .index-content .middle {
+            margin: 20px auto;
+            border-radius: 15px;
+        }
+
+        .index-content .middle .control {
+            background: var(--theme-primary-600, #2563eb);
+        }
+
+        .index-content .middle .list-box {
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+
+        .index-content .middle .list-box .control {
+            border-top-left-radius: 15px;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <div class="doc-box">
+        <div class="header ">
+            <div class="top min-width">
+                
+                <span class="text"> 七星技术服务7XPAY </span>
+                <div class="line"></div>
+                <div class="text">文档中心</div>
+            </div>
+        </div>
+        <div class="index-content">
+            <div class="middle min-width">
+                <div class="list-box">
+                    <p class="control">文档中心</p>
+                    <ul class="list nav nav-tabs" id="allMenu">
+                        <li>
+                            <a class="nav-header collapsed" data-toggle="collapse" href="#docCourse" onclick="chevron_toggle(this)">教程文档<span class="pull-right icon icon-right"></span></a>
+                            <ul id="docCourse" class="nav nav-list collapse">
+                                
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docUseDetail" onclick="chevron_toggle(this)">使用详情<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docUseDetail" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="GatewayDownDoc.html">网关下载</li>
+                                        <li class="page-url" data-url="GroupManageDoc.html">分组管理</li>
+                                        <li class="page-url" data-url="TemplateDoc.html">比例模板</li>
+                                        <li class="page-url" data-url="AreaManageDoc.html">分区管理</li>
+                                        <li class="page-url" data-url="ReissueDoc.html">充值补发</li>
+                                        <li class="page-url" data-url="wechatmb.html">微信密保</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docWechat" onclick="chevron_toggle(this)">公众号设置<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docWechat" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="PlatformWechatDoc.html">平台公众号</li>
+                                        <li class="page-url" data-url="SelfWechatDoc.html">自己公众号</li>
+                                        <li class="page-url" data-url="SetWechatDoc.html">公众号配置</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="list-check">
+                            <a class="nav-header" data-toggle="collapse" href="#docApi" onclick="chevron_toggle(this)">接口文档<span class="pull-right icon icon-black-down"></span></a>
+                            <ul id="docApi" class="nav nav-list in" style="height: auto;">
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#docDesc" onclick="chevron_toggle(this)">接口文档说明<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="docDesc" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="ApiDesc.html">概述</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameArea" onclick="chevron_toggle(this)">分区相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameArea" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="AreaList.html">所有分区列表</li>
+                                        <li class="page-url" data-url="GetGameAreaById.html">获取指定分区</li>
+                                        <!-- <li class="page-url" data-url="GetGameAreaByGroupId.html">获取分组下的分区</li> -->
+                                        <li class="page-url" data-url="CreateArea.html">创建新分区</li>
+                                        <li class="page-url" data-url="UpdateArea.html">修改分区信息</li>
+                                        <li class="page-url" data-url="DeleteArea.html">删除分区</li>
+                                        <!-- <li class="page-url" data-url="CheckConnect.html">检测分区通讯</li> -->
+                                        <li class="page-url" data-url="LoadScript.html">加载分区脚本</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#gameGroup" onclick="chevron_toggle(this)">分组相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="gameGroup" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="GroupList.html">获取分组列表</li>
+                                        <!-- <li class="page-url" data-url="CreateGroup.html">创建新分组</li> -->
+                                        <!-- <li class="page-url" data-url="DeleteGroup.html">删除分组</li> -->
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#template" onclick="chevron_toggle(this)">模板相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="template" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="TemplateList.html">比例模板列表</li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a class="nav-header collapsed" data-toggle="collapse" href="#reissue" onclick="chevron_toggle(this)">补发相关接口<span class="pull-right icon icon-right"></span></a>
+                                    <ul id="reissue" class="nav nav-list collapse">
+                                        <li class="page-url" data-url="BatchPay.html">整区补发</li>
+                                        <!-- <li class="page-url" data-url="SinglePay.html">手动充值</li> -->
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-header" data-toggle="collapse" href="#drawrecord" onclick="chevron_toggle(this)">充值相关接口<span class="pull-right icon icon-black-down"></span></a>
+                                    <ul id="drawrecord" class="nav nav-list in" style="height: auto;">
+                                        <!-- <li class="page-url" data-url="DrawRecord.html">充值领取记录</li> -->
+                                        <!-- <li class="page-url" data-url="GetPayChannel.html">获取充值通道</li> -->
+                                        <li class="page-url" data-url="SubmitPay.html">订单支付</li>
+                                        <!-- <li class="page-url" data-url="QueryOrder.html">订单查询</li> -->
+                                        <!-- <li class="page-url li-check-active" data-url="SendRedPacket.html">红包领取</li> -->
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="content" id="art-content">
+                        <!-- 内容 [[ -->
+                        <div class="content-hd">
+                            <h2 class="with-border">发放红包</h2>
+                        </div>
+                        <div class="content-bd">
+                            
+
+
+
+<div class="data-box with-padding">
+    <div class="data-hd">
+        <h3>
+            <a name="1"></a>应用场景
+        </h3>
+    </div>
+    <div class="data-bd">
+        <p>该接口可供第三方自动开区工具等，进行红包领取。</p>
+    </div>
+</div>
+<div class="data-box with-padding">
+    <div class="data-hd">
+        <h3>
+            <a name="2"></a>接口链接
+        </h3>
+    </div>
+    <div class="data-bd">
+        <p class="mb20">请求方式：只支持POST</p>
+        <p class="mb20">URL地址：http://newapi.7xpay.com/Api/SendRedPacket</p>
+    </div>
+</div>
+<div class="data-box with-padding">
+    <div class="data-hd">
+        <h3>
+            <a name="3"></a>请求参数
+        </h3>
+    </div>
+    <div class="data-bd">
+        <div class="table-wrp with-border">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="name">字段名</th>
+                        <th class="var">变量名</th>
+                        <th class="require">必填</th>
+                        <th class="type">类型</th>
+                        <th class="example">示例值</th>
+                        <th class="description">描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>分区ID </td>
+                        <td>areaId </td>
+                        <td>是 </td>
+                        <td>Int </td>
+                        <td>1777</td>
+                        <td>分区的唯一标识ID </td>
+                    </tr>
+                    <tr>
+                        <td>商户ID </td>
+                        <td>userId </td>
+                        <td>是 </td>
+                        <td>Int </td>
+                        <td>1024</td>
+                        <td>充值平台分配给商户的userId，4位长度，是调用api的基本凭证 </td>
+                    </tr>
+                    <tr>
+                        <td>充值账号 </td>
+                        <td>playerAccount </td>
+                        <td>是 </td>
+                        <td>String </td>
+                        <td>meng</td>
+                        <td>要手动充值的游戏账号 </td>
+                    </tr>
+                    <tr>
+                        <td>充值金额</td>
+                        <td>payAmount </td>
+                        <td>是 </td>
+                        <td>decimal </td>
+                        <td>10.00</td>
+                        <td>充值金额，保持两位小数 </td>
+                    </tr>
+                    <tr>
+                        <td>充值通道</td>
+                        <td>channelId </td>
+                        <td>否 </td>
+                        <td>Int </td>
+                        <td>10001</td>
+                        <td>充值通道id,默认10001，支付宝 </td>
+                    </tr>
+                    <tr>
+                        <td>关闭金额赠送</td>
+                        <td>closeGiveMoney </td>
+                        <td>否 </td>
+                        <td>int </td>
+                        <td>1</td>
+                        <td>
+                            默认否
+                            1为是，0为否。
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>关闭附加赠送</td>
+                        <td>closeGiveAppend </td>
+                        <td>否 </td>
+                        <td>int </td>
+                        <td>1</td>
+                        <td>
+                            默认否
+                            1为是，0为否。
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>关闭积分赠送</td>
+                        <td>closeGiveIntegral </td>
+                        <td>否 </td>
+                        <td>int </td>
+                        <td>1</td>
+                        <td>
+                            默认否
+                            1为是，0为否。
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>关闭装备赠送</td>
+                        <td>closeGiveEquipment </td>
+                        <td>否 </td>
+                        <td>int </td>
+                        <td>1</td>
+                        <td>
+                            默认否
+                            1为是，0为否。
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>签名 </td>
+                        <td>sign </td>
+                        <td>是 </td>
+                        <td>String </td>
+                        <td>d94a1202d575b1735191a4aff4ad133ea4a4c1b8</td>
+                        <td>
+                            把所有非空的参数按照ascii
+                            顺序的方式进行key=value&amp;key1=value1拼接，在拼接结果末尾直接拼接上md5
+                            签名密钥（详见：<a href="ApiDesc.html">概述</a>）
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<div class="data-box with-padding">
+    <div class="data-hd">
+        <h3>
+            <a name="4"></a>返回结果
+        </h3>
+    </div>
+    <div class="data-bd">
+        <div class="table-wrp with-border">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="name">字段名</th>
+                        <th class="var">变量名</th>
+                        <th class="require">必填</th>
+                        <th class="type">类型</th>
+                        <th class="example">示例值</th>
+                        <th class="description">描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>业务状态 </td>
+                        <td>result </td>
+                        <td>是 </td>
+                        <td>Boolean </td>
+                        <td>true</td>
+                        <td>
+                            <p>true/false </p>
+                            <p>此字段是业务标识状态，true代表业务处理成功，并成功返回 </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>业务状态描述 </td>
+                        <td>message </td>
+                        <td>是</td>
+                        <td>String </td>
+                        <td>成功 </td>
+                        <td>
+                            <p>当result非true时返回信息为错误原因 ，例如 </p>
+                            <p>apiKey不存在 </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+        <p class="mb10">举例如下： </p>
+        <div class="guide-msg mb10">
+            <p>
+                {
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;"result": true,
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;"message": "成功"
+                <br>}
+            </p>
+        </div>
+    </div>
+</div>
+
+
+                                <div class="data-box with-padding">
+                                    <div class="data-hd">
+                                        <h3>
+                                            <a name="5"></a>状态
+                                        </h3>
+                                    </div>
+                                    <div class="data-bd">
+                                        <div class="table-wrp with-border">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="13%">状态</th>
+                                                        <th>描述</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>true </td>
+                                                        <td>成功 </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>false </td>
+                                                        <td>错误，具体错误信息请参照message字段 </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <script src="../Content/IwanPay/js/index.js" charset="utf-8"></script>
+        <div class="footer min-width">
+    <div class="line"></div>
+    本站严禁一切的钓鱼、色情、赌博、私彩及违反国家法律法规等使用
+</div>
+
+    </div>
+    <script>
+        function chevron_toggle(obj) {
+            $(obj).find("span").toggleClass("icon-right");
+            $(obj).find("span").toggleClass("icon-black-down");
+        }
+
+        $(function () {
+            var url = window.location.href.replace(window.location.origin, "");
+            $("#allMenu").find("li").each(function () {
+                if ($(this).attr("data-url")) {
+                    if ($(this).attr("data-url").toLowerCase() == url.toLowerCase()) {
+                        $(this).parent().parent().closest("ul").prev().click();
+                        $(this).closest("ul").prev().click();
+                        $(this).addClass("li-check-active");
+                    }
+                }
+            });
+        });
+    </script>
+    
+
+
+
+</body></html>

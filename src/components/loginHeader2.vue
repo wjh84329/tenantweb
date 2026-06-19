@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'header-top': true, fixed: height > 10 ? true : false }">
-    <img src="../assets/img/logo.png" class="logo" />
+    <site-logo variant="logo" class="logo" alt="网站logo" />
     <ul class="menu">
       <router-link
         tag="li"

@@ -9,7 +9,7 @@
   <div class="main">
     <div class="header" :style="headboxStyle">
       <div class="headbox clearfix" :style="headboxStyle" style="display: flex;">
-        <div class="logo"><img src="../assets//img/logo3.png" style="width: 154px;height: 40px;" alt="" /></div>
+        <div class="logo"><site-logo variant="logo3" style="width: 154px;height: 40px;" alt="网站logo" /></div>
         <ul class="navbox clearfix" style="width: 75%;">
           <li v-if="hasMenu(1) || $store.state.settlementType != 3" :class="{ active: activeNav === '/main/home' }"
             :style="activeNav === '/main/home' ? activeNavStyle : (hoverNav === '/main/home' ? hoverNavStyle : null)"
