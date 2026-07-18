@@ -7,12 +7,12 @@
     <div class="lh-service" :class="{ open: qqShow }">
       <div class="lh-service-card" v-if="qqShow">
         <div class="lh-service-top">
-          <span class="lh-service-headset"></span>
-          <span>在线客服</span>
+          <img class="lh-service-headset" :src="serviceHeadsetIcon" alt="" />
+          <span class="lh-service-top-title">在线客服</span>
         </div>
         <div class="lh-service-title">QQ咨询</div>
         <a
-          v-for="item in serviceQq"
+          v-for="(item, index) in serviceQq"
           :key="item.qq"
           class="lh-service-link"
           :href="`https://wpa.qq.com/msgrd?v=3&uin=${item.qq}&site=qq&menu=yes`"
@@ -23,7 +23,10 @@
           <span class="lh-qq-penguin">
             <img src="../../assets/newUi/qq-chat-icon.svg" alt="" />
           </span>
-          <strong>{{ item.qq }}</strong>
+          <span class="lh-service-meta">
+            <strong>{{ getServiceName(item, index) }}</strong>
+            <em>{{ item.qq }}</em>
+          </span>
         </a>
         <div class="lh-service-empty" v-if="!serviceQq.length">暂无在线客服</div>
         <button class="lh-service-close" type="button" @click="qqShow = false">
@@ -36,124 +39,124 @@
 
     <main class="lh-main">
       <section class="lh-hero">
-        <div class="lh-hero-copy">
-          <div class="lh-hero-intro">
-            <h1><span>商户</span>中心</h1>
-            <p>
-              安全、稳定、清晰的商户作业入口
-            </p>
-          </div>
-          <img class="lh-hero-visual-img" src="../../assets/newUi/login-hero-visual.png" alt="" />
-        </div>
-
-        <div class="lh-login-card">
-          <div class="lh-login-tabs">
-            <button type="button" :class="{ active: isPwdLoginShow }" @click="tab(1)">密码登录</button>
-            <button type="button" :class="{ active: isWxQrLoginShow }" @click="tab(2)">扫码登录</button>
+        <div class="lh-hero-shell">
+          <div class="lh-hero-copy">
+            <div class="lh-hero-intro">
+              <h1><span>商户</span>中心</h1>
+              <p>
+                安全、稳定、清晰的商户作业入口
+              </p>
+            </div>
+            <img class="lh-hero-visual-img" src="../../assets/newUi/login-hero-visual.png" alt="" />
           </div>
 
-          <form v-show="isPwdLoginShow" class="lh-form" @submit.prevent="singin">
-            <div class="lh-field">
-              <span class="lh-field-icon">
-                <img src="../../assets/newLogin/icon4.png" alt="" />
-              </span>
-              <el-input
-                placeholder="请输入登录账号"
-                v-model="form.username"
-                :disabled="false"
-                @keyup.enter.native="singin"
-              ></el-input>
+          <div class="lh-login-card">
+            <div class="lh-login-tabs">
+              <button type="button" :class="{ active: isPwdLoginShow }" @click="tab(1)">密码登录</button>
+              <button type="button" :class="{ active: isWxQrLoginShow }" @click="tab(2)">扫码登录</button>
             </div>
-            <div class="lh-field lh-password-field">
-              <span class="lh-field-icon">
-                <img src="../../assets/newLogin/icon5.png" alt="" />
-              </span>
-              <el-input
-                placeholder="请输入密码"
-                v-model="form.password"
-                :type="showPassword ? 'text' : 'password'"
-                :disabled="false"
-                @keyup.enter.native="singin"
-              ></el-input>
-              <button
-                class="lh-password-toggle"
-                :class="{ active: showPassword }"
-                type="button"
-                :aria-label="showPassword ? '隐藏密码' : '显示密码'"
-                @click="togglePasswordVisibility"
-              >
-                <span class="lh-eye"></span>
-              </button>
-            </div>
-            <div class="lh-field captcha-field">
-              <span class="lh-field-icon">
-                <img src="../../assets/newLogin/icon6.png" alt="" />
-              </span>
-              <div class="lh-captcha-row">
+
+            <form v-show="isPwdLoginShow" class="lh-form" @submit.prevent="singin">
+              <div class="lh-field">
+                <span class="lh-field-icon">
+                  <img :src="fieldUserIcon" alt="" />
+                </span>
                 <el-input
-                  placeholder="请输入验证码"
+                  placeholder="请输入登录账号"
+                  v-model="form.username"
                   :disabled="false"
-                  v-model="form.code"
                   @keyup.enter.native="singin"
                 ></el-input>
-                <img class="lh-captcha" id="code" :src="randomCode" alt="" @click="getQrcode()" />
               </div>
-            </div>
-            <button type="submit" class="lh-submit" :disabled="isLoading">
-              {{ isLoading ? '登录中' : '登录' }}
-            </button>
-            <div class="lh-register">
-              还没有账号？
-              <span @click="$router.push('/login/loginregister')">免费注册</span>
-            </div>
-          </form>
+              <div class="lh-field lh-password-field">
+                <span class="lh-field-icon">
+                  <img :src="fieldLockIcon" alt="" />
+                </span>
+                <el-input
+                  placeholder="请输入密码"
+                  v-model="form.password"
+                  :type="showPassword ? 'text' : 'password'"
+                  :disabled="false"
+                  @keyup.enter.native="singin"
+                ></el-input>
+                <button
+                  class="lh-password-toggle"
+                  :class="{ active: showPassword }"
+                  type="button"
+                  :aria-label="showPassword ? '隐藏密码' : '显示密码'"
+                  @click="togglePasswordVisibility"
+                >
+                  <img :src="showPassword ? eyeOpenIcon : eyeHideIcon" alt="" />
+                </button>
+              </div>
+              <div class="lh-field captcha-field">
+                <span class="lh-field-icon">
+                  <img :src="fieldVerifyIcon" alt="" />
+                </span>
+                <div class="lh-captcha-row">
+                  <el-input
+                    placeholder="请输入验证码"
+                    :disabled="false"
+                    v-model="form.code"
+                    @keyup.enter.native="singin"
+                  ></el-input>
+                  <img class="lh-captcha" id="code" :src="randomCode" alt="" @click="getQrcode()" />
+                </div>
+              </div>
+              <button type="submit" class="lh-submit" :disabled="isLoading">
+                {{ isLoading ? '登录中' : '登录' }}
+              </button>
+              <div class="lh-register">
+                还没有账号？
+                <span @click="$router.push('/login/loginregister')">免费注册</span>
+              </div>
+            </form>
 
-          <div v-show="isWxQrLoginShow" class="lh-qr-login">
-            <div class="lh-qr-box" :class="{ 'is-expired': qrExpired }">
-              <img v-if="qrCodeUrl" class="lh-qr-image" :src="qrCodeUrl" />
-              <div v-else class="lh-qr-loading">
-                <span class="lh-qr-spinner"></span>
-                <span>{{ qrLoading ? '二维码生成中...' : '点击刷新二维码' }}</span>
+            <div v-show="isWxQrLoginShow" class="lh-qr-login">
+              <div class="lh-qr-box" :class="{ 'is-expired': qrExpired }">
+                <img v-if="qrCodeUrl" class="lh-qr-image" :src="qrCodeUrl" />
+                <div v-else class="lh-qr-loading">
+                  <span class="lh-qr-spinner"></span>
+                  <span>{{ qrLoading ? '二维码生成中...' : '点击刷新二维码' }}</span>
+                </div>
+                <button
+                  v-if="qrExpired"
+                  type="button"
+                  class="lh-qr-expired-mask"
+                  @click="getwxqrImg"
+                >
+                  <strong>二维码已过期</strong>
+                  <span>点击刷新</span>
+                </button>
               </div>
-              <button
-                v-if="qrExpired"
-                type="button"
-                class="lh-qr-expired-mask"
-                @click="getwxqrImg"
-              >
-                <strong>二维码已过期</strong>
-                <span>点击刷新</span>
+              <p>请先绑定公众号再使用扫码登录</p>
+              <button type="button" class="lh-submit lh-refresh" @click="getwxqrImg">
+                刷新二维码
               </button>
             </div>
-            <p>请先绑定公众号再使用扫码登录</p>
-            <button type="button" class="lh-submit lh-refresh" @click="getwxqrImg">
-              刷新二维码
-            </button>
           </div>
         </div>
       </section>
 
       <section class="lh-benefits">
         <div class="lh-section-head">
+          <span class="lh-section-mark" aria-hidden="true"></span>
           <h2>选择我们的理由</h2>
-          <p>围绕商户经营、成本、对账与稳定性提供持续服务。</p>
+          <span class="lh-section-mark" aria-hidden="true"></span>
         </div>
         <div class="lh-benefit-grid">
-          <div class="lh-benefit-card">
-            <span>高效便捷</span>
-            <p>快速对接常用业务流程，减少重复操作，让商户作业更顺畅。</p>
-          </div>
-          <div class="lh-benefit-card">
-            <span>降低成本</span>
-            <p>缩短接入和运维时间，把更多精力留给实际运营。</p>
-          </div>
-          <div class="lh-benefit-card">
-            <span>轻松对账</span>
-            <p>账户明细与交易数据集中查看，财务处理更清楚。</p>
-          </div>
-          <div class="lh-benefit-card">
-            <span>系统稳定</span>
-            <p>多机房与专业运维保障，支持业务持续在线。</p>
+          <div
+            v-for="item in benefitItems"
+            :key="item.title"
+            class="lh-benefit-card"
+          >
+            <span class="lh-benefit-icon" :class="item.iconClass">
+              <img :src="item.icon" :alt="item.title" />
+            </span>
+            <div class="lh-benefit-copy">
+              <span>{{ item.title }}</span>
+              <p>{{ item.desc }}</p>
+            </div>
           </div>
         </div>
       </section>
@@ -171,6 +174,16 @@ import Mgr from '../../assets/js/SecurityService';
 import api from '../../assets/js/apiRequestHandler';
 import { authUrl } from '../../assets/js/version.js';
 import wxlogin from 'vue-wxlogin';
+import fieldUserIcon from '../../assets/newUi/loginhome/field-user.svg';
+import fieldLockIcon from '../../assets/newUi/loginhome/field-lock.svg';
+import fieldVerifyIcon from '../../assets/newUi/loginhome/field-verify.svg';
+import eyeOpenIcon from '../../assets/newUi/loginhome/eye-open.svg';
+import eyeHideIcon from '../../assets/newUi/loginhome/eye-hide.svg';
+import benefitRocketIcon from '../../assets/newUi/loginhome/benefit-rocket.svg';
+import benefitCoinIcon from '../../assets/newUi/loginhome/benefit-coin.svg';
+import benefitDocIcon from '../../assets/newUi/loginhome/benefit-doc.svg';
+import benefitShieldIcon from '../../assets/newUi/loginhome/benefit-shield.svg';
+import serviceHeadsetIcon from '../../assets/newUi/loginhome/service-headset.svg';
 export default {
   components: {
     loginFooter,
@@ -349,16 +362,85 @@ export default {
       qrCodeUrl: '',
       returnUrl: '',
       code: '',
-      qqShow: true
+      qqShow: true,
+      fieldUserIcon,
+      fieldLockIcon,
+      fieldVerifyIcon,
+      eyeOpenIcon,
+      eyeHideIcon,
+      serviceHeadsetIcon,
+      benefitItems: [
+        {
+          title: '高效便捷',
+          desc: '流程简化，操作便捷，让业务开展更高效。',
+          icon: benefitRocketIcon,
+          iconClass: 'is-blue'
+        },
+        {
+          title: '降低成本',
+          desc: '减少人力与时间成本，提升整体运营效率。',
+          icon: benefitCoinIcon,
+          iconClass: 'is-gold'
+        },
+        {
+          title: '轻松对账',
+          desc: '账目清晰、自动汇总，对账更轻松。',
+          icon: benefitDocIcon,
+          iconClass: 'is-sky'
+        },
+        {
+          title: '系统稳定',
+          desc: '高可用架构稳定运行，保障业务持续在线。',
+          icon: benefitShieldIcon,
+          iconClass: 'is-blue'
+        }
+      ]
     };
   },
   created() {
     this.footerInfo();
   },
   mounted() {
+    this.applyDesktopViewport();
     this.getQrcode();
   },
+  beforeDestroy() {
+    this.restoreViewport();
+  },
   methods: {
+    applyDesktopViewport() {
+      const desktopWidth = 1366;
+      let viewport = document.querySelector('meta[name="viewport"]');
+      if (!viewport) {
+        viewport = document.createElement('meta');
+        viewport.setAttribute('name', 'viewport');
+        document.head.appendChild(viewport);
+      }
+      this._previousViewportContent = viewport.getAttribute('content') || '';
+      viewport.setAttribute('content', `width=${desktopWidth},initial-scale=1.0`);
+    },
+    restoreViewport() {
+      const viewport = document.querySelector('meta[name="viewport"]');
+      if (!viewport || typeof this._previousViewportContent === 'undefined') return;
+      if (this._previousViewportContent) {
+        viewport.setAttribute('content', this._previousViewportContent);
+      } else {
+        viewport.setAttribute('content', 'width=device-width,initial-scale=1.0');
+      }
+      this._previousViewportContent = undefined;
+    },
+    normalizeScanRoles(roles) {
+      if (Array.isArray(roles)) return roles;
+      if (typeof roles === 'string') {
+        try {
+          const parsedRoles = JSON.parse(roles);
+          return Array.isArray(parsedRoles) ? parsedRoles : [];
+        } catch (e) {
+          return [];
+        }
+      }
+      return [];
+    },
     footerInfo() {
       this.$api.login
         .footerInfo()
@@ -434,19 +516,19 @@ export default {
               this.qrExpired = false;
 
               // 组装与密码登录一致的 user_info 结构（后端如果能一并返回用户名/角色最好）
+              const roles = this.normalizeScanRoles(res.roles);
               const userInfo = {
                 userId: res.userId,
                 username: res.username || '', // 若后端没返回，可以留空或再补一接口
-                roles: res.roles || [], // 同上
+                roles,
                 state: res.state || null
               };
 
-              // 存储 token + 用户信息
-              localStorage.setItem('access_token', res.access_token);
-              localStorage.setItem('user_info', JSON.stringify(userInfo));
+              // 和密码登录保持一致：鉴权统一走 sessionStorage
+              sessionStorage.setItem('access_token', res.access_token);
+              sessionStorage.setItem('user_info', JSON.stringify(userInfo));
               axios.defaults.headers.common.Authorization = 'Bearer ' + res.access_token;
 
-              const roles = userInfo.roles || [];
               if (userInfo.state === 'CustomRole' || roles.includes('CustomRole')) {
                 this.$router.push('/employeemain/employeehome');
               } else {
@@ -471,7 +553,8 @@ export default {
       this.qrLoading = true;
       this.qrCodeUrl = '';
       this.$api.login.getLoginQrCode({
-        returnUrl: ReturnUrl
+        returnUrl: ReturnUrl,
+        source: 'tenantweb'
       }).then((res) => {
         // console.log(res);
         this.qrCodeUrl = res.data.qrCodeUrl;
@@ -612,7 +695,7 @@ export default {
         const userInfo = {
           userId: data.userId,
           username: data.username,
-          roles: data.roles,
+          roles: this.normalizeScanRoles(data.roles),
           state: data.state
         };
 
@@ -621,8 +704,8 @@ export default {
           return;
         }
 
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('user_info', JSON.stringify(userInfo));
+        sessionStorage.setItem('access_token', data.access_token);
+        sessionStorage.setItem('user_info', JSON.stringify(userInfo));
         axios.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
 
         const roles = userInfo.roles || [];
@@ -655,6 +738,9 @@ export default {
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
+    getServiceName(item, index) {
+      return item.name || item.title || `客服${index + 1}号`;
+    },
     openQqChat(qq) {
       window.open(`https://wpa.qq.com/msgrd?v=3&uin=${qq}&site=qq&menu=yes`, '_blank', 'noopener,noreferrer');
     }
@@ -686,6 +772,7 @@ export default {
 .lh-page {
   --hero-content-width: 1300px;
   --hero-login-column-width: 520px;
+  min-width: 1366px;
   min-height: 100vh;
   background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 52%, #ffffff 100%);
   color: #17233c;
@@ -697,6 +784,56 @@ export default {
 }
 
 .lh-hero {
+  position: relative;
+  width: 100%;
+  min-height: 560px;
+  margin: 0 auto;
+  padding: 28px 0 22px;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, #f7fbff 0%, #f1f7ff 22%, #eef5ff 50%, #f1f7ff 78%, #f7fbff 100%);
+  box-shadow: inset 0 1px 0 #edf2fb, inset 0 -1px 0 #edf2fb;
+}
+
+.lh-hero::before,
+.lh-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.lh-hero::before {
+  background:
+    linear-gradient(145deg, rgba(224, 234, 249, 0.82) 0 16%, rgba(224, 234, 249, 0) 16% 100%),
+    linear-gradient(36deg, rgba(235, 241, 252, 0.82) 0 22%, rgba(235, 241, 252, 0) 22% 100%),
+    linear-gradient(152deg, rgba(220, 231, 249, 0) 0 83%, rgba(220, 231, 249, 0.6) 83% 100%);
+  opacity: 0.95;
+}
+
+.lh-hero::after {
+  background:
+    radial-gradient(circle at 24% 44%, rgba(64, 129, 242, 0.08) 0, rgba(64, 129, 242, 0) 24%),
+    radial-gradient(circle at 82% 28%, rgba(64, 129, 242, 0.07) 0, rgba(64, 129, 242, 0) 20%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.lh-hero-shell::before {
+  content: '';
+  position: absolute;
+  left: 48px;
+  right: 48px;
+  bottom: 22px;
+  height: 180px;
+  background:
+    radial-gradient(circle at 18% 74%, rgba(76, 139, 248, 0.05) 0, rgba(76, 139, 248, 0) 26%),
+    radial-gradient(circle at 82% 72%, rgba(76, 139, 248, 0.05) 0, rgba(76, 139, 248, 0) 22%);
+  pointer-events: none;
+}
+
+.lh-hero-shell {
+  position: relative;
+  z-index: 1;
   width: min(var(--hero-content-width), calc(100% - 48px));
   min-height: 560px;
   margin: 0 auto;
@@ -704,7 +841,7 @@ export default {
   grid-template-columns: minmax(0, 1fr) var(--hero-login-column-width);
   gap: 40px;
   align-items: center;
-  padding: 24px 0 18px;
+  background: transparent;
 }
 
 .lh-hero-copy {
@@ -898,51 +1035,12 @@ export default {
   transform: translateY(-50%);
 }
 
-.lh-eye {
-  position: relative;
+.lh-password-toggle img {
   display: block;
   width: 18px;
-  height: 10px;
-  margin: 0 auto;
-  border: 2px solid #9baac0;
-  border-radius: 11px / 8px;
-  background: transparent;
-}
-
-.lh-eye::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 4px;
-  height: 4px;
-  background: #9baac0;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.lh-eye::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -4px;
-  width: 2px;
   height: 18px;
-  background: #c5d0df;
-  border-radius: 2px;
-  transform: translateX(-50%) rotate(38deg);
-}
-
-.lh-password-toggle.active .lh-eye {
-  border-color: #126de8;
-}
-
-.lh-password-toggle.active .lh-eye::before {
-  background: #126de8;
-}
-
-.lh-password-toggle.active .lh-eye::after {
-  opacity: 0;
+  margin: 0 auto;
+  object-fit: contain;
 }
 
 .lh-captcha-row {
@@ -1106,6 +1204,10 @@ export default {
 }
 
 .lh-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
   text-align: center;
 }
 
@@ -1116,40 +1218,101 @@ export default {
   line-height: 1.2;
 }
 
-.lh-section-head p {
-  margin: 10px 0 0;
-  color: #6d7b91;
-  font-size: 15px;
+.lh-section-mark {
+  position: relative;
+  width: 56px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.lh-section-mark::before,
+.lh-section-mark::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1a6df0;
+  border-radius: 999px;
+}
+
+.lh-section-mark::before {
+  left: 0;
+  width: 14px;
+  height: 6px;
+}
+
+.lh-section-mark::after {
+  right: 0;
+  width: 30px;
+  height: 3px;
 }
 
 .lh-benefit-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 28px;
+  gap: 0;
+  margin-top: 30px;
+  padding: 20px 8px;
+  background: #fff;
+  border: 1px solid #e4edf8;
+  border-radius: 8px;
+  box-shadow: 0 18px 42px rgba(50, 93, 152, 0.05);
 }
 
 .lh-benefit-card {
-  min-height: 132px;
-  padding: 22px;
-  background: #fff;
-  border: 1px solid #e0eaf6;
-  border-radius: 8px;
-  box-shadow: 0 14px 36px rgba(50, 93, 152, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 138px;
+  padding: 14px 18px;
+  background: transparent;
 }
 
-.lh-benefit-card span {
+.lh-benefit-card:not(:last-child) {
+  border-right: 1px solid #e8eef7;
+}
+
+.lh-benefit-icon {
+  width: 74px;
+  height: 74px;
+  flex: 0 0 74px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #f3f7ff 0%, #eef3ff 100%);
+}
+
+.lh-benefit-icon.is-gold {
+  background: linear-gradient(180deg, #fff4e8 0%, #ffeed9 100%);
+}
+
+.lh-benefit-icon.is-sky {
+  background: linear-gradient(180deg, #eff6ff 0%, #e6f0ff 100%);
+}
+
+.lh-benefit-icon img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.lh-benefit-copy {
+  min-width: 0;
+}
+
+.lh-benefit-copy span {
   display: block;
   color: #14233d;
   font-size: 18px;
   font-weight: 800;
 }
 
-.lh-benefit-card p {
-  margin: 10px 0 0;
+.lh-benefit-copy p {
+  margin: 8px 0 0;
   color: #687890;
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
 .lh-service {
@@ -1178,52 +1341,17 @@ export default {
   background: linear-gradient(180deg, #126de8 0%, #237df6 100%);
 }
 
-.lh-service-top span:last-child {
-  position: relative;
+.lh-service-top-title {
   margin-top: 8px;
   font-size: 17px;
   font-weight: 800;
 }
 
 .lh-service-headset {
-  position: relative;
   width: 34px;
-  height: 30px;
+  height: 34px;
   display: block;
-  border: 3px solid #fff;
-  border-bottom: none;
-  border-radius: 20px 20px 0 0;
-  box-sizing: border-box;
-}
-
-.lh-service-headset::before,
-.lh-service-headset::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  width: 8px;
-  height: 16px;
-  background: #fff;
-  border-radius: 6px;
-}
-
-.lh-service-headset::before {
-  left: -5px;
-}
-
-.lh-service-headset::after {
-  right: -5px;
-}
-
-.lh-service-headset + span::after {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 3px;
-  margin-left: -22px;
-  margin-top: 24px;
-  background: #fff;
-  border-radius: 3px;
+  object-fit: contain;
 }
 
 .lh-service-mini {
@@ -1262,7 +1390,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px;
+  padding: 10px 12px;
   color: #53647c;
   text-decoration: none;
   border-bottom: 1px solid #eef3fa;
@@ -1283,11 +1411,29 @@ export default {
   object-fit: contain;
 }
 
+.lh-service-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
 .lh-service-link strong {
   display: block;
-  color: #126de8;
+  color: #2d3f5f;
   font-size: 13px;
-  line-height: 20px;
+  line-height: 18px;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.lh-service-link em {
+  display: block;
+  margin-top: 2px;
+  color: #126de8;
+  font-size: 12px;
+  line-height: 18px;
+  font-style: normal;
   word-break: break-all;
 }
 
@@ -1316,7 +1462,7 @@ export default {
 }
 
 @media (max-width: 1100px) {
-  .lh-hero {
+  .lh-hero-shell {
     grid-template-columns: 1fr;
     gap: 32px;
   }
@@ -1335,7 +1481,7 @@ export default {
     padding-top: 76px;
   }
 
-  .lh-hero,
+  .lh-hero-shell,
   .lh-benefits {
     width: calc(100% - 28px);
   }
@@ -1363,6 +1509,12 @@ export default {
 
   .lh-benefit-grid {
     grid-template-columns: 1fr;
+    padding: 8px 0;
+  }
+
+  .lh-benefit-card:not(:last-child) {
+    border-right: none;
+    border-bottom: 1px solid #e8eef7;
   }
 
   .lh-service {

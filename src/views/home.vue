@@ -24,7 +24,7 @@
               </p> -->
               <p class="acout">{{ userInfo.userName }}</p>
               <p class="text">ID：{{ userInfo.id }}</p>
-              <p class="text">IP：{{ userInfo.ip }}</p>
+              <p class="text" :title="userInfo.ip">IP：{{ formatIpForDisplay(userInfo.ip) }}</p>
               <!-- <p class="range"><span>{{ userInfo.type ? '代理' : '商户' }}</span></p> -->
             </div>
           </div>
@@ -662,6 +662,15 @@ export default {
     };
   },
   methods: {
+    formatIpForDisplay(ip) {
+      if (!ip) {
+        return '';
+      }
+      if (!ip.includes(':') || ip.length <= 18) {
+        return ip;
+      }
+      return `${ip.slice(0, 11)}...${ip.slice(-4)}`;
+    },
     traceHomeStage(stage) {
       if (!this.homeTraceStartAt) {
         return;
@@ -702,6 +711,9 @@ export default {
             this.userInfo.lxfs = 0;
             this.userInfo.jsm = 0;
             this.userInfo.wechatState = userRes.data.wechatState;
+            if (userRes.data.type) {
+              this.getlink();
+            }
           }
           // 充值信息
           if (chargeRes.status === 200) {
@@ -739,9 +751,6 @@ export default {
       this.getInfo();
       this.getMimicharge();
       this.getlist();
-      if (this.userInfo.type) {
-        this.getlink();
-      }
     },
     // 获取用户图像
     getUserProfit() {

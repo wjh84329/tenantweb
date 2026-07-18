@@ -48,7 +48,7 @@
         <el-col :span="8">
           <p class="">
             <span class="inputbox pdt5">
-              <el-checkbox v-memo="isLoginChecked">启用异地登录验证(开启该功能需绑定微信)</el-checkbox>
+              <el-checkbox v-model="isLoginChecked" @change="handleLoginCheckChange">启用异地登录验证(开启该功能需绑定微信)</el-checkbox>
             </span>
           </p>
         </el-col>
@@ -82,7 +82,7 @@
           </div>
         </div>
         <p class="btnBox">
-          <el-button size="small" type="primary" @click="dialog.show = true">确定保存</el-button>
+          <el-button size="small" type="primary" @click="openSaveDialog">确定保存</el-button>
         </p>
       </div>
     </div>
@@ -174,6 +174,29 @@ export default {
     };
   },
   methods: {
+    normalizeBool(value) {
+      return value === true || value === 'true' || value === 1 || value === '1';
+    },
+    isValidIpv4(ip) {
+      return /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/.test(ip);
+    },
+    async ensureWechatBound(shouldPrompt = true) {
+      try {
+        const data = await this.$api.personCenter.isBandweixi();
+        const isBound = this.normalizeBool(data.data);
+        if (!isBound && shouldPrompt) {
+          this.$confirm('开启异地登录验证前需要先绑定微信，是否前往绑定微信页面？', '提示', {
+            type: 'warning'
+          }).then(() => {
+            this.$router.push('/personal/weixin');
+          }).catch(() => {});
+        }
+        return isBound;
+      } catch (err) {
+        this.$messageError(err.message);
+        return false;
+      }
+    },
     // 获取用户信息
     getUser() {
       this.$api.home
@@ -198,29 +221,67 @@ export default {
       this.$api.personCenter
         .getsafeIp()
         .then((data) => {
-          console.log(data);
           if (data.status === 200) {
-            this.checked = data.data.isOpenSecurityLimit;
-            this.ipList = data.data.securityIp;
-            this.loginType = data.data.loginType;
-            this.isLoginChecked = data.data.isLoginChecked;
+            this.checked = this.normalizeBool(data.data.isOpenSecurityLimit);
+            this.ipList = Array.isArray(data.data.securityIp)
+              ? data.data.securityIp.map(item => (item || '').trim()).filter(Boolean)
+              : [];
+            this.loginType = [0, 1, 2].includes(data.data.loginType) ? data.data.loginType : 2;
+            this.isLoginChecked = this.normalizeBool(data.data.isLoginChecked);
           }
         })
         .catch((err) => {
           this.$messageError(err.message);
         });
     },
+    async handleLoginCheckChange(value) {
+      if (!value) {
+        return;
+      }
+      const isBound = await this.ensureWechatBound(true);
+      if (!isBound) {
+        this.isLoginChecked = false;
+      }
+    },
+    async openSaveDialog() {
+      if (this.checked && this.ipList.length === 0) {
+        this.$messageError('开启安全IP登录前，请先添加授权IP！');
+        return;
+      }
+      const invalidIp = this.ipList.find(ip => !this.isValidIpv4(ip));
+      if (invalidIp) {
+        this.$messageError(`授权IP格式不正确：${invalidIp}`);
+        return;
+      }
+      if (this.isLoginChecked) {
+        const isBound = await this.ensureWechatBound(true);
+        if (!isBound) {
+          this.isLoginChecked = false;
+          return;
+        }
+      }
+      this.dialog.show = true;
+    },
     // 输入二级密码后确认
-    sureSeeaccount() {
+    async sureSeeaccount() {
       if (this.dialog.secondPassword === '') {
         this.$messageError('请输入二级密码！');
         return;
+      }
+      if (this.isLoginChecked) {
+        const isBound = await this.ensureWechatBound(true);
+        if (!isBound) {
+          this.isLoginChecked = false;
+          return;
+        }
       }
       this.$api.personCenter
         .setsafeIp({
           tenantSafetyIP: {
             isOpenSecurityLimit: this.checked,
-            securityIp: this.ipList
+            securityIp: this.ipList,
+            loginType: this.loginType,
+            isLoginChecked: this.isLoginChecked
           },
           password: this.dialog.secondPassword
         })
@@ -246,8 +307,20 @@ export default {
       });
     },
     handleInputConfirm() {
-      let inputValue = this.inputValue;
+      const inputValue = (this.inputValue || '').trim();
       if (inputValue) {
+        if (!this.isValidIpv4(inputValue)) {
+          this.$messageError('请输入正确的IPv4地址！');
+          this.inputValue = '';
+          this.inputVisible = false;
+          return;
+        }
+        if (this.ipList.includes(inputValue)) {
+          this.$messageError('该授权IP已存在，无需重复添加！');
+          this.inputValue = '';
+          this.inputVisible = false;
+          return;
+        }
         this.ipList.push(inputValue);
       }
       this.inputVisible = false;

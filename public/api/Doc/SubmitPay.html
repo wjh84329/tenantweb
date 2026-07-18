@@ -178,7 +178,7 @@
         <p class="mb10"><strong>1. 提交请求 Sign 生成规则</strong></p>
         <ol>
             <li>按顺序拼接：<code>Version + MerId + TransNo + OrderAmount + PayChannel + PostBackUrl + Remark</code></li>
-            <li>在末尾追加：<code>|SignKey</code>（通讯秘钥）</li>
+            <li>在末尾追加：<code>|SignKey</code>（对应平台接口密钥）</li>
             <li>对最终字符串做 MD5，并转成 <strong>32 位大写</strong></li>
         </ol>
         <div class="guide-msg mb10">
@@ -187,16 +187,16 @@
         <p class="mb10"><strong>2. 下单同步返回 Sign 规则（当前接口返回 JSON 使用）</strong></p>
         <ol>
             <li>按顺序拼接：<code>Version + MerId + TransNo + OrderAmount + PayChannel + Remark + TrxNo + Status + TransTime</code></li>
-            <li>在末尾追加：<code>|SecretKey</code>（商户密钥）</li>
+            <li>在末尾追加：<code>|SignKey</code>（对应平台接口密钥）</li>
             <li>对最终字符串做 MD5，并转成 <strong>32 位大写</strong></li>
         </ol>
         <div class="guide-msg mb10">
-            <pre>Sign = MD5(Version + MerId + TransNo + OrderAmount + PayChannel + Remark + TrxNo + Status + TransTime + "|" + SecretKey).ToUpper()</pre>
+            <pre>Sign = MD5(Version + MerId + TransNo + OrderAmount + PayChannel + Remark + TrxNo + Status + TransTime + "|" + SignKey).ToUpper()</pre>
         </div>
         <p class="mb10"><strong>3. 异步通知 Sign 验签规则</strong></p>
         <ol>
             <li>按顺序拼接：<code>Version + MerId + TransNo + OrderAmount + PayChannel + Remark + TrxNo + Status + TransTime</code></li>
-            <li>在末尾追加：<code>|SignKey</code>（通讯秘钥）</li>
+            <li>在末尾追加：<code>|SignKey</code>（对应平台接口密钥）</li>
             <li>对最终字符串做 MD5，并转成 <strong>32 位大写</strong></li>
         </ol>
         <div class="guide-msg mb10">
@@ -257,8 +257,8 @@
                         <td>MerId </td>
                         <td>是 </td>
                         <td>String </td>
-                        <td>xxxx</td>
-                        <td> 平台分配</td>
+                        <td>10084</td>
+                        <td> 平台分配的数字商户ID</td>
                     </tr>
                     <tr>
                         <td>商户订单号</td>
@@ -385,11 +385,11 @@
         </div>
         <p class="mb10">请求签名示例： </p>
         <div class="guide-msg mb10">
-            <pre>MD5("1.0merchant-uuid-123EXT20251029001100.00alipayhttps://third.example.com/pay-notify123|your_sign_key").ToUpper()</pre>
+            <pre>MD5("1.010084EXT20251029001100.00alipayhttps://third.example.com/pay-notify123|your_sign_key").ToUpper()</pre>
         </div>
         <p class="mb10">举例如下： </p>
         <div class="guide-msg mb10">
-            <p>http://newapi.7xpay.com/api/Cashier/Index?Version=1.0&amp;MerId=merchant-uuid-123&amp;TransNo=EXT20251029001&amp;ProductName=充值100元&amp;OrderAmount=100.00&amp;PayChannel=alipay&amp;UserInfo=player123&amp;PostBackUrl=https%3A%2F%2Fthird.example.com%2Fpay-notify&amp;NotifyUrl=https%3A%2F%2Fthird.example.com%2Fpay-return&amp;Remark=123&amp;Sign=A1B2C3D4E5F6...&amp;Type=0&amp;PlayerIp=8.8.8.8</p>
+            <p>http://newapi.7xpay.com/api/Cashier/Index?Version=1.0&amp;MerId=10084&amp;TransNo=EXT20251029001&amp;ProductName=充值100元&amp;OrderAmount=100.00&amp;PayChannel=alipay&amp;UserInfo=player123&amp;PostBackUrl=https%3A%2F%2Fthird.example.com%2Fpay-notify&amp;NotifyUrl=https%3A%2F%2Fthird.example.com%2Fpay-return&amp;Remark=123&amp;Sign=A1B2C3D4E5F6...&amp;Type=0&amp;PlayerIp=8.8.8.8</p>
         </div>
     </div>
 </div>
@@ -426,8 +426,8 @@
             <td>MerId</td>
             <td>是</td>
             <td>string</td>
-            <td>merchant-uuid-123</td>
-            <td>平台分配的商户编号</td>
+            <td>10084</td>
+            <td>平台分配的数字商户ID</td>
           </tr>
           <tr>
             <td>商品/游戏名称</td>
@@ -531,7 +531,7 @@
             <td>是</td>
             <td>string</td>
             <td>3A1B2C...（32位大写）</td>
-            <td>MD5签名；当前同步返回按上方“下单同步返回 Sign 规则”使用 SecretKey 生成</td>
+            <td>MD5签名；同步返回按上方“下单同步返回 Sign 规则”使用 SignKey 生成</td>
           </tr>
         </tbody>
       </table>
@@ -549,7 +549,7 @@
       <pre>
 {
   "Version": "1.0",
-  "MerId": "merchant-uuid-123",
+  "MerId": "10084",
   "ProductName": "充值100元",
   "TransNo": "EXT20251029001",
   "OrderAmount": "100.00",
@@ -603,8 +603,8 @@
             <td>MerId</td>
             <td>是</td>
             <td>string</td>
-            <td>merchant-uuid-123</td>
-            <td>平台分配的商户编号</td>
+            <td>10084</td>
+            <td>平台分配的数字商户ID</td>
           </tr>
           <tr>
             <td>商户订单号</td>
@@ -691,7 +691,7 @@
   </div>
   <div class="data-bd">
     <div class="guide-msg mb10">
-      <pre>GET https://third.example.com/pay-notify?Version=1.0&MerId=merchant-uuid-123&TransNo=EXT20251029001&OrderAmount=100.00&PayAmount=100.00&PayChannel=alipay&TrxNo=B26061812345678901&Status=1&Remark=123&TransTime=20250308123045&Sign=A1B2C3D4E5F6...</pre>
+      <pre>GET https://third.example.com/pay-notify?Version=1.0&MerId=10084&TransNo=EXT20251029001&OrderAmount=100.00&PayAmount=100.00&PayChannel=alipay&TrxNo=B26061812345678901&Status=1&Remark=123&TransTime=20250308123045&Sign=A1B2C3D4E5F6...</pre>
     </div>
     <p>商户处理成功后返回：</p>
     <div class="guide-msg mb10">

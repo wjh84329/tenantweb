@@ -142,49 +142,61 @@ export default {
 .contact-hero {
   position: relative;
   width: 100%;
-  min-height: 272px;
+  min-height: 286px;
   margin: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 500px;
-  gap: 36px;
+  grid-template-columns: minmax(0, 1fr) 620px;
+  gap: 28px;
   align-items: center;
-  padding: 46px max(24px, calc((100% - 1300px) / 2));
+  padding: 42px max(24px, calc((100% - 1300px) / 2)) 36px;
   box-sizing: border-box;
   background:
-    linear-gradient(120deg, rgba(242, 247, 255, 0.98) 0%, rgba(235, 243, 255, 0.94) 58%, rgba(244, 248, 255, 0.98) 100%);
+    linear-gradient(90deg, #f7fbff 0%, #f1f7ff 22%, #eef5ff 50%, #f1f7ff 78%, #f7fbff 100%);
   border-bottom: 1px solid #dbe8f7;
   overflow: hidden;
+  box-shadow: inset 0 1px 0 #edf2fb;
 }
 
 .contact-hero::before,
 .contact-hero::after {
   content: '';
   position: absolute;
+  inset: 0;
   pointer-events: none;
 }
 
 .contact-hero::before {
-  left: -4%;
-  right: -4%;
-  bottom: 22px;
-  height: 110px;
   background:
-    radial-gradient(80% 90% at 20% 0%, rgba(104, 164, 255, 0.12) 0%, rgba(104, 164, 255, 0.02) 65%, transparent 75%),
-    radial-gradient(70% 80% at 82% 10%, rgba(104, 164, 255, 0.1) 0%, rgba(104, 164, 255, 0.01) 62%, transparent 72%);
+    linear-gradient(145deg, rgba(224, 234, 249, 0.82) 0 16%, rgba(224, 234, 249, 0) 16% 100%),
+    linear-gradient(36deg, rgba(235, 241, 252, 0.82) 0 22%, rgba(235, 241, 252, 0) 22% 100%),
+    linear-gradient(152deg, rgba(220, 231, 249, 0) 0 83%, rgba(220, 231, 249, 0.58) 83% 100%);
+  opacity: 0.95;
 }
 
 .contact-hero::after {
-  left: 24px;
-  top: 96px;
-  width: 94px;
-  height: 94px;
-  background-image: radial-gradient(rgba(70, 136, 255, 0.16) 2px, transparent 2px);
-  background-size: 18px 18px;
+  background:
+    radial-gradient(circle at 18% 42%, rgba(64, 129, 242, 0.08) 0, rgba(64, 129, 242, 0) 24%),
+    radial-gradient(circle at 77% 28%, rgba(64, 129, 242, 0.07) 0, rgba(64, 129, 242, 0) 20%),
+    radial-gradient(78% 88% at 18% 100%, rgba(104, 164, 255, 0.12) 0%, rgba(104, 164, 255, 0.02) 64%, transparent 74%),
+    radial-gradient(72% 80% at 84% 100%, rgba(104, 164, 255, 0.09) 0%, rgba(104, 164, 255, 0.01) 60%, transparent 72%);
 }
 
 .contact-hero-copy {
   position: relative;
   z-index: 1;
+  max-width: 610px;
+}
+
+.contact-hero-copy::before {
+  content: '';
+  position: absolute;
+  left: -78px;
+  top: 42px;
+  width: 74px;
+  height: 106px;
+  background-image: radial-gradient(rgba(70, 136, 255, 0.16) 2px, transparent 2px);
+  background-size: 18px 18px;
+  pointer-events: none;
 }
 
 .contact-hero h1 {
@@ -216,11 +228,15 @@ export default {
 
 .contact-visual-img {
   display: block;
-  width: min(610px, 100%);
+  width: min(760px, 112%);
+  max-width: none;
   margin-left: auto;
+  margin-right: -20px;
   object-fit: contain;
   position: relative;
   z-index: 1;
+  image-rendering: auto;
+  filter: saturate(1.03) contrast(1.02) drop-shadow(0 20px 38px rgba(71, 122, 206, 0.12));
 }
 
 .contact-content {
@@ -435,6 +451,14 @@ export default {
 @media (max-width: 1080px) {
   .contact-hero {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .contact-visual-img {
+    width: min(700px, 100%);
+    max-width: 100%;
+    margin-right: 0;
+    margin-left: auto;
   }
 
   .contact-content {
