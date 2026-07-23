@@ -620,6 +620,11 @@ export default {
             changeDate: this.changeTime,
             notice: this.notice,
             machineCode: batchMachineCode,
+            serverIp: (this.gatewayIp || '').trim(),
+            serverPort:
+              this.gatewayPort === null || this.gatewayPort === undefined
+                ? ''
+                : String(this.gatewayPort).trim(),
             successMark: this.webSet.successmark,
             useDate: this.setTime,
             webUrl: this.webSet.address,
@@ -688,6 +693,11 @@ export default {
                   ? ''
                   : this.installPath, // 安装路径
               machineCode: singleMachineCode,
+              serverIp: (this.gatewayIp || '').trim(),
+              serverPort:
+                this.gatewayPort === null || this.gatewayPort === undefined
+                  ? ''
+                  : String(this.gatewayPort).trim(),
               // serverPort: 0, // 服务器端口 *页面无对应*
               // sort: 0, // 默认参数    *页面无对应*
               // state: true, // 默认参数    *页面无对应*

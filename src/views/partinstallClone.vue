@@ -713,6 +713,11 @@ export default {
                 ? ''
                 : this.installPath, // 安装路径
             machineCode: cloneMachineCode,
+            serverIp: (this.gatewayIp || '').trim(),
+            serverPort:
+              this.gatewayPort === null || this.gatewayPort === undefined
+                ? ''
+                : String(this.gatewayPort).trim(),
             // serverPort: 0, // 服务器端口 *页面无对应*
             // sort: 0, // 默认参数    *页面无对应*
             // state: true, // 默认参数    *页面无对应*
