@@ -132,7 +132,12 @@ export default {
       }
       const list = this.serverDrow || [];
       const found = list.find(e =>
-        this.matchEquipByEndpoint(e.ip, e.port, inputIp, portNum)
+        this.matchEquipByEndpoint(
+          e.ip || e.Ip,
+          e.port == null ? e.Port : e.port,
+          inputIp,
+          portNum
+        )
       );
       if (!found) {
         return {
@@ -141,7 +146,14 @@ export default {
             '未找到与所填 IP、端口一致的已注册网关，请确认网关已运行且已在平台注册。'
         };
       }
-      return { ok: true, machineCode: found.machineCode };
+      const machineCode = (found.machineCode || found.MachineCode || '').trim();
+      if (!machineCode) {
+        return {
+          ok: false,
+          message: '已找到对应网关，但平台登记记录缺少设备实例 ID，请重启网关后重试。'
+        };
+      }
+      return { ok: true, machineCode };
     },
     gatewayTypesNeedEndpoint() {
       return this.typeindex === 1 || this.typeindex === 2 || this.typeindex === 6;
