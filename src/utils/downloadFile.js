@@ -9,19 +9,28 @@ export function appendQuery(url, key, value) {
   return url + separator + encodeURIComponent(key) + '=' + encodeURIComponent(value);
 }
 
-export function normalizeDownloadUrl(url) {
-  if (!url || typeof window === 'undefined' || window.location.protocol !== 'https:') {
+export function normalizeDownloadUrl(url, preferredBaseUrl = '') {
+  if (!url || typeof window === 'undefined') {
     return url || '';
   }
 
   try {
     const parsed = new URL(url, window.location.href);
+    if (preferredBaseUrl) {
+      const preferredBase = new URL(preferredBaseUrl, window.location.href);
+      parsed.protocol = preferredBase.protocol;
+      parsed.host = preferredBase.host;
+      return parsed.toString();
+    }
+
     if (parsed.protocol === 'http:') {
-      parsed.protocol = 'https:';
+      if (window.location.protocol === 'https:') {
+        parsed.protocol = 'https:';
+      }
     }
     return parsed.toString();
   } catch (e) {
-    return url.replace(/^http:\/\//i, 'https://');
+    return window.location.protocol === 'https:' ? url.replace(/^http:\/\//i, 'https://') : url;
   }
 }
 

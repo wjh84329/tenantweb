@@ -483,7 +483,7 @@ export default {
   },
   methods: {
     normalizeGatewayConfigUrl(url) {
-      return normalizeDownloadUrl(url || '');
+      return normalizeDownloadUrl(url || '', netUrl);
     },
     // 选中事件
     setActive(path) {
