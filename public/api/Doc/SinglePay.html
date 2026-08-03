@@ -234,10 +234,10 @@
                     <tr>
                         <td>充值方式</td>
                         <td>productId </td>
-                        <td>是 </td>
+                        <td>否 </td>
                         <td>Int </td>
                         <td>1</td>
-                        <td>平台中已启用的充值方式ID </td>
+                        <td>平台中已启用的充值方式ID；未传时默认选择充值方式列表中的第一个 </td>
                     </tr>
                     <tr>
                         <td>额外补发比例</td>
@@ -328,8 +328,9 @@
         </div>
         <p class="mb10">请求示例（可选开关均省略）： </p>
         <div class="guide-msg mb10">
-            <p>userId=1024&amp;partitionId=1777&amp;productId=1&amp;playerAccount=meng&amp;payAmount=10.00&amp;sign=签名结果</p>
-            <p>签名原文：partitionId=1777&amp;payAmount=10.00&amp;playerAccount=meng&amp;productId=1&amp;userId=1024商户SignKey</p>
+            <p>userId=1024&amp;partitionId=1777&amp;playerAccount=meng&amp;payAmount=10.00&amp;sign=签名结果</p>
+            <p>签名原文：partitionId=1777&amp;payAmount=10.00&amp;playerAccount=meng&amp;userId=1024商户SignKey</p>
+            <p>如果传入productId，该字段需要按原有ASCII顺序参与签名。</p>
             <p>sign=MD5(签名原文)，32位十六进制字符串，大小写均可。</p>
         </div>
     </div>
