@@ -9,7 +9,7 @@
   <div class="main">
     <div class="header" :style="headerStyle">
       <div class="headbox clearfix" :style="headerStyle"  style="display: flex;">
-        <div class="logo"><site-logo variant="logo3" style="width: 154px;height: 40px;" alt="网站logo" /></div>
+        <div class="logo"><site-logo variant="logo3" style="width: 250px;height: 50px;" alt="网站logo" /></div>
         <ul class="navbox clearfix" style="width: 75%;">
           <li :class="{ active: activeNav === '/behalf/baseInfo' }"
           :style="activeNav === '/behalf/baseInfo' ? activeNavStyle : (hoverNav === '/behalf/baseInfo' ? hoverNavStyle : null)"
@@ -252,11 +252,11 @@ export default {
       height: 60px;
 
       .logo {
-        flex: 0 0 178px;
+        flex: 0 0 250px;
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        width: 178px;
+        width: 250px;
         height: 60px;
         margin-top: 0;
         float: left;

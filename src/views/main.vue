@@ -9,7 +9,7 @@
   <div class="main">
     <div class="header" :style="headboxStyle">
       <div class="headbox clearfix" :style="headboxStyle" style="display: flex;">
-        <div class="logo"><site-logo variant="logo3" style="width: 154px;height: 40px;" alt="网站logo" /></div>
+        <div class="logo"><site-logo variant="logo3" style="width: 250px;height: 50px;" alt="网站logo" /></div>
         <ul class="navbox clearfix" style="width: 75%;">
           <li v-if="hasMenu(1) || $store.state.settlementType != 3" :class="{ active: activeNav === '/main/home' }"
             :style="activeNav === '/main/home' ? activeNavStyle : (hoverNav === '/main/home' ? hoverNavStyle : null)"
@@ -868,11 +868,11 @@ export default {
       height: 60px;
 
       .logo {
-        flex: 0 0 178px;
+        flex: 0 0 250px;
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        width: 178px;
+        width: 250px;
         height: 60px;
         margin-top: 0;
         float: left;
