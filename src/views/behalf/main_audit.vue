@@ -209,21 +209,30 @@ export default {
     background: #0398d6;
 
     .headbox {
-      width: 80vw;
+      width: 1280px;
+      max-width: 100%;
       margin: 0 auto;
       height: 60px;
 
       .logo {
-        margin-top: 13px;
+        flex: 0 0 178px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 178px;
+        height: 60px;
+        margin-top: 0;
         float: left;
-        width: 20%;
-        text-align: right;
+        text-align: left;
       }
 
       .navbox {
+        flex: 1 1 auto;
+        width: auto !important;
+        min-width: 0;
         float: left;
         // margin-top: 15px;
-        margin-left: 50px;
+        margin-left: 0;
 
         li {
           float: left;
@@ -250,6 +259,9 @@ export default {
       }
 
       .count {
+        flex: 0 0 auto;
+        width: auto !important;
+        margin-left: auto;
         float: right;
         height: 28px;
         line-height: 28px;
@@ -282,7 +294,8 @@ export default {
     }
 
     .midleContaner {
-      width: 80vw;
+      width: 1280px;
+      max-width: 100%;
       margin: 20px auto 22px auto;
       position: relative;
       // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
