@@ -2,7 +2,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SinglePay</title>
+    <title>手动充值</title>
     <link href="../Content/bootstrap.min.css" rel="stylesheet">
     <link href="../Content/IwanPay/css/document-description.css" rel="stylesheet">
     <link href="../Content/IwanPay/css/doc-common.css" rel="stylesheet">
@@ -150,7 +150,7 @@
                     <div class="content" id="art-content">
                         <!-- 内容 [[ -->
                         <div class="content-hd">
-                            <h2 class="with-border">SinglePay</h2>
+                            <h2 class="with-border">手动充值</h2>
                         </div>
                         <div class="content-bd">
                             
@@ -164,7 +164,7 @@
         </h3>
     </div>
     <div class="data-bd">
-        <p>该接口可供第三方自动开区工具等，进行整区补发。</p>
+        <p>该接口可供第三方工具按指定分区、充值方式和游戏账号发起单笔手动补发。</p>
     </div>
 </div>
 <div class="data-box with-padding">
@@ -175,7 +175,8 @@
     </div>
     <div class="data-bd">
         <p class="mb20">请求方式：只支持POST</p>
-        <p class="mb20">URL地址：http://newapi.7xpay.com/Api/SinglePay</p>
+        <p class="mb20">Content-Type：application/x-www-form-urlencoded</p>
+        <p class="mb20">URL地址：https://newapi.7xpay.com/api/ManualPay</p>
     </div>
 </div>
 <div class="data-box with-padding">
@@ -200,7 +201,7 @@
                 <tbody>
                     <tr>
                         <td>分区ID </td>
-                        <td>areaId </td>
+                        <td>partitionId </td>
                         <td>是 </td>
                         <td>Int </td>
                         <td>1777</td>
@@ -231,71 +232,84 @@
                         <td>充值金额，保持两位小数 </td>
                     </tr>
                     <tr>
-                        <td>充值通道</td>
-                        <td>channelId </td>
-                        <td>否 </td>
+                        <td>充值方式</td>
+                        <td>productId </td>
+                        <td>是 </td>
                         <td>Int </td>
-                        <td>10001</td>
-                        <td>充值通道id,默认10001，支付宝 </td>
+                        <td>1</td>
+                        <td>平台中已启用的充值方式ID </td>
                     </tr>
                     <tr>
-                        <td>关闭金额赠送</td>
-                        <td>closeGiveMoney </td>
+                        <td>额外补发比例</td>
+                        <td>extra </td>
                         <td>否 </td>
-                        <td>int </td>
-                        <td>1</td>
-                        <td>
-                            默认否
-                            1为是，0为否。
-
-                        </td>
+                        <td>Decimal </td>
+                        <td>0</td>
+                        <td>额外补发百分比，默认0，不能小于0 </td>
+                    </tr>
+                    <tr>
+                        <td>不包含金额赠送</td>
+                        <td>isGiveAmount </td>
+                        <td>否 </td>
+                        <td>Boolean </td>
+                        <td>false</td>
+                        <td>金额赠送总开关；true为不包含，默认false </td>
+                    </tr>
+                    <tr>
+                        <td>关闭激励赠送</td>
+                        <td>isJl </td>
+                        <td>否 </td>
+                        <td>Boolean </td>
+                        <td>false</td>
+                        <td>true为关闭，默认false </td>
                     </tr>
                     <tr>
                         <td>关闭附加赠送</td>
-                        <td>closeGiveAppend </td>
+                        <td>isFj </td>
                         <td>否 </td>
-                        <td>int </td>
-                        <td>1</td>
-                        <td>
-                            默认否
-                            1为是，0为否。
-
-                        </td>
+                        <td>Boolean </td>
+                        <td>false</td>
+                        <td>true为关闭，默认false </td>
                     </tr>
                     <tr>
                         <td>关闭积分赠送</td>
-                        <td>closeGiveIntegral </td>
+                        <td>isJf </td>
                         <td>否 </td>
-                        <td>int </td>
-                        <td>1</td>
-                        <td>
-                            默认否
-                            1为是，0为否。
-
-                        </td>
+                        <td>Boolean </td>
+                        <td>false</td>
+                        <td>true为关闭，默认false </td>
                     </tr>
                     <tr>
                         <td>关闭装备赠送</td>
-                        <td>closeGiveEquipment </td>
+                        <td>isZb </td>
                         <td>否 </td>
-                        <td>int </td>
-                        <td>1</td>
-                        <td>
-                            默认否
-                            1为是，0为否。
-
-                        </td>
+                        <td>Boolean </td>
+                        <td>false</td>
+                        <td>true为关闭，默认false </td>
                     </tr>
-
                     <tr>
-                        <td>补发原因</td>
-                        <td>reason </td>
-                        <td>是 </td>
-                        <td>String </td>
-                        <td>补发原因</td>
-                        <td>
-                            进行补发的原因
-                        </td>
+                        <td>关闭渠道赠送</td>
+                        <td>isQd </td>
+                        <td>否 </td>
+                        <td>Boolean </td>
+                        <td>false</td>
+                        <td>true为关闭，默认false </td>
+                    </tr>
+                    <tr>
+                        <td>不包含红包赠送</td>
+                        <td>isRedPacketAmount </td>
+                        <td>否 </td>
+                        <td>Boolean </td>
+                        <td>false</td>
+                        <td>true为不包含，默认false </td>
+                    </tr>
+                    <tr>
+                        <td>关闭转区点赠送</td>
+                        <td>isClose </td>
+                        <td>否 </td>
+                        <td>Boolean </td>
+                        <td>true</td>
+                        <td>true为关闭；该字段不传时默认true，其他关闭项不传时均默认false </td>
                     </tr>
                     <tr>
                         <td>签名 </td>
@@ -304,15 +318,20 @@
                         <td>String </td>
                         <td>d94a1202d575b1735191a4aff4ad133ea4a4c1b8</td>
                         <td>
-                            把所有非空的参数按照ascii
-                            顺序的方式进行key=value&amp;key1=value1拼接，在拼接结果末尾直接拼接上md5
+                            除sign和sign_type外，把所有非空参数按照ASCII
+                            顺序以key=value&amp;key1=value1拼接，在拼接结果末尾直接拼接商户SignKey
                             签名密钥（详见：<a href="ApiDesc.html">概述</a>）
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-      
+        <p class="mb10">请求示例（可选开关均省略）： </p>
+        <div class="guide-msg mb10">
+            <p>userId=1024&amp;partitionId=1777&amp;productId=1&amp;playerAccount=meng&amp;payAmount=10.00&amp;sign=签名结果</p>
+            <p>签名原文：partitionId=1777&amp;payAmount=10.00&amp;playerAccount=meng&amp;productId=1&amp;userId=1024商户SignKey</p>
+            <p>sign=MD5(签名原文)，32位十六进制字符串，大小写均可。</p>
+        </div>
     </div>
 </div>
 <div class="data-box with-padding">
@@ -348,7 +367,7 @@
                     </tr>
                     <tr>
                         <td>业务状态描述 </td>
-                        <td>message </td>
+                        <td>msg / message </td>
                         <td>是</td>
                         <td>String </td>
                         <td>成功 </td>
@@ -369,7 +388,8 @@
             <p>
                 {
                 <br>&nbsp;&nbsp;&nbsp;&nbsp;"result": true,
-                <br>&nbsp;&nbsp;&nbsp;&nbsp;"message": "成功"
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;"msg": "补发成功",
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;"message": "补发成功"
                 <br>}
             </p>
         </div>
