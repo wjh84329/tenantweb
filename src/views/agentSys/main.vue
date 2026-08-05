@@ -50,9 +50,9 @@
         <div class="slider" :style="sliderStyle">
           <div class="top_tit" :style="headerStyle">代理管理</div>
           <ul>
-            <!-- <li :style="sliderStyle" style="margin-top: 10px;">
+            <li :style="sliderStyle" style="margin-top: 10px;">
               <span class="icon1" @click="refresh('/agentsystem/setting')">网站设置</span>
-            </li> -->
+            </li>
             <li :style="sliderStyle">
               <span class="icon2" @click="refresh('/agentsystem/merchant')">下属商户</span>
             </li>

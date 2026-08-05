@@ -51,6 +51,9 @@ export default {
             this.webName = data.data.webName;
             this.copyright = data.data.copyright;
             this.servicePhone = data.data.servicePhone;
+            if (data.data.isAgentSite && data.data.webName) {
+              document.title = data.data.webName;
+            }
           }
         })
         .catch(err => {

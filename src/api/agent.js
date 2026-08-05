@@ -9,6 +9,36 @@
 import api from '../assets/js/apiRequestHandler';
 import mgr from '../assets/js/securityapi';
 export default {
+  /* --------------------------0.网站设置---------------------------- */
+  async getSiteSetting() {
+    let header = await mgr();
+    return api({
+      url: '/api/HomePage/GetAgentSiteSetting',
+      method: 'get',
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
+  async saveSiteSetting(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/HomePage/UpdateAgentSiteSetting',
+      method: 'post',
+      data: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
+  async uploadSiteLogo(form) {
+    let header = await mgr();
+    return api({
+      url: '/api/HomePage/UploadAgentSiteLogo',
+      method: 'post',
+      data: form,
+      headers: {
+        Authorization: 'Bearer ' + header,
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  },
   /* --------------------------1.下属商户---------------------------- */
   // 下属商户列表
   async submerchantList(params) {

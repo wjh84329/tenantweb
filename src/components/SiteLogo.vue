@@ -3,9 +3,12 @@
 </template>
 
 <script>
-import { netUrl } from '../assets/js/version';
+import api from '../assets/js/apiRequestHandler';
+import { netUrl, url as tenantApiUrl } from '../assets/js/version';
 
 const remoteBaseUrl = String(netUrl || '').replace(/\/+$/, '');
+const tenantBaseUrl = String(tenantApiUrl || '').replace(/\/+$/, '');
+let brandingRequest = null;
 const fallbackMap = {
   logo: require('../assets/img/logo.png'),
   logo2: require('../assets/img/logo2.png'),
@@ -44,8 +47,11 @@ export default {
   data() {
     return {
       currentSrc: this.buildRemoteSrc(),
-      hasFallenBack: false
+      sourceKind: 'global'
     };
+  },
+  mounted() {
+    this.loadAgentBranding();
   },
   computed: {
     logoStyle() {
@@ -70,7 +76,7 @@ export default {
       this.resetImage();
     },
     variant() {
-      if (this.hasFallenBack) {
+      if (this.sourceKind === 'local') {
         this.currentSrc = this.getFallbackSrc();
       }
     }
@@ -83,16 +89,45 @@ export default {
     getFallbackSrc() {
       return fallbackMap[this.variant] || fallbackMap.logo3;
     },
+    async loadAgentBranding() {
+      try {
+        if (!brandingRequest) {
+          brandingRequest = api({
+            url: '/api/About/GetTenantBaseInfoAsync',
+            method: 'get',
+            params: { siteDomain: window.location.host }
+          }).catch(error => {
+            brandingRequest = null;
+            throw error;
+          });
+        }
+        const response = await brandingRequest;
+        const logoUrl = response && response.data ? response.data.logoUrl : '';
+        if (!logoUrl) return;
+        this.currentSrc = /^https?:\/\//i.test(logoUrl)
+          ? logoUrl
+          : `${tenantBaseUrl}${logoUrl.charAt(0) === '/' ? logoUrl : `/${logoUrl}`}`;
+        this.sourceKind = 'agent';
+      } catch (e) {
+        // 公共配置不可用时继续使用平台Logo。
+      }
+    },
     handleError() {
-      if (this.hasFallenBack) {
+      if (this.sourceKind === 'agent') {
+        this.sourceKind = 'global';
+        this.currentSrc = this.buildRemoteSrc();
         return;
       }
-      this.hasFallenBack = true;
+      if (this.sourceKind === 'local') {
+        return;
+      }
+      this.sourceKind = 'local';
       this.currentSrc = this.getFallbackSrc();
     },
     resetImage() {
-      this.hasFallenBack = false;
+      this.sourceKind = 'global';
       this.currentSrc = this.buildRemoteSrc();
+      this.loadAgentBranding();
     }
   }
 };

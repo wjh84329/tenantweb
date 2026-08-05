@@ -1,462 +1,249 @@
-<!--
- * @Description: 代理系统
- * @Author: gao shuai
- * @Date: 2020-05-18 09:46:49
- * @LastEditTime: 2020-08-24 15:20:31
- * @LastEditors: gao shuai
--->
-
 <template>
-  <div class="home">
-    <div class="gs_title" style="color: white;">网站设置</div>
-    <div class="gs_tabbox clearfix mgt15">
-      <form class="site-setting-form">
-        <div class="form-row">
-          <label class="form-label">网站名称：</label>
-          <input v-model="form.siteName" class="form-input" type="text" />
-          <span class="form-desc">您的网站名称</span>
-        </div>
-        <div class="form-row">
-          <label class="form-label">代理域名：</label>
-          <input v-model="form.agentDomain" class="form-input highlight" type="text" />
-          <span class="form-desc">您的网站域名(不加 http://)</span>
-        </div>
-        <div class="form-row">
-          <label class="form-label">注册地址：</label>
-          <input v-model="form.registerUrl" class="form-input" type="text" />
-        </div>
-        <div class="form-row">
-          <label class="form-label"></label>
-          <span class="form-desc">用户注册地址</span>
-        </div>
-        <div class="form-row">
-          <label class="form-label">充值域名：</label>
-          <input v-model="form.chargeDomain" class="form-input" type="text" />
-        </div>
-        <div class="form-row">
-          <label class="form-label"></label>
-          <span class="form-desc">不加 http://，多个域名请用“；”分隔</span>
-        </div>
-        <div class="form-row">
-          <label class="form-label">联系电话：</label>
-          <input v-model="form.phone" class="form-input" type="text" />
-          <span class="form-desc">将显示您的网站上</span>
-        </div>
-        <div class="form-row">
-          <label class="form-label">客服QQ：</label>
-          <input v-model="form.serviceQQ" class="form-input" type="text" />
-          <span class="form-desc">格式:姓名,QQ号码,多个QQ用|分隔</span>
-        </div>
-        <div class="form-row">
-          <label class="form-label">技术QQ：</label>
-          <input v-model="form.techQQ" class="form-input" type="text" />
-          <span class="form-desc">格式:姓名,QQ号码,多个QQ用|分隔</span>
-        </div>
-        <div class="form-row">
-          <label class="form-label">版权：</label>
-          <input v-model="form.copyright" class="form-input" type="text" />
-          <span class="form-desc">底部版权</span>
-        </div>
-        <div class="form-row">
-          <label class="form-label">流量统计代码：</label>
-          <textarea v-model="form.statCode" class="form-textarea"></textarea>
-        </div>
-        <div class="form-row">
-          <label class="form-label"></label>
-          <span class="form-desc">网站流量统计,支持cnzz,51la,51yes流量统计</span>
-        </div>
-        <div class="form-row">
-          <label class="form-label"></label>
-          <el-button type="primary" @click.prevent="saveSetting">确定保存</el-button>
-        </div>
-      </form>
+  <div class="site-setting-page">
+    <div class="gs_title">网站设置</div>
+    <div class="setting-card" v-loading="loading">
+      <div class="setting-intro">
+        <strong>代理独立站点</strong>
+        <span>配置后，代理域名访问商户端时优先使用这里的名称、Logo 和联系QQ。</span>
+      </div>
+
+      <el-form ref="settingForm" :model="form" :rules="rules" label-width="120px" class="setting-form">
+        <el-form-item label="网站名称" prop="siteName">
+          <el-input v-model.trim="form.siteName" maxlength="100" placeholder="例如：某某充值服务" />
+          <p class="field-help">未填写时显示平台默认名称。</p>
+        </el-form-item>
+
+        <el-form-item label="代理域名" prop="domain">
+          <el-input v-model.trim="form.domain" placeholder="例如：https://pay.example.com" />
+          <p class="field-help">域名会写入数据库，并自动加入商户端和授权服务的跨域白名单；请同时完成DNS和Nginx解析。</p>
+        </el-form-item>
+
+        <el-form-item label="联系QQ" prop="contactQq">
+          <el-input v-model.trim="form.contactQq" maxlength="11" placeholder="请输入5-11位QQ号码" />
+          <p class="field-help">代理域名的登录首页、注册页和联系我们页面会优先显示此QQ。</p>
+        </el-form-item>
+
+        <el-form-item label="网站Logo">
+          <div class="logo-setting">
+            <div class="logo-preview">
+              <img v-if="logoUrl && logoAvailable" :src="logoUrl" alt="代理网站Logo" @error="logoAvailable = false" />
+              <span v-else>暂未上传</span>
+            </div>
+            <div class="logo-actions">
+              <el-upload
+                action="#"
+                :show-file-list="false"
+                :http-request="uploadLogo"
+                :before-upload="beforeLogoUpload"
+              >
+                <el-button type="primary" plain :loading="uploading">选择Logo</el-button>
+              </el-upload>
+              <p class="field-help">支持PNG、JPG、WEBP，最大3MB，建议尺寸250×50。</p>
+            </div>
+          </div>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" :loading="saving" @click="saveSetting">保存网站设置</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
 
 <script>
-// import { loginUrl } from '../../assets/js/version';
+import { url as tenantApiUrl } from '../../assets/js/version';
+
+const apiBase = String(tenantApiUrl || '').replace(/\/+$/, '');
+
 export default {
-  inject: ['reload'],
+  name: 'AgentSiteSetting',
   data() {
+    const validateDomain = (rule, value, callback) => {
+      if (!value) return callback();
+      const candidate = value.indexOf('://') > -1 ? value : `https://${value}`;
+      try {
+        const parsed = new URL(candidate);
+        if (!/^https?:$/.test(parsed.protocol) || !parsed.hostname) throw new Error('invalid');
+        callback();
+      } catch (e) {
+        callback(new Error('请输入正确的网站域名'));
+      }
+    };
     return {
-      activeName: '0',
-      subMerchant: {
-        pageIndex: 1,
-        pageSize: 20,
-        total: 0,
-        rateDraw: [],
-        tableData: [],
-        dialog: {
-          show: false,
-          nickName: '',
-          name: '',
-          password: '',
-          mail: '',
-          qq: '',
-          phone: '',
-          rate: ''
-        }
-      },
+      loading: false,
+      saving: false,
+      uploading: false,
+      logoUrl: '',
+      logoAvailable: false,
       form: {
         siteName: '',
-        agentDomain: '',
-        registerUrl: '',
-        chargeDomain: '',
-        phone: '',
-        serviceQQ: '',
-        techQQ: '',
-        copyright: '',
-        statCode: ''
+        domain: '',
+        contactQq: ''
+      },
+      rules: {
+        domain: [{ validator: validateDomain, trigger: 'blur' }],
+        contactQq: [{ pattern: /^\d{5,11}$/, message: '请输入5-11位QQ号码', trigger: 'blur' }]
       }
     };
   },
-  methods: {
-    // 下属商户列表
-    getlist() {
-      this.$api.agent
-        .submerchantList({
-          PageNumber: this.subMerchant.pageIndex,
-          PageSize: this.subMerchant.pageSize
-        })
-        .then((data) => {
-          if (data.status === 204) {
-            this.subMerchant.tableData = [];
-            this.subMerchant.total = 0;
-          } else if (data.status === 200) {
-            this.subMerchant.tableData = data.data;
-            this.subMerchant.total = JSON.parse(
-              data.headers['x-pagination']
-            ).TotalCount;
-          }
-        })
-        .catch((err) => {
-          this.$messageError(err.message);
-        });
-    },
-    // 比率组下拉
-    rankDraw() {
-      this.$api.agent
-        .rankDraw()
-        .then((data) => {
-          if (data.status === 200) {
-            this.subMerchant.rateDraw = data.data;
-          }
-        })
-        .catch((err) => {
-          this.$messageError(err.message);
-        });
-    },
-    // 添加商户
-    addMerchant() {
-      if (this.subMerchant.dialog.nickName === '') {
-        this.$messageError('请输入昵称！');
-        return;
-      } else if (this.subMerchant.dialog.name === '') {
-        this.$messageError('请输入用户名！');
-        return;
-      } else if (this.subMerchant.dialog.password === '') {
-        this.$messageError('请输入密码！');
-        return;
-      } else if (this.subMerchant.dialog.mail === '') {
-        this.$messageError('请输入邮箱！');
-        return;
-      } else if (this.subMerchant.dialog.qq === '') {
-        this.$messageError('请输入联系qq！');
-        return;
-      } else if (this.subMerchant.dialog.phone === '') {
-        this.$messageError('请输入联系电话！');
-        return;
-      } else if (this.subMerchant.dialog.rate === '') {
-        this.$messageError('请选择比率组！');
-        return;
-      }
-      this.$api.agent
-        .addMerchant({
-          nickname: this.subMerchant.dialog.nickName,
-          loginName: this.subMerchant.dialog.name,
-          password: this.subMerchant.dialog.password,
-          email: this.subMerchant.dialog.mail,
-          qqNumber: this.subMerchant.dialog.qq,
-          phoneNumber: this.subMerchant.dialog.phone,
-          rankId: this.subMerchant.dialog.rate
-        })
-        .then((data) => {
-          if (data.status === 200) {
-            this.$messageSuccess('新增商户成功！');
-            this.subMerchant.dialog.show = false;
-            this.getlist();
-          }
-        })
-        .catch((err) => {
-          this.$messageError(err.message);
-        });
-    },
-    // 添加商户弹框初始化
-    subMerchantInit() {
-      this.subMerchant.dialog.nickName = '';
-      this.subMerchant.dialog.name = '';
-      this.subMerchant.dialog.password = '';
-      this.subMerchant.dialog.mail = '';
-      this.subMerchant.dialog.qq = '';
-      this.subMerchant.dialog.phone = '';
-      this.subMerchant.dialog.rate = '';
-    },
-    // 用户名不能中文
-    noChinese() {
-      this.subMerchant.dialog.name = this.subMerchant.dialog.name.replace(
-        /[\u4E00-\u9FA5]/g,
-        ''
-      );
-    },
-    // 保存设置
-    saveSetting() {
-      this.$message.success('保存成功');
-    }
-  },
   created() {
-    this.getlist();
-    this.rankDraw();
+    this.loadSetting();
+  },
+  methods: {
+    absoluteApiUrl(path) {
+      if (!path) return '';
+      if (/^https?:\/\//i.test(path)) return path;
+      return `${apiBase}${path.charAt(0) === '/' ? path : `/${path}`}`;
+    },
+    async loadSetting() {
+      this.loading = true;
+      try {
+        const response = await this.$api.agent.getSiteSetting();
+        const data = response.data || {};
+        this.form.siteName = data.siteName || '';
+        this.form.domain = data.domain || '';
+        this.form.contactQq = data.contactQq || '';
+        this.logoUrl = this.absoluteApiUrl(data.logoUrl);
+        this.logoAvailable = !!this.logoUrl;
+      } catch (error) {
+        this.$messageError(error.message || '网站设置加载失败');
+      } finally {
+        this.loading = false;
+      }
+    },
+    saveSetting() {
+      this.$refs.settingForm.validate(async valid => {
+        if (!valid) return;
+        this.saving = true;
+        try {
+          await this.$api.agent.saveSiteSetting(this.form);
+          this.$messageSuccess('网站设置保存成功');
+          await this.loadSetting();
+        } catch (error) {
+          this.$messageError(error.message || '网站设置保存失败');
+        } finally {
+          this.saving = false;
+        }
+      });
+    },
+    beforeLogoUpload(file) {
+      const allowed = ['image/png', 'image/jpeg', 'image/webp'].includes(file.type);
+      if (!allowed) {
+        this.$messageError('Logo仅支持PNG、JPG或WEBP格式');
+        return false;
+      }
+      if (file.size > 3 * 1024 * 1024) {
+        this.$messageError('Logo图片不能超过3MB');
+        return false;
+      }
+      return true;
+    },
+    async uploadLogo(options) {
+      this.uploading = true;
+      const form = new FormData();
+      form.append('file', options.file);
+      try {
+        const response = await this.$api.agent.uploadSiteLogo(form);
+        this.logoUrl = this.absoluteApiUrl(response.data.logoUrl);
+        this.logoAvailable = true;
+        this.$messageSuccess('Logo上传成功');
+      } catch (error) {
+        this.$messageError(error.message || 'Logo上传失败');
+      } finally {
+        this.uploading = false;
+      }
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.site-setting-page {
+  min-height: 800px;
+  background: #fff;
+}
+
 .gs_title {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 22px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
   background: var(--theme-color);
 }
-.gs_tabbox {
-  background: #fff;
-  padding: 20px 0 20px 0;
+
+.setting-card {
+  padding: 32px 54px 48px;
 }
-.site-setting-form {
-  width: 800px;
-  margin: 0 auto;
+
+.setting-intro {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 30px;
+  padding: 16px 20px;
+  color: #526078;
+  background: #f4f8ff;
+  border-left: 4px solid var(--theme-color);
+
+  strong {
+    color: #17233d;
+    font-size: 16px;
+  }
 }
-.form-row {
+
+.setting-form {
+  width: 760px;
+  max-width: 100%;
+
+  ::v-deep .el-input {
+    width: 430px;
+    max-width: 100%;
+  }
+}
+
+.field-help {
+  margin: 7px 0 0;
+  color: #8a94a6;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.logo-setting {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 20px;
 }
-.form-label {
-  width: 110px;
-  text-align: right;
-  color: #333;
-  font-size: 14px;
-  margin-right: 8px;
-  flex-shrink: 0;
-}
-.form-input {
-  width: 320px;
-  height: 28px;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  padding: 2px 8px;
-  font-size: 14px;
-  background: #fff;
-  margin-right: 10px;
-}
-.form-input.highlight {
-  background: #f6ffcc;
-}
-.form-textarea {
-  width: 320px;
-  min-height: 60px;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  padding: 4px 8px;
-  font-size: 14px;
-  resize: vertical;
-  margin-right: 10px;
-}
-.form-desc {
-  color: #888;
-  font-size: 13px;
-  margin-left: 2px;
-  flex: 1;
-}
-.opeartbox {
-  padding: 15px 20px 5px;
-  background: #fff;
-  &.titwidth {
-    ul {
-      li {
-        .tit {
-          display: inline-block;
-          width: 80px;
-        }
-      }
-    }
-  }
-  ul {
-    li {
-      float: left;
-      margin-right: 15px;
-      margin-bottom: 10px;
-      .tit {
-        font-size: 14px;
-        color: #2d2d2d;
-        margin-right: 5px;
-      }
-      .txtbox {
-        display: inline-block;
-      }
-    }
-  }
-}
-.orderForm {
-  // margin-top: 10px;
-  background: #fff;
-  padding-top: 5px;
-  padding-bottom: 10px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  background-color: #d9edf7;
-  color: #999;
-}
-.font {
-  color: #06859a;
-  font-size: 15px;
-  // font-weight: bold;
-}
-.weight {
-  width: 18%;
-  padding-bottom: 5px;
-  color: #06859a;
-  font-size: 15px;
-  // font-weight: bold;
-}
-@keyframes progress-bar-stripes {
-  from {
-    background-position: 40px 0;
-  }
-  to {
-    background-position: 0 0;
-  }
-}
-.progressBox {
-  height: 16px;
-  background: #bbb;
-  position: relative;
-  .textbox {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    height: 16px;
-    line-height: 16px;
-    color: #fff;
-  }
-  .progressBar {
-    height: 100%;
-    width: 0;
-    background: #67c23a;
-    background-image: linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.2) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0.2) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-size: 40px 40px;
-    animation: progress-bar-stripes 2s linear infinite;
-    transition: all ease-out 0.3s;
-  }
-}
-.roadlist {
-  border: 1px solid #ccc;
-  width: 753px;
-  li {
-    float: left;
-    width: 250px;
-    height: 40px;
-    text-align: center;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    margin-bottom: -1px;
-    &:nth-child(3n + 2) {
-      border-right: none;
-    }
-    .tit {
-      display: inline-block;
-      vertical-align: middle;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-    .content {
-      display: inline-block;
-      vertical-align: middle;
-      width: 100px;
-      height: 32px;
-      padding: 4px 9px;
-      text-align: center;
-    }
-  }
-}
-.stateColor {
-  background: red;
-  // margin-left: 20px;
-  color: #fff;
-  display: inline-block;
-  padding-left: 5px;
-  position: relative;
-  height: 22px;
-  line-height: 22px;
-  &.color1 {
-    background: green;
-    &:after {
-      border-color: green;
-    }
-    &:before {
-      border-right-color: green;
-    }
-  }
-  &:after {
-    content: '';
-    position: absolute;
-    border: 1px solid red;
-    border-width: 11px 5px;
-    top: 0;
-    right: -10px;
-    border-right-color: transparent !important;
-  }
-  &:before {
-    content: '';
-    position: absolute;
-    border: 1px solid transparent;
-    border-width: 11px 5px;
-    top: 0;
-    left: -10px;
-    border-right-color: red;
-  }
-}
-.checkdetail {
-  cursor: pointer;
-  &:hover {
-    color: #0099ff;
-    text-decoration: underline;
-  }
-}
-.dialogOrder {
-  padding-bottom: 20px;
-  table {
+
+.logo-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 50px;
+  box-sizing: border-box;
+  overflow: hidden;
+  color: #a1a9b8;
+  background: #f8fafc;
+  border: 1px dashed #cdd6e5;
+  border-radius: 4px;
+
+  img {
     width: 100%;
-    tr {
-      td {
-        border: 1px solid #ccc;
-        text-align: center;
-        height: 40px;
-        color: #008194;
-        &.tit {
-          background: #edfdff;
-          color: #6f6f6f;
-          font-weight: bold;
-          width: 100px;
-        }
-      }
-    }
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.logo-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  .field-help {
+    margin-top: 4px;
   }
 }
 </style>

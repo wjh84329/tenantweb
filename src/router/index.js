@@ -849,7 +849,7 @@ const routes = [
           role: ['SuperAdmin', 'Admin', 'Tenant', 'Agent', 'Employee']
         },
         component: resolve => {
-          require(['../views/agentSys/merchant'], resolve);
+          require(['../views/agentSys/setting'], resolve);
         }
       },
       {

@@ -7,6 +7,11 @@
  */
 
 import api from '../assets/js/apiRequestHandler';
+
+function withSiteDomain(params) {
+  return Object.assign({ siteDomain: window.location.host }, params || {});
+}
+
 export default {
 
   // 资费列表
@@ -22,7 +27,7 @@ export default {
     return api({
       url: '/api/About/GetTenantBaseInfoAsync',
       method: 'get',
-      params: params
+      params: withSiteDomain(params)
     });
   },
   // 注册
@@ -38,7 +43,7 @@ export default {
     return api({
       url: '/api/About/GetTenantBaseInfoAsync',
       method: 'get',
-      params: params
+      params: withSiteDomain(params)
     });
   },
   // 获取公告信息
