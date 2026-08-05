@@ -308,6 +308,7 @@ export default {
           phoneNumber: this.phone,
           email: this.mails,
           uuid: this.$route.query.uuid ? this.$route.query.uuid : null,
+          siteDomain: window.location.host,
           validateKey: this.validKey,
           validateCode: this.validcode
         })
