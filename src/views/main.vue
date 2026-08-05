@@ -783,6 +783,23 @@ export default {
       }
       return `https://wpa.qq.com/msgrd?v=3&uin=${encodeURIComponent(uin)}&site=qq&menu=yes`;
     },
+    async loadFloatDockSupportQq() {
+      try {
+        const response = await this.$api.login.footerInfo();
+        const data = response.data || {};
+        if (!data.isAgentSite) {
+          return;
+        }
+        if (/^\d{5,11}$/.test(String(data.platformSupportQq || ''))) {
+          this.floatDockQqUin.platform = String(data.platformSupportQq);
+        }
+        if (/^\d{5,11}$/.test(String(data.assistantSupportQq || ''))) {
+          this.floatDockQqUin.assistant = String(data.assistantSupportQq);
+        }
+      } catch {
+        // Keep platform defaults when agent branding cannot be loaded.
+      }
+    },
     scrollMainToTop() {
       const el = this.$refs.mainScrollArea;
       if (el && typeof el.scrollTo === 'function') {
@@ -815,6 +832,7 @@ export default {
   },
   created() {
     this.getUser();
+    this.loadFloatDockSupportQq();
     // 监听皮肤切换事件
     this.$root.$on('skin-change', num => {
       this.skinNum = num;

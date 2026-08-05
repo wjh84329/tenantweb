@@ -23,6 +23,16 @@
           <p class="field-help">代理域名的登录首页、注册页和联系我们页面会优先显示此QQ。</p>
         </el-form-item>
 
+        <el-form-item label="平台技术QQ" prop="platformSupportQq">
+          <el-input v-model.trim="form.platformSupportQq" maxlength="11" placeholder="请输入5-11位QQ号码" />
+          <p class="field-help">代理商户端右侧“平台技术”入口使用；留空时使用平台默认QQ。</p>
+        </el-form-item>
+
+        <el-form-item label="助手技术QQ" prop="assistantSupportQq">
+          <el-input v-model.trim="form.assistantSupportQq" maxlength="11" placeholder="请输入5-11位QQ号码" />
+          <p class="field-help">代理商户端右侧“助手技术”入口使用；留空时使用平台默认QQ。</p>
+        </el-form-item>
+
         <div class="setting-section-title">底部主体与备案</div>
         <p class="legal-tip">代理域名不会继承平台的主体和备案信息。未填写的项目不会在代理网站底部显示。</p>
 
@@ -105,13 +115,17 @@ export default {
         siteName: '',
         domain: '',
         contactQq: '',
+        platformSupportQq: '',
+        assistantSupportQq: '',
         footerCopyright: '',
         icpNumber: '',
         publicSecurityNumber: ''
       },
       rules: {
         domain: [{ validator: validateDomain, trigger: 'blur' }],
-        contactQq: [{ pattern: /^\d{5,11}$/, message: '请输入5-11位QQ号码', trigger: 'blur' }]
+        contactQq: [{ pattern: /^\d{5,11}$/, message: '请输入5-11位QQ号码', trigger: 'blur' }],
+        platformSupportQq: [{ pattern: /^\d{5,11}$/, message: '请输入5-11位QQ号码', trigger: 'blur' }],
+        assistantSupportQq: [{ pattern: /^\d{5,11}$/, message: '请输入5-11位QQ号码', trigger: 'blur' }]
       }
     };
   },
@@ -132,6 +146,8 @@ export default {
         this.form.siteName = data.siteName || '';
         this.form.domain = data.domain || '';
         this.form.contactQq = data.contactQq || '';
+        this.form.platformSupportQq = data.platformSupportQq || '';
+        this.form.assistantSupportQq = data.assistantSupportQq || '';
         this.form.footerCopyright = data.footerCopyright || '';
         this.form.icpNumber = data.icpNumber || '';
         this.form.publicSecurityNumber = data.publicSecurityNumber || '';
