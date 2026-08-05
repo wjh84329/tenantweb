@@ -3,6 +3,7 @@
     <div class="footer-inner">
       <p v-if="displayAboutHtml" v-html="displayAboutHtml"></p>
       <p v-if="displayCopyrightHtml" v-html="displayCopyrightHtml"></p>
+      <p v-if="displayFilingHtml" v-html="displayFilingHtml"></p>
     </div>
     <el-backtop target=".contentBox"></el-backtop>
   </div>
@@ -14,6 +15,10 @@ export default {
     return {
       webName: '', // 网站信息
       copyright: '', // 版权
+      icpNumber: '',
+      icpUrl: '',
+      publicSecurityNumber: '',
+      publicSecurityUrl: '',
       // serviceQq: []
       about: ''
     };
@@ -24,6 +29,17 @@ export default {
     },
     displayCopyrightHtml() {
       return this.renderFooterHtml(this.copyright);
+    },
+    displayFilingHtml() {
+      const links = [];
+      const icp = this.renderLegalLink(this.icpNumber, this.icpUrl);
+      const publicSecurity = this.renderLegalLink(
+        this.publicSecurityNumber,
+        this.publicSecurityUrl
+      );
+      if (icp) links.push(icp);
+      if (publicSecurity) links.push(publicSecurity);
+      return links.join('　');
     }
   },
   methods: {
@@ -40,6 +56,13 @@ export default {
     },
     normalizeFooterText(text) {
       return (text || '').replace(/钻石/g, '七星');
+    },
+    renderLegalLink(text, url) {
+      const label = String(text || '').trim();
+      if (!label) return '';
+      const href = String(url || '').trim();
+      if (!/^https?:\/\//i.test(href)) return this.escapeHtml(label);
+      return `<a href="${this.escapeAttr(href)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(label)}</a>`;
     },
     renderFooterHtml(raw) {
       const normalized = this.normalizeFooterText(raw);
@@ -92,6 +115,10 @@ export default {
             this.copyright = data.data.copyright;
             this.serviceQq = data.data.serviceQq;
             this.about = data.data.about;
+            this.icpNumber = data.data.icpNumber || '';
+            this.icpUrl = data.data.icpUrl || '';
+            this.publicSecurityNumber = data.data.publicSecurityNumber || '';
+            this.publicSecurityUrl = data.data.publicSecurityUrl || '';
           }
         })
         .catch(err => {

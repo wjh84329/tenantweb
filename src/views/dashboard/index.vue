@@ -60,7 +60,13 @@
                             @click="() => $router.push({ name: 'DashboardRegister' })"
                             title="传世支付平台">&nbsp;用户注册&nbsp;</a>
                     </p><br>
-                    <p>{{ copyright }} Copyright 2021-2030 All Rights Reserved </p>
+                    <p v-if="copyright">{{ copyright }}<template v-if="!isAgentSite"> Copyright 2021-2030 All Rights Reserved</template></p>
+                    <p v-if="icpNumber || publicSecurityNumber">
+                        <a v-if="icpNumber" :href="icpUrl" target="_blank" rel="noopener noreferrer">{{ icpNumber }}</a>
+                        <span v-if="icpNumber && publicSecurityNumber">&nbsp;&nbsp;</span>
+                        <a v-if="publicSecurityNumber && publicSecurityUrl" :href="publicSecurityUrl" target="_blank" rel="noopener noreferrer">{{ publicSecurityNumber }}</a>
+                        <span v-else-if="publicSecurityNumber">{{ publicSecurityNumber }}</span>
+                    </p>
                     <p>本站严禁一切钓鱼、色情、赌博、私彩、套现及违反国家法律法规等使用</p>
 
                 </div>
@@ -77,6 +83,11 @@ export default {
     return {
       webName: '', // 网站信息
       copyright: '', // 版权
+      isAgentSite: false,
+      icpNumber: '',
+      icpUrl: '',
+      publicSecurityNumber: '',
+      publicSecurityUrl: '',
       servicePhone: '',
       height: 0
     };
@@ -104,6 +115,11 @@ export default {
           if (data.status === 200) {
             this.webName = data.data.webName;
             this.copyright = data.data.copyright;
+            this.isAgentSite = !!data.data.isAgentSite;
+            this.icpNumber = data.data.icpNumber || '';
+            this.icpUrl = data.data.icpUrl || '';
+            this.publicSecurityNumber = data.data.publicSecurityNumber || '';
+            this.publicSecurityUrl = data.data.publicSecurityUrl || '';
             this.servicePhone = data.data.servicePhone;
           }
         })

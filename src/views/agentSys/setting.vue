@@ -23,6 +23,31 @@
           <p class="field-help">代理域名的登录首页、注册页和联系我们页面会优先显示此QQ。</p>
         </el-form-item>
 
+        <div class="setting-section-title">底部主体与备案</div>
+        <p class="legal-tip">代理域名不会继承平台的主体和备案信息。未填写的项目不会在代理网站底部显示。</p>
+
+        <el-form-item label="版权所有信息" prop="footerCopyright">
+          <el-input
+            v-model.trim="form.footerCopyright"
+            maxlength="300"
+            placeholder="例如：某某网络科技有限公司 版权所有"
+          />
+        </el-form-item>
+
+        <el-form-item label="ICP备案号" prop="icpNumber">
+          <el-input v-model.trim="form.icpNumber" maxlength="100" placeholder="例如：鄂ICP备XXXXXXXX号-X" />
+          <p class="field-help">填写后自动跳转到工信部备案查询网站。</p>
+        </el-form-item>
+
+        <el-form-item label="公安备案号" prop="publicSecurityNumber">
+          <el-input
+            v-model.trim="form.publicSecurityNumber"
+            maxlength="100"
+            placeholder="例如：鄂公网安备 XXXXXXXXXXXXXX号"
+          />
+          <p class="field-help">没有公安备案可留空；填写后会按其中数字生成公安备案查询链接。</p>
+        </el-form-item>
+
         <el-form-item label="网站Logo">
           <div class="logo-setting">
             <div class="logo-preview">
@@ -79,7 +104,10 @@ export default {
       form: {
         siteName: '',
         domain: '',
-        contactQq: ''
+        contactQq: '',
+        footerCopyright: '',
+        icpNumber: '',
+        publicSecurityNumber: ''
       },
       rules: {
         domain: [{ validator: validateDomain, trigger: 'blur' }],
@@ -104,6 +132,9 @@ export default {
         this.form.siteName = data.siteName || '';
         this.form.domain = data.domain || '';
         this.form.contactQq = data.contactQq || '';
+        this.form.footerCopyright = data.footerCopyright || '';
+        this.form.icpNumber = data.icpNumber || '';
+        this.form.publicSecurityNumber = data.publicSecurityNumber || '';
         this.logoUrl = this.absoluteApiUrl(data.logoUrl);
         this.logoAvailable = !!this.logoUrl;
       } catch (error) {
@@ -209,6 +240,20 @@ export default {
   color: #8a94a6;
   font-size: 12px;
   line-height: 1.5;
+}
+
+.setting-section-title {
+  margin: 30px 0 8px 120px;
+  color: #17233d;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.legal-tip {
+  margin: 0 0 18px 120px;
+  color: #d97706;
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 .logo-setting {
