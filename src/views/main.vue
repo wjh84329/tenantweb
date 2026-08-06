@@ -115,7 +115,7 @@
             <li v-if="hasMenu(19) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
               <span class="icon10" @click="startGatewayDownload">下载网关</span>
             </li>
-            <li :style="sliderStyle">
+            <li v-if="siteBrandingResolved && !isAgentSite" :style="sliderStyle">
               <span class="icon13" @click="openApiDoc">教程文档</span>
             </li>
             <!-- <li>
@@ -296,6 +296,8 @@ export default {
       downloadProgressTotal: 0,
       downloadDisplayName: '',
       isDisablePayApi: false,
+      isAgentSite: false,
+      siteBrandingResolved: false,
       floatDockCollapsed: false,
       // 微信验证 / 助手下载 / 备用下载 统一打开的站点
       floatDockPortalUrl: 'https://www.haozs.com/',
@@ -787,7 +789,8 @@ export default {
       try {
         const response = await this.$api.login.footerInfo();
         const data = response.data || {};
-        if (!data.isAgentSite) {
+        this.isAgentSite = data.isAgentSite === true;
+        if (!this.isAgentSite) {
           return;
         }
         if (/^\d{5,11}$/.test(String(data.platformSupportQq || ''))) {
@@ -798,6 +801,8 @@ export default {
         }
       } catch {
         // Keep platform defaults when agent branding cannot be loaded.
+      } finally {
+        this.siteBrandingResolved = true;
       }
     },
     scrollMainToTop() {
