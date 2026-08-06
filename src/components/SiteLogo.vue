@@ -1,5 +1,5 @@
 <template>
-  <img :src="currentSrc" :alt="alt" :style="logoStyle" @error="handleError" />
+  <img v-if="currentSrc" :src="currentSrc" :alt="alt" :style="logoStyle" @error="handleError" />
 </template>
 
 <script>
@@ -46,8 +46,8 @@ export default {
   },
   data() {
     return {
-      currentSrc: this.buildRemoteSrc(),
-      sourceKind: 'global'
+      currentSrc: '',
+      sourceKind: 'loading'
     };
   },
   mounted() {
@@ -102,20 +102,32 @@ export default {
           });
         }
         const response = await brandingRequest;
-        const logoUrl = response && response.data ? response.data.logoUrl : '';
-        if (!logoUrl) return;
-        this.currentSrc = /^https?:\/\//i.test(logoUrl)
-          ? logoUrl
-          : `${tenantBaseUrl}${logoUrl.charAt(0) === '/' ? logoUrl : `/${logoUrl}`}`;
-        this.sourceKind = 'agent';
+        const siteInfo = response && response.data ? response.data : {};
+        const logoUrl = siteInfo.logoUrl || '';
+        if (siteInfo.isAgentSite) {
+          this.sourceKind = logoUrl ? 'agent' : 'empty';
+          this.currentSrc = logoUrl
+            ? (/^https?:\/\//i.test(logoUrl)
+              ? logoUrl
+              : `${tenantBaseUrl}${logoUrl.charAt(0) === '/' ? logoUrl : `/${logoUrl}`}`)
+            : '';
+          return;
+        }
+        this.showGlobalLogo();
       } catch (e) {
-        // 公共配置不可用时继续使用平台Logo。
+        // Keep the logo area neutral when site ownership cannot be determined.
+        this.sourceKind = 'empty';
+        this.currentSrc = '';
       }
+    },
+    showGlobalLogo() {
+      this.sourceKind = 'global';
+      this.currentSrc = this.buildRemoteSrc();
     },
     handleError() {
       if (this.sourceKind === 'agent') {
-        this.sourceKind = 'global';
-        this.currentSrc = this.buildRemoteSrc();
+        this.sourceKind = 'empty';
+        this.currentSrc = '';
         return;
       }
       if (this.sourceKind === 'local') {
@@ -125,8 +137,8 @@ export default {
       this.currentSrc = this.getFallbackSrc();
     },
     resetImage() {
-      this.sourceKind = 'global';
-      this.currentSrc = this.buildRemoteSrc();
+      this.sourceKind = 'loading';
+      this.currentSrc = '';
       this.loadAgentBranding();
     }
   }
