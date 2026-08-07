@@ -291,15 +291,23 @@ export default {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const dataUrl = e.target.result || '';
-          const commaIndex = dataUrl.indexOf(',');
-          const meta = dataUrl.substring(5, commaIndex); // e.g. image/png;base64
-          const base64 = dataUrl.substring(commaIndex + 1);
-          // 取出格式，如 png 或 jpeg 或 gif
-          let format = 'png';
-          if (meta.indexOf('jpeg') !== -1 || meta.indexOf('jpg') !== -1) format = 'jpeg';
-          else if (meta.indexOf('png') !== -1) format = 'png';
-          resolve({ format, base64, dataUrl });
+          const img = new Image();
+          img.onload = () => {
+            // 身份证照片压缩后再转 base64，避免 JSON 请求体过大触发 413。
+            const MAX_SIDE = 1280;
+            const scale = Math.min(1, MAX_SIDE / Math.max(img.width, img.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.max(1, Math.round(img.width * scale));
+            canvas.height = Math.max(1, Math.round(img.height * scale));
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            const commaIndex = dataUrl.indexOf(',');
+            const base64 = dataUrl.substring(commaIndex + 1);
+            resolve({ format: 'jpeg', base64, dataUrl });
+          };
+          img.onerror = () => reject(new Error('图片读取失败'));
+          img.src = e.target.result || '';
         };
         reader.onerror = (err) => reject(err);
         reader.readAsDataURL(file);
