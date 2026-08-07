@@ -90,6 +90,16 @@ export default {
       headers: { Authorization: 'Bearer ' + header }
     });
   },
+  // 审核推广链接注册的下属商户
+  async auditMerchant(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/HomePage/AuditAgentMerchantAsync',
+      method: 'post',
+      data: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
   // 切换代理商户
   async rankChange(params) {
     let header = await mgr();

@@ -46,9 +46,10 @@
                   <p style="color:#999;height:18px;">{{scope.row.lastDate?scope.row.lastDate.split(' ')[1]:''}}</p>
                 </template>
               </el-table-column>
-              <el-table-column label="状态" width="70">
+              <el-table-column label="状态" width="90">
                 <template slot-scope="scope">
-                  <el-switch v-model="scope.row.state" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="stateChange(scope.row.id)"></el-switch>
+                  <el-tag v-if="scope.row.state === 2" type="warning" size="mini">待审核</el-tag>
+                  <el-switch v-else v-model="scope.row.state" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="stateChange(scope.row.id)"></el-switch>
                 </template>
               </el-table-column>
               <el-table-column label="比率组" width="140">
@@ -59,10 +60,14 @@
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="240">
+              <el-table-column label="操作" width="260">
                 <template slot-scope="scope">
-                  <el-button-group>
-                    <el-button size="mini" type="primary" @click="merchantLogin(scope.row.id)">登录</el-button>
+                  <template v-if="scope.row.state === 2">
+                    <el-button size="mini" type="primary" @click="auditMerchant(scope.row.id, true)">审核通过</el-button>
+                    <el-button size="mini" type="danger" @click="auditMerchant(scope.row.id, false)">驳回</el-button>
+                  </template>
+                  <el-button-group v-else>
+                    <el-button v-if="scope.row.state === 1" size="mini" type="primary" @click="merchantLogin(scope.row.id)">登录</el-button>
                     <el-button size="mini" type="warning" @click="updateDesc(scope.row.id, scope.row.desc)">修改备注</el-button>
                     <el-button size="mini" type="danger" @click="handleClose(scope.row.id)">删除</el-button>
                   </el-button-group>
@@ -302,6 +307,30 @@ export default {
         })
         .catch((err) => {
           this.$messageError(err.message);
+        });
+    },
+    // 审核推广链接注册的下属商户
+    auditMerchant(id, approved) {
+      const action = approved ? '通过' : '驳回';
+      this.$confirm(`确定${action}该商户的注册申请吗？`, '审核确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: approved ? 'warning' : 'error'
+      })
+        .then(() => this.$api.agent.auditMerchant({
+          merchantId: id,
+          approved: approved
+        }))
+        .then((data) => {
+          if (data && data.status === 200) {
+            this.$messageSuccess(`审核${action}成功！`);
+            this.getlist();
+          }
+        })
+        .catch((err) => {
+          if (err && err.message !== 'cancel' && err !== 'cancel') {
+            this.$messageError(err.message);
+          }
         });
     },
     // 比率组切换
