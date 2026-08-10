@@ -165,6 +165,7 @@
     <div class="data-bd">
         <p>该接口可供第三方自动开区工具等，修改某个分区的信息。 </p>
         <p>一个分区只能拥有一个比例模版，但是可以拥有多个分组 </p>
+        <p>默认只修改分区资料，不会自动加载分区脚本；如果修改后要立即补发，请先调用 ReloadGameArea 并等待返回成功，再调用 BatchPay。 </p>
     </div>
 </div>
 <div class="data-box with-padding">
@@ -285,6 +286,14 @@
                         <td>String </td>
                         <td>20180101123000 </td>
                         <td>设置正式区开区时间，平台将根据此时间杜绝玩家卡时间充值，避免玩家开区领取双份充值。不传该字段时默认值为空，时间格式yyyyMMddhhmmss </td>
+                    </tr>
+                    <tr>
+                        <td>是否立即加载脚本 </td>
+                        <td>IsLoadPartition </td>
+                        <td>否 </td>
+                        <td>Boolean </td>
+                        <td>false </td>
+                        <td>是否在修改分区成功后立即加载分区脚本，true为加载，false为不加载；不传该字段时默认值为false。建议修改成功后显式调用 ReloadGameArea，确认加载成功后再调用 BatchPay。 </td>
                     </tr>
                     <!-- <tr>
                         <td>是否开启元宝蛋 </td>

@@ -165,6 +165,8 @@
     </div>
     <div class="data-bd">
         <p>该接口可供第三方自动开区工具等，进行整区补发。</p>
+        <p>如果补发前刚创建或修改过分区，请先调用 ReloadGameArea 加载分区脚本，并等待 ReloadGameArea 返回成功后再调用本接口，避免脚本尚未加载完成就开始整区补发。</p>
+        <p>C++网关 2.5.13 及以上版本支持脚本加载完成回传；未升级网关保持兼容模式，但无法严格确认脚本已经加载完成。</p>
     </div>
 </div>
 <div class="data-box with-padding">

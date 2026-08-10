@@ -165,6 +165,8 @@
     </div>
     <div class="data-bd">
         <p>该接口可供第三方自动开区工具等，加载某个分区的脚本。 </p>
+        <p>如果刚调用过 CreateGameArea 或 UpdateGameArea，建议按 CreateGameArea/UpdateGameArea → ReloadGameArea → BatchPay 的顺序调用，并且必须等待 ReloadGameArea 返回成功后再调用 BatchPay。 </p>
+        <p>C++网关 2.5.13 及以上版本会在脚本加载完成后回传结果；后台最多等待3秒，收到成功回传后才返回成功。未升级网关仍按兼容模式返回成功，但不具备严格的加载完成确认。 </p>
     </div>
 </div>
 <div class="data-box with-padding">
@@ -283,6 +285,7 @@
                         <td>
                             <p>当result为false时返回信息为错误原因 ，例如 </p>
                             <p>商户不存在 </p>
+                            <p>新版网关回传脚本加载失败时，返回加载分区失败 </p>
                         </td>
                     </tr>
                 </tbody>

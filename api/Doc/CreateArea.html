@@ -165,6 +165,7 @@
     <div class="data-bd">
         <p>该接口可供第三方自动开区工具等，创建一个新的分区。 </p>
         <p>一个分区只能拥有一个比例模版，但是可以拥有多个分组 </p>
+        <p>默认只创建分区资料，不会自动加载分区脚本；需要创建后立即加载脚本时，请传 IsLoadPartition=true，或者创建成功后再调用“加载分区脚本”接口。 </p>
     </div>
 </div>
 <div class="data-box with-padding">
@@ -293,6 +294,14 @@
                         <td>Int </td>
                         <td>2 </td>
                         <td>是否开启元宝蛋功能，1为是，2为否，不传该字段时默认值为2 </td>
+                    </tr>
+                    <tr>
+                        <td>是否立即加载脚本 </td>
+                        <td>IsLoadPartition </td>
+                        <td>否 </td>
+                        <td>Boolean </td>
+                        <td>false </td>
+                        <td>是否在创建分区成功后立即加载分区脚本，true为加载，false为不加载；不传该字段时默认值为false。建议创建成功后显式调用 ReloadGameArea，确认加载成功后再调用 BatchPay。 </td>
                     </tr>
                     <!-- <tr>
                         <td>是否加载分区脚本 </td>
