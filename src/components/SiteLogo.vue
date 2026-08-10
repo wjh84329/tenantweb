@@ -42,6 +42,10 @@ export default {
     fit: {
       type: String,
       default: 'contain'
+    },
+    logoType: {
+      type: String,
+      default: 'site'
     }
   },
   data() {
@@ -79,12 +83,19 @@ export default {
       if (this.sourceKind === 'local') {
         this.currentSrc = this.getFallbackSrc();
       }
+    },
+    logoType() {
+      this.resetImage();
     }
   },
   methods: {
     buildRemoteSrc() {
-      const resourceName = String(this.resourceName || 'logo').trim() || 'logo';
+      const defaultResource = this.logoType === 'home' ? 'homeLogo' : 'logo';
+      const resourceName = String(this.resourceName || defaultResource).trim() || defaultResource;
       return `${remoteBaseUrl}/api/Upload/ShowFile?name=${encodeURIComponent(resourceName)}`;
+    },
+    buildGlobalSiteLogoSrc() {
+      return `${remoteBaseUrl}/api/Upload/ShowFile?name=logo`;
     },
     getFallbackSrc() {
       return fallbackMap[this.variant] || fallbackMap.logo3;
@@ -103,7 +114,9 @@ export default {
         }
         const response = await brandingRequest;
         const siteInfo = response && response.data ? response.data : {};
-        const logoUrl = siteInfo.logoUrl || '';
+        const logoUrl = this.logoType === 'home'
+          ? (siteInfo.homeLogoUrl || siteInfo.logoUrl || '')
+          : (siteInfo.logoUrl || '');
         if (siteInfo.isAgentSite) {
           this.sourceKind = logoUrl ? 'agent' : 'empty';
           this.currentSrc = logoUrl
@@ -131,6 +144,11 @@ export default {
         return;
       }
       if (this.sourceKind === 'local') {
+        return;
+      }
+      if (this.sourceKind === 'global' && this.logoType === 'home') {
+        this.sourceKind = 'global-site-fallback';
+        this.currentSrc = this.buildGlobalSiteLogoSrc();
         return;
       }
       this.sourceKind = 'local';

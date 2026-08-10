@@ -58,6 +58,26 @@
           <p class="field-help">没有公安备案可留空；填写后会按其中数字生成公安备案查询链接。</p>
         </el-form-item>
 
+        <el-form-item label="首页Logo">
+          <div class="logo-setting">
+            <div class="logo-preview logo-preview--light">
+              <img v-if="homeLogoUrl && homeLogoAvailable" :src="homeLogoUrl" alt="代理首页Logo" @error="homeLogoAvailable = false" />
+              <span v-else>暂未上传</span>
+            </div>
+            <div class="logo-actions">
+              <el-upload
+                action="#"
+                :show-file-list="false"
+                :http-request="options => uploadLogo(options, 'home')"
+                :before-upload="beforeLogoUpload"
+              >
+                <el-button type="primary" plain :loading="uploadingHomeLogo">选择Logo</el-button>
+              </el-upload>
+              <p class="field-help">用于未登录首页、登录页等白色背景场景，支持PNG、JPG、WEBP，最大3MB，建议尺寸250×50。</p>
+            </div>
+          </div>
+        </el-form-item>
+
         <el-form-item label="网站Logo">
           <div class="logo-setting">
             <div class="logo-preview">
@@ -68,12 +88,12 @@
               <el-upload
                 action="#"
                 :show-file-list="false"
-                :http-request="uploadLogo"
+                :http-request="options => uploadLogo(options, 'site')"
                 :before-upload="beforeLogoUpload"
               >
-                <el-button type="primary" plain :loading="uploading">选择Logo</el-button>
+                <el-button type="primary" plain :loading="uploadingSiteLogo">选择Logo</el-button>
               </el-upload>
-              <p class="field-help">支持PNG、JPG、WEBP，最大3MB，建议尺寸250×50。</p>
+              <p class="field-help">用于登录后的商户后台、代理后台等主题色背景场景，支持PNG、JPG、WEBP，最大3MB，建议尺寸250×50。</p>
             </div>
           </div>
         </el-form-item>
@@ -108,9 +128,12 @@ export default {
     return {
       loading: false,
       saving: false,
-      uploading: false,
+      uploadingHomeLogo: false,
+      uploadingSiteLogo: false,
       logoUrl: '',
       logoAvailable: false,
+      homeLogoUrl: '',
+      homeLogoAvailable: false,
       form: {
         siteName: '',
         domain: '',
@@ -153,6 +176,8 @@ export default {
         this.form.publicSecurityNumber = data.publicSecurityNumber || '';
         this.logoUrl = this.absoluteApiUrl(data.logoUrl);
         this.logoAvailable = !!this.logoUrl;
+        this.homeLogoUrl = this.absoluteApiUrl(data.homeLogoUrl);
+        this.homeLogoAvailable = !!this.homeLogoUrl;
       } catch (error) {
         this.$messageError(error.message || '网站设置加载失败');
       } finally {
@@ -186,19 +211,34 @@ export default {
       }
       return true;
     },
-    async uploadLogo(options) {
-      this.uploading = true;
+    async uploadLogo(options, logoType) {
+      const isHomeLogo = logoType === 'home';
+      if (isHomeLogo) {
+        this.uploadingHomeLogo = true;
+      } else {
+        this.uploadingSiteLogo = true;
+      }
       const form = new FormData();
       form.append('file', options.file);
+      form.append('logoType', isHomeLogo ? 'home' : 'site');
       try {
         const response = await this.$api.agent.uploadSiteLogo(form);
-        this.logoUrl = this.absoluteApiUrl(response.data.logoUrl);
-        this.logoAvailable = true;
+        if (isHomeLogo) {
+          this.homeLogoUrl = this.absoluteApiUrl(response.data.logoUrl);
+          this.homeLogoAvailable = true;
+        } else {
+          this.logoUrl = this.absoluteApiUrl(response.data.logoUrl);
+          this.logoAvailable = true;
+        }
         this.$messageSuccess('Logo上传成功');
       } catch (error) {
         this.$messageError(error.message || 'Logo上传失败');
       } finally {
-        this.uploading = false;
+        if (isHomeLogo) {
+          this.uploadingHomeLogo = false;
+        } else {
+          this.uploadingSiteLogo = false;
+        }
       }
     }
   }
@@ -296,6 +336,10 @@ export default {
     height: 100%;
     object-fit: contain;
   }
+}
+
+.logo-preview--light {
+  background: #fff;
 }
 
 .logo-actions {

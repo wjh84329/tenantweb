@@ -14,7 +14,7 @@
                         <div class="navbar-default">
                             <div class="col-lg-2 col-md-2 col-sm-3 col-xs-7 left">
                                 <a href="">
-                                    <site-logo variant="legacy" alt="多渠道兑换平台支付"
+                                    <site-logo variant="legacy" logo-type="home" alt="多渠道兑换平台支付"
                                         style="margin-top: 10px; float: left;" />
                                 </a>
                             </div>

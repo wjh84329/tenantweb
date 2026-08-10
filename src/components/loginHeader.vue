@@ -2,7 +2,7 @@
   <div class="login-site-header">
     <div class="header-inner">
       <router-link class="brand" to="/login/loginHome">
-        <site-logo variant="logo2" class="logo" alt="网站logo" />
+        <site-logo variant="logo2" logo-type="home" class="logo" alt="首页logo" />
       </router-link>
       <ul class="menu">
         <router-link tag="li" to="/login/loginHome" :class="{ on: $route.path.indexOf('loginHome') > 0 }">
