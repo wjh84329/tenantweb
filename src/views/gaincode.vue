@@ -152,6 +152,7 @@
 <script>
 import { mapState } from 'vuex';
 import { url } from '../assets/js/version';
+import { normalizeDownloadUrl } from '../utils/downloadFile';
 export default {
   data() {
     return {
@@ -357,7 +358,7 @@ export default {
               let eleLink = document.createElement('a');
               eleLink.style.display = 'none';
               // 字符内容转变成blob地址
-              eleLink.href = data.data;
+              eleLink.href = normalizeDownloadUrl(data.data, url);
               // 触发点击
               document.body.appendChild(eleLink);
               eleLink.click();
