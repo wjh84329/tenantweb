@@ -102,7 +102,7 @@
       </div>
       <!-- 结算银行 -->
       <div class="info-section" style="margin-top:24px;">
-        <div class="info-title">结算银行<span class="edit-link" @click="goToOpenAccount">[开户]</span></div>
+        <div class="info-title">结算银行</div>
         <el-divider></el-divider>
         <table class="custom-table">
           <tr>
@@ -120,8 +120,13 @@
           <tr>
             <td class="th">银行预留电话：</td>
             <td>{{ accountInfo.phone }}</td>
-            <td class="th">所在地区：</td>
-            <td>{{ accountInfo.location }}</td>
+            <td class="th">开户状态：</td>
+            <td>
+              <el-button v-if="accountInfo.state === 0" size="small" type="warning" @click="goToOpenAccount">
+                提交开户
+              </el-button>
+              <span v-else>{{ accountStatusText }}</span>
+            </td>
           </tr>
         </table>
       </div>
@@ -247,6 +252,7 @@ export default {
         idCard: '',
         phone: '',
         location: '',
+        state: 0,
         eyeflag: false
       },
       dialog: {
@@ -254,6 +260,17 @@ export default {
         secondPassword: ''
       }
     };
+  },
+  computed: {
+    accountStatusText() {
+      const statusMap = {
+        1: '审核中',
+        2: '开户成功',
+        3: '审核失败',
+        4: '账户已冻结'
+      };
+      return statusMap[this.accountInfo.state] || '未知状态';
+    }
   },
   methods: {
     goqy() {
@@ -432,6 +449,7 @@ export default {
           this.accountInfo.idCard = data.data.idNumber;
           this.accountInfo.phone = data.data.phone;
           this.accountInfo.location = data.data.bankBranch;
+          this.accountInfo.state = Number(data.data.state) || 0;
         })
         .catch((err) => {
           this.$messageError(err.message);
