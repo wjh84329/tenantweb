@@ -86,7 +86,7 @@
             <li v-if="canShowSideMenu(16)" :style="sliderStyle">
               <span class="icon12" @click="refresh('/main/orderInterval')">定时任务</span>
             </li>
-            <li v-if="canShowSideMenu(16)" :style="sliderStyle">
+            <li v-if="canShowSideMenu(21)" :style="sliderStyle">
               <span class="icon8" @click="refresh('/main/transfer')">转区点记录</span>
             </li>
             <li v-if="canShowSideMenu(17)" :style="sliderStyle">
@@ -116,7 +116,7 @@
             <li v-if="canShowSideMenu(19)" :style="sliderStyle">
               <span class="icon10" @click="startGatewayDownload">下载网关</span>
             </li>
-            <li v-if="siteBrandingResolved && !isAgentSite && !isSubAccount" :style="sliderStyle">
+            <li v-if="siteBrandingResolved && !isAgentSite && !isRestrictedAccount" :style="sliderStyle">
               <span class="icon13" @click="openApiDoc">教程文档</span>
             </li>
             <!-- <li>
@@ -323,8 +323,9 @@ export default {
       'id',
       'nickName'
     ]),
-    isSubAccount() {
-      return Number(this.$store.state.settlementType) === 4;
+    isRestrictedAccount() {
+      const settlementType = Number(this.$store.state.settlementType);
+      return settlementType === 3 || settlementType === 4;
     },
     headboxStyle() {
       switch (this.skinNum) {
@@ -482,7 +483,7 @@ export default {
   watch: {
     '$route.path'(newPath) {
       this.updateActiveByRoute(newPath || this.$route.path);
-      this.ensureSubAccountRouteAccess(newPath || this.$route.path);
+      this.ensureRestrictedRouteAccess(newPath || this.$route.path);
     },
     skinNum() {
       this.updateThemeVars();
@@ -579,7 +580,7 @@ export default {
           this.$store.commit('setRoleInfo', data.data.roleinfon);
           this.$store.commit('saveisCro', data.data.isCro);
           this.isDisablePayApi = data.data.isDisablePayApi === true;
-          this.$nextTick(() => this.ensureSubAccountRouteAccess(this.$route.path));
+          this.$nextTick(() => this.ensureRestrictedRouteAccess(this.$route.path));
           // this.role=data.profile.role;
           console.log(this.$store.state);
         })
@@ -785,14 +786,22 @@ export default {
       }
       return settlementType === 3 ? this.hasMenu(menuId) : true;
     },
-    ensureSubAccountRouteAccess(path) {
-      if (!this.isSubAccount) {
+    ensureRestrictedRouteAccess(path) {
+      const settlementType = Number(this.$store.state.settlementType);
+      if (settlementType === 3) {
+        if (path === '/main/transfer' && !this.hasMenu(21)) {
+          this.$router.replace('/main/home').catch(() => {});
+        }
+        return;
+      }
+      if (settlementType !== 4) {
         return;
       }
       const requiredMenus = {
         '/main/Ordermanagement': 2,
         '/main/Zoningmanagement': 3,
-        '/main/Orderreissue': 15
+        '/main/Orderreissue': 15,
+        '/main/transfer': 21
       };
       if (path === '/main/home') {
         return;
