@@ -104,7 +104,7 @@
                 <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">账户收支</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看子账户" placement="bottom"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
-                <router-link v-if="$store.state.settlementType != 3" to="/main/employee" tag="span"
+                <router-link v-if="$store.state.settlementType != 3" to="/personal/employee" tag="span"
                   class="linebtn">子账户</router-link>
                 <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">子账户</span>
               </el-tooltip>
@@ -681,12 +681,11 @@ export default {
       const elapsed = Math.round(now - this.homeTraceStartAt);
       console.warn(`[HomeTrace] ${stage} ${elapsed}ms`);
     },
-    loadAllData(accountPromise) {
+    loadAllData() {
       this.pageLoading = true;
       return Promise.all([
         this.$api.home.getUserinfo(),
-        this.$api.home.chargeInfo(),
-        accountPromise || this.getAccountInfo()
+        this.$api.home.chargeInfo()
       ])
         .then(([userRes, chargeRes]) => {
           // 用户信息
@@ -701,6 +700,8 @@ export default {
             this.$store.commit('changeNickName', userRes.data.userName);
             this.$store.commit('changeId', userRes.data.id);
             this.$store.commit('changeqyState', userRes.data.isQY);
+            this.$store.commit('settlementType', userRes.data.settlementType);
+            this.$store.commit('setRoleInfo', userRes.data.roleinfon);
             this.functionSet.serverSwitch = userRes.data.serviceState;
             this.functionSet.gamerSwitch = userRes.data.leaveState;
             this.functionSet.phoneSwitch = userRes.data.phoneState;
@@ -730,6 +731,9 @@ export default {
           }
           console.log(this.$store.state);
           this.traceHomeStage('CoreDataDone');
+          if (!this.isRestrictedAccount()) {
+            return this.getAccountInfo();
+          }
         })
         .catch((err) => {
           this.$messageError(err.message);
@@ -742,15 +746,20 @@ export default {
     },
     loadDeferredData() {
       this.traceHomeStage('DeferredStart');
-      this.cashWithdraw();
+      if (!this.isRestrictedAccount()) {
+        this.cashWithdraw();
+        this.getInfo();
+      }
       this.getNotice();
       this.orderList();
       this.servicePhone();
       this.getMessageCount();
       this.getUserProfit();
-      this.getInfo();
       this.getMimicharge();
       this.getlist();
+    },
+    isRestrictedAccount() {
+      return [3, 4].includes(Number(this.$store.state.settlementType));
     },
     // 获取用户图像
     getUserProfit() {
@@ -1143,9 +1152,20 @@ export default {
     },
     // 完善个人信息检测
     checkpersonInfo() {
+      if (this.isRestrictedAccount()) {
+        this.dialog3.show = false;
+        this.dialog5.show = false;
+        return;
+      }
+
       this.$api.home
         .checkPersonInfo()
         .then((data) => {
+          if (this.isRestrictedAccount()) {
+            this.dialog3.show = false;
+            this.dialog5.show = false;
+            return;
+          }
           if (data.status === 200) {
             this.dialog3.show = !data.data;
             if (!this.dialog3.show) {
@@ -1503,24 +1523,22 @@ export default {
       ? performance.now()
       : Date.now();
     this.traceHomeStage('Created');
-    const accountPromise = this.getAccountInfo();
-    this.loadAllData(accountPromise);
-    // 等待获取账户信息后再检查是否需要弹签约提示，避免竞态
-    accountPromise.then(() => {
-      this.traceHomeStage('AccountInfoDone');
+    const coreDataPromise = this.loadAllData();
+    // 等待用户身份和账户信息加载完成，避免员工、子账户被误判为主账户
+    coreDataPromise.then(() => {
+      this.traceHomeStage('CoreDataChecked');
       this.checkpersonInfo();
-    }).catch(() => {
-      // 即使获取账户信息失败，也仍然尝试检查个人信息（可选）
-      this.traceHomeStage('AccountInfoFailed');
-      this.checkpersonInfo();
+      // 确认账户类型后再加载附加数据，避免员工、子账户调用开户相关接口
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.loadDeferredData();
+        }, 0);
+      });
+      if (!this.isRestrictedAccount()) {
+        this.loadChannelSettingEntry();
+      }
     });
-    // 首屏只等核心信息，其他数据延后加载，避免“已登录但首页长时间白屏/卡住”的体感
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.loadDeferredData();
-      }, 0);
-    });
-    // this.checkpersonInfo(); 已移动到 getAccountInfo 完成后调用
+    // 个人信息检查已移动到用户身份识别完成后调用
     // 获取当前角色所有菜单权限 id 数组
     // const menuIds = (this.$store.state.roleInfo || '').split(',').map(id => Number(id));
     // // this.getSkin();
@@ -1528,7 +1546,6 @@ export default {
     // function hasMenu(menuId) {
     //   return menuIds.includes(menuId);
     // }
-    this.loadChannelSettingEntry();
   }
 };
 </script>

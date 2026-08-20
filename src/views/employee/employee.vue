@@ -47,8 +47,8 @@
       </div>
       <div class="mgt15 pdl20">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" background
-          :page-sizes="[10, 20, 30, 40]" :current-page="pageIndex" :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper" :total="total">
+          :page-sizes="[10, 20, 30, 40]" :current-page="subMerchant.pageIndex" :page-size="subMerchant.pageSize"
+          layout="total, sizes, prev, pager, next, jumper" :total="subMerchant.total">
         </el-pagination>
       </div>
     </div>

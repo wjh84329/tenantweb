@@ -418,3 +418,30 @@ input[type="number"]{
   font-weight: 400;
   font-style: normal;
 }
+
+// Keep the account name outside the centered navigation width.
+.main > .header .headbox > .count {
+  position: absolute !important;
+  top: 15px;
+  right: 24px;
+  z-index: 2;
+  width: auto !important;
+  max-width: 180px;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1600px) {
+  .main > .header .headbox > .navbox li {
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+  }
+
+  .main > .header .headbox > .count {
+    right: 12px;
+    max-width: 100px;
+  }
+}

@@ -47,7 +47,7 @@
             :style="hoverNav === '/agentsystem' ? hoverNavStyle : null">
             <span class="icon1">代理系统</span>
           </li>
-          <li :class="{ active: activeNav === '/employee' }" v-if="$store.state.settlementType != 4"
+          <li :class="{ active: activeNav === '/employee' }" v-if="$store.state.settlementType != 3"
             :style="activeNav === '/employee' ? activeNavStyle : (hoverNav === '/employee' ? hoverNavStyle : null)"
             @click="setActive('/employee')">
             <span class="icon1">员工管理</span>
