@@ -13,15 +13,9 @@
         <h4 style="padding-left: 20px;margin-top: 10px;display: none;">手动补发</h4>
         <!-- <el-divider style="width: 90%;display: none;"></el-divider> -->
         <el-form label-width="100px">
-          <el-form-item label="游戏分组：">
-            <el-select v-model="gameGroup" popper-class="gs_colorSelcet" size="small" placeholder="请选择"
-              @change="groupChanged">
-              <el-option v-for="(item, i) in gameGroupdrow" :class="'templateColor' + item.templateColor"
-                :key="'gameGroup' + i" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="游戏模板：">
-            <el-select v-model="template" popper-class="gs_colorSelcet" size="small" placeholder="请选择"
+            <el-select v-model="template" popper-class="gs_colorSelcet" size="small" clearable
+              placeholder="可不选，用于筛选分区"
               @change="templateChanged">
               <el-option v-for="(item, i) in templateDropdown" :class="'templateColor' + item.templateColor"
                 :key="'template' + i" :label="item.name" :value="item.id"></el-option>
@@ -236,8 +230,6 @@ export default {
       isClose: true, // 关闭转区点赠送
       rechargemodepage: '', // 充值方式
       rechargemodedrow: [], // 充值方式下拉
-      gameGroupdrow: [], // 游戏分组下拉
-      gameGroup: '', // 游戏分组
       templateDropdown: [], // 模板下拉
       template: '', // 选中模板
       gameDivisiondrow: [], // 游戏分区下拉
@@ -329,19 +321,13 @@ export default {
     closeQrcodeDialog() {
       this.qrcodeDialog = false;
     },
-    // 分组
-    groupChanged(data) {
-      console.log(111);
-      for (let a = 0; a < this.gameGroupdrow.length; a++) {
-        if (data === this.gameGroupdrow[a].id) {
-          this.templateDropdown = this.gameGroupdrow[a].reissueTemplates;
-          this.template = '';
-          this.gamearea = ''; // 游戏分区
-        }
-      }
-    },
     // 模板
     templateChanged(data) {
+      if (data === '' || data === null || typeof data === 'undefined') {
+        this.gamearea = '';
+        this.gameareaDrow();
+        return;
+      }
       for (let a = 0; a < this.templateDropdown.length; a++) {
         if (data === this.templateDropdown[a].id) {
           this.gameDivisiondrow = this.templateDropdown[a].partitions;
@@ -355,14 +341,35 @@ export default {
         .gameTeam()
         .then((data) => {
           if (data.status === 200) {
-            this.gameGroupdrow = data.data;
+            this.templateDropdown = this.mergeReissueTemplates(data.data);
           } else if (data.status === 204) {
-            this.gameGroupdrow = [];
+            this.templateDropdown = [];
           }
         })
         .catch((err) => {
           this.$messageError(err.message);
         });
+    },
+    mergeReissueTemplates(groups) {
+      const templates = {};
+      (groups || []).forEach((group) => {
+        (group.reissueTemplates || []).forEach((item) => {
+          if (!templates[item.id]) {
+            templates[item.id] = Object.assign({}, item, { partitions: [] });
+          }
+          const partitionIds = {};
+          templates[item.id].partitions.forEach((partition) => {
+            partitionIds[partition.id] = true;
+          });
+          (item.partitions || []).forEach((partition) => {
+            if (!partitionIds[partition.id]) {
+              templates[item.id].partitions.push(partition);
+              partitionIds[partition.id] = true;
+            }
+          });
+        });
+      });
+      return Object.keys(templates).map((id) => templates[id]);
     },
     // tab切换
     handleClick() {
@@ -394,6 +401,9 @@ export default {
         .then((data) => {
           if (data.status === 200) {
             this.rechargemodedrow = data.data;
+            if (this.rechargemodepage === '' && this.rechargemodedrow.length > 0) {
+              this.rechargemodepage = this.rechargemodedrow[0].id;
+            }
           } else if (data.status === 204) {
             this.rechargemodedrow = [];
           }
@@ -423,7 +433,7 @@ export default {
         .then((data) => {
           if (data.status === 200) {
             this.gamearea = '';
-            this.rechargemodepage = '';
+            this.rechargemodepage = this.rechargemodedrow.length > 0 ? this.rechargemodedrow[0].id : '';
             this.gameaccount = '';
             this.amountofrecharge = '';
             this.isGiveAmount = false;
