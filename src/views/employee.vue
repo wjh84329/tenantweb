@@ -14,12 +14,6 @@
     <div class="tablebox pdb15 pdt20">
       <div class="gs_tablebox">
         <el-table ref="moduleTable" size="mini" :data="subMerchant.tableData" border style="width: 100%" stripe>
-          <el-table-column prop="joinDate" label="注册时间"  width="250">
-            <!-- <template slot-scope="scope">
-              <p style="height:18px;">{{ scope.row.joinDate ? scope.row.joinDate.split(' ')[0] : '' }}</p>
-              <p style="color:#999;height:18px;">{{ scope.row.joinDate ? scope.row.joinDate.split(' ')[1] : '' }}</p>
-            </template> -->
-          </el-table-column>
           <el-table-column prop="nickName" label="昵称">
           </el-table-column>
           <el-table-column prop="userName" label="帐号">
@@ -30,8 +24,9 @@
 
           <el-table-column label="所属分组" min-width="220">
             <template slot-scope="scope">
-              <span class="group-count">{{ scope.row.selectedGroupIds.length > 0 ? `已选 ${scope.row.selectedGroupIds.length} 个` : '未分配' }}</span>
-              <el-button size="mini" type="primary" @click="openGroupDialog(scope.row)">设置分组</el-button>
+              <span class="group-names" :title="getEmployeeGroupNames(scope.row)">
+                {{ getEmployeeGroupNames(scope.row) }}
+              </span>
             </template>
           </el-table-column>
 
@@ -42,10 +37,17 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" width="150">
+          <el-table-column prop="joinDate" label="注册时间" width="170">
+            <template slot-scope="scope">
+              <p style="height:18px;">{{ scope.row.joinDate ? scope.row.joinDate.split(' ')[0] : '' }}</p>
+              <p style="color:#999;height:18px;">{{ scope.row.joinDate ? scope.row.joinDate.split(' ')[1] : '' }}</p>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="操作" width="180">
             <template slot-scope="scope">
               <el-button-group>
-                <!-- <el-button size="mini" type="primary" @click="editgroup(scope.row.id, scope.row.name)">编辑分组</el-button> -->
+                <el-button size="mini" type="primary" @click="openGroupDialog(scope.row)">设置分组</el-button>
                 <el-button size="mini" type="danger" @click.prevent="handleClose(scope.row.id)">删除</el-button>
               </el-button-group>
             </template>
@@ -192,6 +194,13 @@ export default {
     };
   },
   methods: {
+    getEmployeeGroupNames(employee) {
+      const groupNameMap = new Map(this.teamdata.Options.map(group => [String(group.id), group.name]));
+      const names = (employee.selectedGroupIds || [])
+        .map(id => groupNameMap.get(String(id)))
+        .filter(Boolean);
+      return names.length > 0 ? names.join('、') : '未分配';
+    },
     /* --------------------------------0.下属商户------------------------------- */
     // 下属商户列表
     getlist() {
@@ -431,11 +440,11 @@ export default {
   }
 }
 
-.group-count {
-  display: inline-block;
-  min-width: 72px;
-  margin-right: 10px;
+.group-names {
+  display: block;
+  line-height: 20px;
   color: #606266;
+  overflow-wrap: anywhere;
 }
 
 .group-dialog-toolbar {
