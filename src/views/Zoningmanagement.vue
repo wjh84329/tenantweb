@@ -107,7 +107,7 @@
                 <el-button size="mini" type="primary" @click="showdialog(scope.row.id)">加载</el-button>
                 <el-button size="mini" type="primary" @click="areaClone(scope.row.id)">克隆</el-button>
                 <el-button size="mini" type="primary" @click="toOrderreissue(scope.row.id)">补发</el-button>
-                <el-button size="mini" type="danger" @click.prevent="handleClose([{ id: scope.row.id }])">删除</el-button>
+                <el-button v-if="canDeletePartition" size="mini" type="danger" @click.prevent="handleClose([{ id: scope.row.id }])">删除</el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -120,7 +120,7 @@
         </el-pagination>
         <div class="btnsbox fl mgt10">
         <el-button size="small" type="primary" :disabled="selectList.length === 0" @click="sortArea">排序</el-button>
-        <el-button size="small" type="danger" :disabled="selectList.length === 0"
+        <el-button v-if="canDeletePartition" size="small" type="danger" :disabled="selectList.length === 0"
           @click="handleClose(selectList)">删除</el-button>
         <el-button size="small" type="warning" :disabled="selectList.length === 0"
           @click="handleLoad(selectList)">加载所选分区</el-button>
@@ -150,6 +150,12 @@
 import InstallScriptPartitionPreviewDialog from '../components/InstallScriptPartitionPreviewDialog.vue';
 
 export default {
+  computed: {
+    canDeletePartition() {
+      const settlementType = Number(this.$store.state.settlementType);
+      return settlementType !== 4 && (settlementType !== 3 || this.hasPermission(102));
+    }
+  },
   components: {
     InstallScriptPartitionPreviewDialog
   },
@@ -189,6 +195,12 @@ export default {
     };
   },
   methods: {
+    hasPermission(permissionId) {
+      return (this.$store.state.roleInfo || '')
+        .split(',')
+        .map(id => Number(id))
+        .includes(permissionId);
+    },
     /** 与网关 partition.Scan：0 仅游戏内扫码，1 网页+扫码，2 仅网页 */
     formatPartitionScanLabel(scan) {
       const n = scan === null || scan === undefined || scan === '' ? NaN : Number(scan);

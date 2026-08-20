@@ -58,7 +58,7 @@
                 <el-button size="mini" type="info" @click="editModule(scope.row.id)">编辑</el-button>
                 <el-button size="mini" type="primary" @click="areaClone(scope.row.id)">克隆</el-button>
                 <el-button size="mini" type="success" plain @click="editScript(scope.row)">编辑脚本</el-button>
-                <el-button size="mini" type="danger" :disabled="scope.row.partitionsCount>0" @click="handleClose(scope.row.id)" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">删除</el-button>
+                <el-button v-if="canDeleteTemplate" size="mini" type="danger" :disabled="scope.row.partitionsCount>0" @click="handleClose(scope.row.id)">删除</el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -74,6 +74,12 @@
 
 <script>
 export default {
+  computed: {
+    canDeleteTemplate() {
+      const settlementType = Number(this.$store.state.settlementType);
+      return settlementType !== 4 && (settlementType !== 3 || this.hasPermission(101));
+    }
+  },
   data() {
     return {
       activeName: '0',
@@ -84,6 +90,12 @@ export default {
     };
   },
   methods: {
+    hasPermission(permissionId) {
+      return (this.$store.state.roleInfo || '')
+        .split(',')
+        .map(id => Number(id))
+        .includes(permissionId);
+    },
     // 前往分区列表页
     toPartList(id) {
       this.$router.push({ path: '/main/Zoningmanagement', query: { tempId: id } });

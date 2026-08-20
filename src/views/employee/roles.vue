@@ -78,7 +78,9 @@ export default {
             { id: 17, label: '通讯秘钥' },
             { id: 18, label: '获取代码' },
             { id: 19, label: '下载网关' },
-            { id: 20, label: '整区补发' }
+            { id: 20, label: '整区补发' },
+            { id: 101, label: '删除模板' },
+            { id: 102, label: '删除分区' }
           ]
         },
         {
