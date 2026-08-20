@@ -28,6 +28,28 @@
           <el-table-column prop="qqNumber" label="联系QQ">
           </el-table-column>
 
+          <el-table-column label="所属分组" min-width="260">
+            <template slot-scope="scope">
+              <el-select
+                v-model="scope.row.selectedGroupIds"
+                multiple
+                collapse-tags
+                clearable
+                size="small"
+                placeholder="请选择分组"
+                style="width: 230px"
+                @change="queueEmployeeGroupSave(scope.row)"
+              >
+                <el-option
+                  v-for="group in teamdata.Options"
+                  :key="group.id"
+                  :label="group.name"
+                  :value="group.id"
+                />
+              </el-select>
+            </template>
+          </el-table-column>
+
           <el-table-column prop="partitionsCount" label="最后登陆">
             <template slot-scope="scope">
               <p style="height:18px;">{{ scope.row.lastDate ? scope.row.lastDate.split(' ')[0] : '' }}</p>
@@ -52,36 +74,6 @@
         </el-pagination>
       </div>
     </div>
-    <!-- 添加游戏分组弹框 -->
-    <el-dialog title="编辑员工分组" :visible.sync="teamdata.show" @close="teamInit" custom-class="gs_dialog" width="400px">
-      <div class="opeartbox">
-        <ul class="clearfix">
-          <li hidden>
-            <span class='tit'>用户Id：</span>
-            <span class="txtbox">
-              <el-input size="small" v-model="teamdata.id"></el-input>
-            </span>
-          </li>
-          <li>
-            <span class="inputbox clearfix gs_checkbox pdt5" style="width: 700px">
-              <el-checkbox-group class="fl" style="max-width: 600px" v-model="teamdata.teamlist" @change="teamchange">
-                <el-checkbox v-for="(team, i) in teamdata.Options" :label="team.id" :key="'team' + i">{{ team.name
-                  }}</el-checkbox>
-              </el-checkbox-group>
-              <el-checkbox class="fl mgl20" :indeterminate="teamdata.isIndeterminate" v-model="teamdata.teamAll"
-                @change="teamAllChange">全选</el-checkbox>
-            </span>
-          </li>
-
-        </ul>
-
-      </div>
-      <p class="tc pdt10 pdb10">
-        <el-button size="small" type="primary" @click="addteam">确定</el-button>
-        <el-button size="small" type="info" @click="teamdata.show = false">取消</el-button>
-      </p>
-    </el-dialog>
-
     <!-- 添加商户弹框 -->
     <el-dialog title="添加员工" :visible.sync="subMerchant.dialog.show" @close="subMerchantInit" custom-class="gs_dialog"
       width="450px">
@@ -157,15 +149,10 @@ export default {
       pageIndex: 1, // 页码
       pageSize: 20, // 每页的条数
       total: 0, // 总数据的条数
+      groupSaveTimers: {},
 
       teamdata: {
-        // 分组
-        id: 0,
-        show: false,
-        teamAll: false,
-        teamlist: [],
-        Options: [], // 分组的多选list
-        isIndeterminate: true
+        Options: []
       },
       subMerchant: {
         pageIndex: 1, // 页码
@@ -180,7 +167,8 @@ export default {
           password: '', // 登录密码
           mail: '', // 邮箱
           qq: '', // 联系qq
-          phone: '' // 联系电话
+          phone: '', // 联系电话
+          roleId: ''
 
         }
       }
@@ -200,7 +188,10 @@ export default {
             this.subMerchant.tableData = [];
             this.subMerchant.total = 0;
           } else if (data.status === 200) {
-            this.subMerchant.tableData = data.data;
+            this.subMerchant.tableData = data.data.map(employee => ({
+              ...employee,
+              selectedGroupIds: (employee.groups || []).map(group => group.sourceGroupId)
+            }));
             this.subMerchant.total = JSON.parse(
               data.headers['x-pagination']
             ).TotalCount;
@@ -230,6 +221,9 @@ export default {
         return;
       } else if (this.subMerchant.dialog.phone === '') {
         this.$messageError('请输入联系电话！');
+        return;
+      } else if (!this.subMerchant.dialog.roleId) {
+        this.$messageError('请选择角色！');
         return;
       }
       this.$api.employee
@@ -262,6 +256,7 @@ export default {
       this.subMerchant.dialog.mail = ''; // 登录密码
       this.subMerchant.dialog.qq = ''; // 联系qq
       this.subMerchant.dialog.phone = ''; // 联系电话
+      this.subMerchant.dialog.roleId = '';
       this.subMerchant.dialog.rate = ''; // 比率组
     },
     // 获取用户分组
@@ -269,61 +264,34 @@ export default {
       this.$api.partinstall
         .groupsdrow()
         .then((data) => {
-          this.teamdata.Options = data.data;
+          this.teamdata.Options = data.status === 200 ? data.data : [];
         })
         .catch((err) => {
           this.$messageError(err.message);
         });
     },
-    // 安装成功后，页面数据初始化
-    teamInit() {
-      // 分组
-      this.teamdata.id = 0;
-      this.teamdata.show = false;
-      this.teamdata.teamAll = false;
-      this.teamdata.teamlist = [];
-      this.teamdata.isIndeterminate = true;
+    queueEmployeeGroupSave(employee) {
+      clearTimeout(this.groupSaveTimers[employee.id]);
+      this.groupSaveTimers[employee.id] = setTimeout(() => {
+        this.saveEmployeeGroups(employee);
+      }, 400);
     },
-    // 分组多选的设置函数
-    teamAllChange(val) {
-      this.teamdata.teamlist = val
-        ? this.teamdata.Options.map((item) => item.id)
-        : [];
-      this.teamdata.isIndeterminate = false;
-    },
-    teamchange(value) {
-      let checkedCount = value.length;
-      this.teamdata.teamAll = checkedCount === this.teamdata.Options.length;
-      this.teamdata.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.teamdata.Options.length;
-    },
-    // 编辑分组
-    editgroup(id, name) {
-      this.teamdata.id = id;
-      this.teamdata.show = true;
-    },
-    // 添加分组
-    addteam() {
-      if (JSON.stringify(this.teamdata.teamlist) === '[]') {
-        this.$messageError('请选择游戏分组！');
-        return true;
-      }
+    saveEmployeeGroups(employee) {
+      delete this.groupSaveTimers[employee.id];
       this.$api.employee
         .addteam({
-          id: this.teamdata.id,
-          groups: this.teamdata.teamlist.map((item) => {
-            return { id: item };
-          })
+          id: employee.id,
+          groups: employee.selectedGroupIds.map(id => ({ id }))
         })
         .then((data) => {
           if (data.status === 200) {
-            this.$messageSuccess('添加成功！');
+            this.$messageSuccess('员工分组已更新！');
             this.getlist();
-            this.teamdata.show = false;
           }
         })
         .catch((err) => {
           this.$messageError(err.message);
+          this.getlist();
         });
     },
     // 用户名不能中文
@@ -392,6 +360,11 @@ export default {
     this.getlist();
     this.groupsdrow();
     this.getRoleList();
+  },
+  beforeDestroy() {
+    Object.keys(this.groupSaveTimers || {}).forEach(id => {
+      clearTimeout(this.groupSaveTimers[id]);
+    });
   }
 };
 </script>

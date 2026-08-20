@@ -808,17 +808,6 @@ const routes = [
         component: resolve => {
           require(['../views/individual/sharedetails'], resolve);
         }
-      },
-      {
-        path: 'employee',
-        name: 'employee',
-        meta: {
-          requiresAuth: true,
-          role: ['SuperAdmin', 'Admin', 'Tenant', 'Agent', 'Employee']
-        },
-        component: resolve => {
-          require(['../views/employee/employee'], resolve);
-        }
       }
     ]
   },

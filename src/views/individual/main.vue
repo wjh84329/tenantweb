@@ -105,9 +105,6 @@
             <li :style="sliderStyle">
               <span class="icon12" style="" @click="refresh('/personal/wechat')">微信动态密保</span>
             </li>
-            <li :style="sliderStyle">
-              <span class="icon12" style="" @click="refresh('/personal/employee')">子账户</span>
-            </li>
           </ul>
         </div>
         <div class="contentbox">

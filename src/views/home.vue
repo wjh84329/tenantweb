@@ -103,11 +103,6 @@
                   class="linebtn">账户收支</router-link>
                 <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">账户收支</span>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="点击查看子账户" placement="bottom"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
-                <router-link v-if="$store.state.settlementType != 3" to="/personal/employee" tag="span"
-                  class="linebtn">子账户</router-link>
-                <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">子账户</span>
-              </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看微信动态密保" placement="bottom" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/wechat" tag="span"
                   class="linebtn">微信动态密保</router-link>

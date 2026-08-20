@@ -20,17 +20,6 @@ export default {
       headers: { Authorization: 'Bearer ' + header }
     });
   },
-  // 下属子账户列表
-  async submerchantListz(params) {
-    let header = await mgr();
-    return api({
-      url: '/api/HomePage/GetEmployeeZListAsync',
-      method: 'get',
-      params: params,
-      headers: { Authorization: 'Bearer ' + header }
-    });
-  },
-
   // 添加员工
   async addMerchant(params) {
     let header = await mgr();
@@ -46,15 +35,6 @@ export default {
     let header = await mgr();
     return api({
       url: '/api/UserManage/AddEmployeeTeamAsync',
-      method: 'post',
-      data: params,
-      headers: { Authorization: 'Bearer ' + header }
-    });
-  },
-  async updateSubAccountPermissions(params) {
-    let header = await mgr();
-    return api({
-      url: '/api/UserManage/UpdateSubAccountPermissions',
       method: 'post',
       data: params,
       headers: { Authorization: 'Bearer ' + header }
