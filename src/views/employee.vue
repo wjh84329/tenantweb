@@ -22,6 +22,12 @@
           <el-table-column prop="qqNumber" label="联系QQ">
           </el-table-column>
 
+          <el-table-column prop="permissionGroupName" label="权限组" min-width="120">
+            <template slot-scope="scope">
+              {{ scope.row.permissionGroupName || '未设置' }}
+            </template>
+          </el-table-column>
+
           <el-table-column label="所属分组" min-width="220">
             <template slot-scope="scope">
               <span
