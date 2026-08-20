@@ -51,6 +51,15 @@ export default {
       headers: { Authorization: 'Bearer ' + header }
     });
   },
+  async updateSubAccountPermissions(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/UserManage/UpdateSubAccountPermissions',
+      method: 'post',
+      data: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
   // 删除下属员工
   async delMerchant(params) {
     let header = await mgr();

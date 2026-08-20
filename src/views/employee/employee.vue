@@ -35,10 +35,11 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" width="150">
+          <el-table-column label="操作" width="230">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button size="mini" type="primary" @click="editgroup(scope.row.id, scope.row.name)">编辑分组</el-button>
+                <el-button size="mini" type="warning" @click="editPermissions(scope.row)">编辑权限</el-button>
                 <el-button size="mini" type="danger" @click.prevent="handleClose(scope.row.id)">删除</el-button>
               </el-button-group>
             </template>
@@ -82,6 +83,18 @@
       </p>
     </el-dialog>
 
+    <el-dialog title="编辑子账户权限" :visible.sync="permissionDialog.show" custom-class="gs_dialog" width="420px">
+      <el-checkbox-group v-model="permissionDialog.permissions" class="permission-dialog-options">
+        <el-checkbox :label="2">订单管理</el-checkbox>
+        <el-checkbox :label="3">分区管理</el-checkbox>
+        <el-checkbox :label="15">手动补发</el-checkbox>
+      </el-checkbox-group>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="permissionDialog.show = false">取消</el-button>
+        <el-button size="small" type="primary" @click="savePermissions">保存</el-button>
+      </span>
+    </el-dialog>
+
     <!-- 添加商户弹框 -->
     <el-dialog title="添加子账户" :visible.sync="subMerchant.dialog.show" @close="subMerchantInit" custom-class="gs_dialog"
       width="450px">
@@ -123,6 +136,16 @@
               <el-input size="small" v-model="subMerchant.dialog.phone"></el-input>
             </span>
           </li>
+          <li>
+            <span class='tit'>账号权限：</span>
+            <span class="txtbox subaccount-permissions">
+              <el-checkbox-group v-model="subMerchant.dialog.permissions">
+                <el-checkbox :label="2">订单管理</el-checkbox>
+                <el-checkbox :label="3">分区管理</el-checkbox>
+                <el-checkbox :label="15">手动补发</el-checkbox>
+              </el-checkbox-group>
+            </span>
+          </li>
 
         </ul>
         <p class="tc pdt10 pdb10">
@@ -143,6 +166,11 @@ export default {
       pageIndex: 1, // 页码
       pageSize: 20, // 每页的条数
       total: 0, // 总数据的条数
+      permissionDialog: {
+        show: false,
+        id: 0,
+        permissions: [2, 3, 15]
+      },
 
       teamdata: {
         // 分组
@@ -166,7 +194,8 @@ export default {
           password: '', // 登录密码
           mail: '', // 邮箱
           qq: '', // 联系qq
-          phone: '' // 联系电话
+          phone: '', // 联系电话
+          permissions: [2, 3, 15]
 
         }
       }
@@ -225,7 +254,8 @@ export default {
           password: this.subMerchant.dialog.password,
           email: this.subMerchant.dialog.mail,
           qqNumber: this.subMerchant.dialog.qq,
-          phoneNumber: this.subMerchant.dialog.phone
+          phoneNumber: this.subMerchant.dialog.phone,
+          permissions: this.subMerchant.dialog.permissions
 
         })
         .then((data) => {
@@ -247,6 +277,7 @@ export default {
       this.subMerchant.dialog.mail = ''; // 登录密码
       this.subMerchant.dialog.qq = ''; // 联系qq
       this.subMerchant.dialog.phone = ''; // 联系电话
+      this.subMerchant.dialog.permissions = [2, 3, 15];
       this.subMerchant.dialog.rate = ''; // 比率组
     },
     // 获取用户分组
@@ -325,6 +356,27 @@ export default {
         .catch((err) => {
           this.$messageError(err.message);
         });
+    },
+    editPermissions(row) {
+      const permissions = (row.roleinfon || '2,3,15')
+        .split(',')
+        .map(value => Number(value))
+        .filter(value => [2, 3, 15].includes(value));
+      this.permissionDialog.id = row.id;
+      this.permissionDialog.permissions = permissions;
+      this.permissionDialog.show = true;
+    },
+    savePermissions() {
+      this.$api.employee.updateSubAccountPermissions({
+        id: this.permissionDialog.id,
+        permissions: this.permissionDialog.permissions
+      }).then(() => {
+        this.$messageSuccess('权限更新成功！');
+        this.permissionDialog.show = false;
+        this.getlist();
+      }).catch(err => {
+        this.$messageError(err.message);
+      });
     },
     // 用户名不能中文
     noChinese() {
@@ -406,6 +458,9 @@ export default {
       }
     }
   }
+}
+.permission-dialog-options {
+  padding: 12px 20px;
 }
 
 .tc pdt10 pdb10 {

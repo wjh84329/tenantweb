@@ -16,13 +16,13 @@
             @click="setActive('/main/home')">
             <span class="icon1">首页</span>
           </li>
-          <li v-if="hasMenu(2) || $store.state.settlementType != 3"
+          <li v-if="canShowTopMenu(2)"
             :class="{ active: activeNav === '/main/Ordermanagement' }"
             :style="activeNav === '/main/Ordermanagement' ? activeNavStyle : (hoverNav === '/main/Ordermanagement' ? hoverNavStyle : null)"
             @click="setActive('/main/Ordermanagement')">
             <span class="icon1">订单管理</span>
           </li>
-          <li v-if="(hasMenu(3) && (hasMenu(12) && hasMenu(13))) || $store.state.settlementType != 3"
+          <li v-if="canShowTopMenu(3)"
             :class="{ active: activeNav === '/main/Zoningmanagement' }"
             :style="activeNav === '/main/Zoningmanagement' ? activeNavStyle : (hoverNav === '/main/Zoningmanagement' ? hoverNavStyle : null)"
             @click="setActive('/main/Zoningmanagement')">
@@ -62,34 +62,34 @@
         <div class="slider" :style="sliderStyle">
           <div class="top_tit" :style="headboxStyle">控制面板</div>
           <ul>
-            <li v-if="hasMenu(11) || $store.state.settlementType != 3" :style="sliderStyle" style="margin-top: 10px;">
+            <li v-if="canShowSideMenu(11)" :style="sliderStyle" style="margin-top: 10px;">
               <span class="icon1" @click="refresh('/main/partmodules')">分区模板</span>
             </li>
-            <li v-if="hasMenu(12) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="canShowSideMenu(12)" :style="sliderStyle">
               <span class="icon2" @click="refresh('/main/partinstalls')">安装分区</span>
             </li>
-            <li v-if="hasMenu(13) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="canShowSideMenu(13)" :style="sliderStyle">
               <span class="icon3" @click="refresh('/main/Zoningmanagement')">分区管理</span>
             </li>
-            <li v-if="hasMenu(14) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="canShowSideMenu(14)" :style="sliderStyle">
               <span class="icon4" @click="refresh('/main/Groupmanagement')">分组管理</span>
             </li>
-            <li v-if="hasMenu(15) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="canShowSideMenu(15)" :style="sliderStyle">
               <span class="icon6" @click="refresh('/main/Orderreissue')">手动补发</span>
             </li>
-            <li v-if="hasMenu(20) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="canShowSideMenu(20)" :style="sliderStyle">
               <span class="icon7" @click="refresh('/main/BetchOrderreissue')">整区补发</span>
             </li>
-            <li v-if="hasMenu(16) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="canShowSideMenu(16)" :style="sliderStyle">
               <span class="icon5" @click="refresh('/main/Replacementofrecords')">补发记录</span>
             </li>
-            <li v-if="hasMenu(16) || $store.state.settlementType != 3" :style="sliderStyle">
+            <li v-if="canShowSideMenu(16)" :style="sliderStyle">
               <span class="icon12" @click="refresh('/main/orderInterval')">定时任务</span>
             </li>
-            <li v-if="hasMenu(16) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
+            <li v-if="canShowSideMenu(16)" :style="sliderStyle">
               <span class="icon8" @click="refresh('/main/transfer')">转区点记录</span>
             </li>
-            <li v-if="hasMenu(17) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
+            <li v-if="canShowSideMenu(17)" :style="sliderStyle">
               <span class="icon12" @click="refresh('/main/conectKey')">通讯秘钥</span>
             </li>
             <!-- <li style="color: black;">
@@ -105,7 +105,7 @@
             <!-- <li>
               <router-link tag="span" :to="{path:'/main/Userlogs'}" class="icon8">用户日志</router-link>
             </li> -->
-            <li v-if="hasMenu(18) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
+            <li v-if="canShowSideMenu(18)" :style="sliderStyle">
               <span class="icon9" @click="refresh('/main/gaincode')">获取代码</span>
             </li>
             <!-- <li style="color: black;">
@@ -113,10 +113,10 @@
                 >推广分佣</span
               >
             </li> -->
-            <li v-if="hasMenu(19) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :style="sliderStyle">
+            <li v-if="canShowSideMenu(19)" :style="sliderStyle">
               <span class="icon10" @click="startGatewayDownload">下载网关</span>
             </li>
-            <li v-if="siteBrandingResolved && !isAgentSite" :style="sliderStyle">
+            <li v-if="siteBrandingResolved && !isAgentSite && !isSubAccount" :style="sliderStyle">
               <span class="icon13" @click="openApiDoc">教程文档</span>
             </li>
             <!-- <li>
@@ -323,6 +323,9 @@ export default {
       'id',
       'nickName'
     ]),
+    isSubAccount() {
+      return Number(this.$store.state.settlementType) === 4;
+    },
     headboxStyle() {
       switch (this.skinNum) {
         case 1: return { background: '#88434f', color: 'white' };
@@ -479,6 +482,7 @@ export default {
   watch: {
     '$route.path'(newPath) {
       this.updateActiveByRoute(newPath || this.$route.path);
+      this.ensureSubAccountRouteAccess(newPath || this.$route.path);
     },
     skinNum() {
       this.updateThemeVars();
@@ -575,6 +579,7 @@ export default {
           this.$store.commit('setRoleInfo', data.data.roleinfon);
           this.$store.commit('saveisCro', data.data.isCro);
           this.isDisablePayApi = data.data.isDisablePayApi === true;
+          this.$nextTick(() => this.ensureSubAccountRouteAccess(this.$route.path));
           // this.role=data.profile.role;
           console.log(this.$store.state);
         })
@@ -760,6 +765,42 @@ export default {
     hasMenu(menuId) {
       const menuIds = (this.$store.state.roleInfo || '').split(',').map(id => Number(id));
       return menuIds.includes(menuId);
+    },
+    canShowTopMenu(menuId) {
+      const settlementType = Number(this.$store.state.settlementType);
+      if (settlementType === 4) {
+        return this.hasMenu(menuId);
+      }
+      if (settlementType === 3) {
+        return menuId === 3
+          ? this.hasMenu(3) && this.hasMenu(12) && this.hasMenu(13)
+          : this.hasMenu(menuId);
+      }
+      return true;
+    },
+    canShowSideMenu(menuId) {
+      const settlementType = Number(this.$store.state.settlementType);
+      if (settlementType === 4) {
+        return menuId === 13 ? this.hasMenu(3) : (menuId === 15 && this.hasMenu(15));
+      }
+      return settlementType === 3 ? this.hasMenu(menuId) : true;
+    },
+    ensureSubAccountRouteAccess(path) {
+      if (!this.isSubAccount) {
+        return;
+      }
+      const requiredMenus = {
+        '/main/Ordermanagement': 2,
+        '/main/Zoningmanagement': 3,
+        '/main/Orderreissue': 15
+      };
+      if (path === '/main/home') {
+        return;
+      }
+      const requiredMenu = requiredMenus[path];
+      if (!requiredMenu || !this.hasMenu(requiredMenu)) {
+        this.$router.replace('/main/home').catch(() => {});
+      }
     },
     updateThemeVars() {
       const bg = (this.headboxStyle && this.headboxStyle.background) || '#0398d6';
