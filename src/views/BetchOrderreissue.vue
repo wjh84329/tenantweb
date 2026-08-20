@@ -13,7 +13,7 @@
       <div class="alignmentright">
         <h4 style="padding-left: 20px;margin-top: 10px;display: none;">整区补发</h4>
         <!-- <el-divider style="width: 90%;"></el-divider> -->
-        <el-form label-width="100px">
+        <el-form class="reissue-form" label-width="100px">
           <el-form-item label="游戏模板：">
             <el-select v-model="template" popper-class="gs_colorSelcet" size="small" clearable
               placeholder="可不选，用于筛选分区"
@@ -29,21 +29,21 @@
             </el-select>
           </el-form-item>
           <el-form-item label="自动补发：">
-            <el-date-picker style="width:216px;" v-model="datetime" size="small" type="datetime"
+            <el-date-picker class="schedule-picker" v-model="datetime" type="datetime"
               value-format="yyyy-MM-dd HH:mm:ss" placeholder="不填则立即补发；填写则到时执行">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="日期：">
-            <el-date-picker style="width:190px;" v-model="time1" size="small" type="datetime"
+            <el-date-picker class="range-picker" v-model="time1" type="datetime"
               value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
             </el-date-picker> 至
-            <el-date-picker style="width:190px;" v-model="time2" default-time="23:59:59" size="small" type="datetime"
+            <el-date-picker class="range-picker" v-model="time2" default-time="23:59:59" type="datetime"
               value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
             </el-date-picker>
             <!-- <el-date-picker style="width:338px;" v-model="time" size="small" type="datetimerange" :default-time="['00:00:00', '23:59:59']" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="起始时间" end-placeholder="结束时间"></el-date-picker> -->
           </el-form-item>
           <el-form-item label="额外补发：">
-            <el-input style="width: 19%;" size="small" v-model="extra"></el-input> %
+            <el-input class="extra-input" v-model="extra"></el-input> %
           </el-form-item>
           <p class="mgl20 mgt10">
             <el-checkbox v-model="isLoadPartition">整区补发前加载分区<span
@@ -577,5 +577,36 @@ export default {
   // width: 55%;
   // float: right;
   margin-left: 15%;
+}
+
+.reissue-form {
+  ::v-deep .el-select,
+  ::v-deep .schedule-picker {
+    width: 320px;
+    max-width: 100%;
+  }
+
+  ::v-deep .range-picker,
+  ::v-deep .extra-input {
+    width: 240px;
+    max-width: 100%;
+  }
+
+  ::v-deep .el-input__inner {
+    height: 40px;
+    line-height: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .alignmentright {
+    margin-left: 0;
+  }
+
+  .reissue-form {
+    ::v-deep .range-picker {
+      width: calc(50% - 16px);
+    }
+  }
 }
 </style>

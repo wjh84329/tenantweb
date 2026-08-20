@@ -12,7 +12,7 @@
       <div class="alignmentleft">
         <h4 style="padding-left: 20px;margin-top: 10px;display: none;">手动补发</h4>
         <!-- <el-divider style="width: 90%;display: none;"></el-divider> -->
-        <el-form label-width="100px">
+        <el-form class="reissue-form" label-width="100px">
           <el-form-item label="游戏模板：">
             <el-select v-model="template" popper-class="gs_colorSelcet" size="small" clearable
               placeholder="可不选，用于筛选分区"
@@ -34,10 +34,10 @@
             </el-select>
           </el-form-item>
           <el-form-item label="游戏账号：">
-            <el-input style="width: 27%;" size="small" v-model="gameaccount" placeholder="请输入游戏账号"></el-input>
+            <el-input v-model="gameaccount" placeholder="请输入游戏账号"></el-input>
           </el-form-item>
           <el-form-item label="充值金额：">
-            <el-input style="width: 27%;" size="small" type="number" v-model="amountofrecharge"
+            <el-input type="number" v-model="amountofrecharge"
               placeholder="充值金额"></el-input>
           </el-form-item>
           <el-form-item label="额外补发：" style="display: none;">
@@ -740,6 +740,26 @@ export default {
   width: 55%;
   float: right;
 }
+
+.reissue-form {
+  ::v-deep .el-select,
+  ::v-deep .el-input {
+    width: 320px;
+    max-width: 100%;
+  }
+
+  ::v-deep .el-input__inner {
+    height: 40px;
+    line-height: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .alignmentleft {
+    margin-left: 0;
+  }
+}
+
 ::v-deep .el-dialog__body {
   padding-bottom: 0 !important;
   max-height: 60vh;
