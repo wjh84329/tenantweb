@@ -117,6 +117,7 @@ export default {
       rechargemodedrow: [], // 充值方式下拉
       templateDropdown: [], // 模板下拉
       template: '', // 选中模板
+      allGameDivisiondrow: [], // 当前账号可用的全部分区
       gameDivisiondrow: [], // 游戏分区下拉
       gamearea: '', // 游戏分区
       gameaccount: '', // 游戏账号
@@ -158,23 +159,19 @@ export default {
     templateChanged(data) {
       if (data === '' || data === null || typeof data === 'undefined') {
         this.gamearea = '';
-        this.gameareaDrow();
+        this.gameDivisiondrow = this.allGameDivisiondrow;
         return;
       }
-      for (let a = 0; a < this.templateDropdown.length; a++) {
-        if (data === this.templateDropdown[a].id) {
-          this.gameDivisiondrow = this.templateDropdown[a].partitions;
-          this.gamearea = ''; // 游戏分区
-        }
-      }
+      this.gameDivisiondrow = this.allGameDivisiondrow.filter((partition) => partition.templateId === data);
+      this.gamearea = ''; // 游戏分区
     },
-    // 游戏分组下拉
-    gameteamDrow() {
-      this.$api.reorder
-        .gameTeam()
+    // 分区模板下拉
+    templateDrow() {
+      this.$api.groupmange
+        .gameDrow()
         .then((data) => {
           if (data.status === 200) {
-            this.templateDropdown = this.mergeReissueTemplates(data.data);
+            this.templateDropdown = data.data;
           } else if (data.status === 204) {
             this.templateDropdown = [];
           }
@@ -182,27 +179,6 @@ export default {
         .catch((err) => {
           this.$messageError(err.message);
         });
-    },
-    mergeReissueTemplates(groups) {
-      const templates = {};
-      (groups || []).forEach((group) => {
-        (group.reissueTemplates || []).forEach((item) => {
-          if (!templates[item.id]) {
-            templates[item.id] = Object.assign({}, item, { partitions: [] });
-          }
-          const partitionIds = {};
-          templates[item.id].partitions.forEach((partition) => {
-            partitionIds[partition.id] = true;
-          });
-          (item.partitions || []).forEach((partition) => {
-            if (!partitionIds[partition.id]) {
-              templates[item.id].partitions.push(partition);
-              partitionIds[partition.id] = true;
-            }
-          });
-        });
-      });
-      return Object.keys(templates).map((id) => templates[id]);
     },
     // tab切换
     handleClick() {
@@ -218,8 +194,12 @@ export default {
         .gamelist()
         .then((data) => {
           if (data.status === 200) {
-            this.gameDivisiondrow = data.data;
+            this.allGameDivisiondrow = data.data;
+            this.gameDivisiondrow = this.template === ''
+              ? data.data
+              : data.data.filter((partition) => partition.templateId === this.template);
           } else if (data.status === 204) {
+            this.allGameDivisiondrow = [];
             this.gameDivisiondrow = [];
           }
         })
@@ -555,7 +535,7 @@ export default {
     }
   },
   created() {
-    this.gameteamDrow();
+    this.templateDrow();
     this.gameareaDrow();
     this.gamepayDrow();
     this.getlist();
