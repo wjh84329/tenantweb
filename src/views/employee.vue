@@ -24,7 +24,11 @@
 
           <el-table-column label="所属分组" min-width="220">
             <template slot-scope="scope">
-              <span class="group-names" :title="getEmployeeGroupNames(scope.row)">
+              <span
+                class="group-names"
+                :title="`${getEmployeeGroupNames(scope.row)}（点击设置分组）`"
+                @click="openGroupDialog(scope.row)"
+              >
                 {{ getEmployeeGroupNames(scope.row) }}
               </span>
             </template>
@@ -443,8 +447,13 @@ export default {
 .group-names {
   display: block;
   line-height: 20px;
-  color: #606266;
+  color: #409eff;
+  cursor: pointer;
   overflow-wrap: anywhere;
+}
+
+.group-names:hover {
+  text-decoration: underline;
 }
 
 .group-dialog-toolbar {
