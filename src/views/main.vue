@@ -773,9 +773,7 @@ export default {
         return this.hasMenu(menuId);
       }
       if (settlementType === 3) {
-        return menuId === 3
-          ? this.hasMenu(3) && this.hasMenu(12) && this.hasMenu(13)
-          : this.hasMenu(menuId);
+        return this.hasMenu(menuId);
       }
       return true;
     },

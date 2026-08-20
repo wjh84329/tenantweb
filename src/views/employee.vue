@@ -28,25 +28,10 @@
           <el-table-column prop="qqNumber" label="联系QQ">
           </el-table-column>
 
-          <el-table-column label="所属分组" min-width="260">
+          <el-table-column label="所属分组" min-width="220">
             <template slot-scope="scope">
-              <el-select
-                v-model="scope.row.selectedGroupIds"
-                multiple
-                collapse-tags
-                clearable
-                size="small"
-                placeholder="请选择分组"
-                style="width: 230px"
-                @change="queueEmployeeGroupSave(scope.row)"
-              >
-                <el-option
-                  v-for="group in teamdata.Options"
-                  :key="group.id"
-                  :label="group.name"
-                  :value="group.id"
-                />
-              </el-select>
+              <span class="group-count">{{ scope.row.selectedGroupIds.length > 0 ? `已选 ${scope.row.selectedGroupIds.length} 个` : '未分配' }}</span>
+              <el-button size="mini" type="primary" @click="openGroupDialog(scope.row)">设置分组</el-button>
             </template>
           </el-table-column>
 
@@ -74,6 +59,31 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog
+      :title="`设置员工分组${groupDialog.employeeName ? ' - ' + groupDialog.employeeName : ''}`"
+      :visible.sync="groupDialog.show"
+      width="520px"
+      @close="resetGroupDialog"
+    >
+      <div class="group-dialog-toolbar">
+        <el-checkbox
+          v-model="groupDialog.checkAll"
+          :indeterminate="groupDialog.isIndeterminate"
+          @change="handleGroupCheckAll"
+        >全选</el-checkbox>
+        <span>已选择 {{ groupDialog.selectedIds.length }} 个分组</span>
+      </div>
+      <el-checkbox-group v-model="groupDialog.selectedIds" class="group-checkbox-list" @change="handleGroupSelectionChange">
+        <el-checkbox v-for="group in teamdata.Options" :key="group.id" :label="group.id">
+          {{ group.name }}
+        </el-checkbox>
+      </el-checkbox-group>
+      <div v-if="teamdata.Options.length === 0" class="group-empty">暂无分组</div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="groupDialog.show = false">取消</el-button>
+        <el-button type="primary" :loading="groupDialog.saving" @click="saveEmployeeGroups">保存</el-button>
+      </span>
+    </el-dialog>
     <!-- 添加商户弹框 -->
     <el-dialog title="添加员工" :visible.sync="subMerchant.dialog.show" @close="subMerchantInit" custom-class="gs_dialog"
       width="450px">
@@ -149,10 +159,17 @@ export default {
       pageIndex: 1, // 页码
       pageSize: 20, // 每页的条数
       total: 0, // 总数据的条数
-      groupSaveTimers: {},
-
       teamdata: {
         Options: []
+      },
+      groupDialog: {
+        show: false,
+        saving: false,
+        employeeId: 0,
+        employeeName: '',
+        selectedIds: [],
+        checkAll: false,
+        isIndeterminate: false
       },
       subMerchant: {
         pageIndex: 1, // 页码
@@ -270,28 +287,52 @@ export default {
           this.$messageError(err.message);
         });
     },
-    queueEmployeeGroupSave(employee) {
-      clearTimeout(this.groupSaveTimers[employee.id]);
-      this.groupSaveTimers[employee.id] = setTimeout(() => {
-        this.saveEmployeeGroups(employee);
-      }, 400);
+    openGroupDialog(employee) {
+      this.groupDialog.employeeId = employee.id;
+      this.groupDialog.employeeName = employee.nickName || employee.userName || '';
+      this.groupDialog.selectedIds = [...employee.selectedGroupIds];
+      this.handleGroupSelectionChange(this.groupDialog.selectedIds);
+      this.groupDialog.show = true;
     },
-    saveEmployeeGroups(employee) {
-      delete this.groupSaveTimers[employee.id];
+    handleGroupCheckAll(checked) {
+      this.groupDialog.selectedIds = checked
+        ? this.teamdata.Options.map(group => group.id)
+        : [];
+      this.groupDialog.isIndeterminate = false;
+    },
+    handleGroupSelectionChange(selectedIds) {
+      const selectedCount = selectedIds.length;
+      const totalCount = this.teamdata.Options.length;
+      this.groupDialog.checkAll = totalCount > 0 && selectedCount === totalCount;
+      this.groupDialog.isIndeterminate = selectedCount > 0 && selectedCount < totalCount;
+    },
+    resetGroupDialog() {
+      this.groupDialog.saving = false;
+      this.groupDialog.employeeId = 0;
+      this.groupDialog.employeeName = '';
+      this.groupDialog.selectedIds = [];
+      this.groupDialog.checkAll = false;
+      this.groupDialog.isIndeterminate = false;
+    },
+    saveEmployeeGroups() {
+      this.groupDialog.saving = true;
       this.$api.employee
         .addteam({
-          id: employee.id,
-          groups: employee.selectedGroupIds.map(id => ({ id }))
+          id: this.groupDialog.employeeId,
+          groups: this.groupDialog.selectedIds.map(id => ({ id }))
         })
         .then((data) => {
           if (data.status === 200) {
             this.$messageSuccess('员工分组已更新！');
+            this.groupDialog.show = false;
             this.getlist();
           }
         })
         .catch((err) => {
           this.$messageError(err.message);
-          this.getlist();
+        })
+        .finally(() => {
+          this.groupDialog.saving = false;
         });
     },
     // 用户名不能中文
@@ -360,11 +401,6 @@ export default {
     this.getlist();
     this.groupsdrow();
     this.getRoleList();
-  },
-  beforeDestroy() {
-    Object.keys(this.groupSaveTimers || {}).forEach(id => {
-      clearTimeout(this.groupSaveTimers[id]);
-    });
   }
 };
 </script>
@@ -393,6 +429,42 @@ export default {
       }
     }
   }
+}
+
+.group-count {
+  display: inline-block;
+  min-width: 72px;
+  margin-right: 10px;
+  color: #606266;
+}
+
+.group-dialog-toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ebeef5;
+  color: #909399;
+}
+
+.group-checkbox-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+  max-height: 360px;
+  padding-top: 16px;
+  overflow-y: auto;
+}
+
+.group-checkbox-list .el-checkbox {
+  margin-right: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-empty {
+  padding: 30px 0 18px;
+  color: #909399;
+  text-align: center;
 }
 
 .tc pdt10 pdb10 {
