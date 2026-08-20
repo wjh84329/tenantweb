@@ -17,7 +17,7 @@
             <el-input placeholder="请输入内容" v-model="baseInfo.serverKey" :readonly="true">
               <template slot="prepend">通讯秘钥</template>
               <template slot="append">
-                <el-button type="primary" style="background-color: #409EFF;color: white;" @click="changeKey">更换秘钥</el-button>
+                <el-button v-if="!isRestrictedAccount" type="primary" style="background-color: #409EFF;color: white;" @click="changeKey">更换秘钥</el-button>
               </template>
             </el-input>
           </div>
@@ -34,7 +34,7 @@
             <el-input placeholder="请输入内容" v-model="baseInfo.signKey" :readonly="true">
               <template slot="prepend">接口秘钥</template>
               <template slot="append">
-                <el-button type="primary" style="background-color: #409EFF;color: white;" @click="changeSignKey">更换秘钥</el-button>
+                <el-button v-if="!isRestrictedAccount" type="primary" style="background-color: #409EFF;color: white;" @click="changeSignKey">更换秘钥</el-button>
               </template>
             </el-input>
           </div>
@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
@@ -56,6 +58,13 @@ export default {
         signKey: ''// 接口秘钥
       }
     };
+  },
+  computed: {
+    ...mapState(['settlementType']),
+    isRestrictedAccount() {
+      const settlementType = Number(this.settlementType);
+      return settlementType === 3 || settlementType === 4;
+    }
   },
   methods: {
     // 获取用户信息
