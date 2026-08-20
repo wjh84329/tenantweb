@@ -48,10 +48,11 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" width="180">
+          <el-table-column label="操作" width="270">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button size="mini" type="primary" @click="openGroupDialog(scope.row)">设置分组</el-button>
+                <el-button size="mini" type="warning" @click="openPasswordDialog(scope.row)">重置密码</el-button>
                 <el-button size="mini" type="danger" @click.prevent="handleClose(scope.row.id)">删除</el-button>
               </el-button-group>
             </template>
@@ -88,6 +89,40 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="groupDialog.show = false">取消</el-button>
         <el-button type="primary" :loading="groupDialog.saving" @click="saveEmployeeGroups">保存</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      :title="`重置员工密码${passwordDialog.employeeName ? ' - ' + passwordDialog.employeeName : ''}`"
+      :visible.sync="passwordDialog.show"
+      width="420px"
+      @close="resetPasswordDialog"
+    >
+      <el-form label-width="100px" @submit.native.prevent>
+        <el-form-item label="新登录密码">
+          <el-input
+            v-model="passwordDialog.password"
+            type="password"
+            show-password
+            maxlength="20"
+            autocomplete="new-password"
+            placeholder="请输入6-20位密码"
+          />
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <el-input
+            v-model="passwordDialog.confirmPassword"
+            type="password"
+            show-password
+            maxlength="20"
+            autocomplete="new-password"
+            placeholder="请再次输入密码"
+            @keyup.enter.native="saveEmployeePassword"
+          />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="passwordDialog.show = false">取消</el-button>
+        <el-button type="primary" :loading="passwordDialog.saving" @click="saveEmployeePassword">确定重置</el-button>
       </span>
     </el-dialog>
     <!-- 添加商户弹框 -->
@@ -176,6 +211,14 @@ export default {
         selectedIds: [],
         checkAll: false,
         isIndeterminate: false
+      },
+      passwordDialog: {
+        show: false,
+        saving: false,
+        employeeId: 0,
+        employeeName: '',
+        password: '',
+        confirmPassword: ''
       },
       subMerchant: {
         pageIndex: 1, // 页码
@@ -346,6 +389,49 @@ export default {
         })
         .finally(() => {
           this.groupDialog.saving = false;
+        });
+    },
+    openPasswordDialog(employee) {
+      this.passwordDialog.employeeId = employee.id;
+      this.passwordDialog.employeeName = employee.nickName || employee.userName || '';
+      this.passwordDialog.show = true;
+    },
+    resetPasswordDialog() {
+      this.passwordDialog.saving = false;
+      this.passwordDialog.employeeId = 0;
+      this.passwordDialog.employeeName = '';
+      this.passwordDialog.password = '';
+      this.passwordDialog.confirmPassword = '';
+    },
+    saveEmployeePassword() {
+      const password = this.passwordDialog.password;
+      if (!password || password.length < 6 || password.length > 20) {
+        this.$messageError('请输入6-20位登录密码！');
+        return;
+      }
+      if (password !== this.passwordDialog.confirmPassword) {
+        this.$messageError('两次登录密码输入不一致！');
+        return;
+      }
+
+      this.passwordDialog.saving = true;
+      this.$api.employee
+        .resetPassword({
+          id: this.passwordDialog.employeeId,
+          password,
+          confirmPassword: this.passwordDialog.confirmPassword
+        })
+        .then((data) => {
+          if (data.status === 200) {
+            this.$messageSuccess('员工登录密码重置成功！');
+            this.passwordDialog.show = false;
+          }
+        })
+        .catch((err) => {
+          this.$messageError(err.message);
+        })
+        .finally(() => {
+          this.passwordDialog.saving = false;
         });
     },
     // 用户名不能中文
