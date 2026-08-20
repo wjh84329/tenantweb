@@ -130,16 +130,6 @@ export default {
       headers: { Authorization: 'Bearer ' + header }
     });
   },
-  // 批量排序分区管理
-  async sortAreas(params) {
-    let header = await mgr();
-    return api({
-      url: '/api/PartitionsManager/BatchSortPartitionsManagerAsync',
-      method: 'post',
-      data: params,
-      headers: { Authorization: 'Bearer ' + header }
-    });
-  },
   // 获取分区详细信息
   async getAreaInfo(params) {
     let header = await mgr();

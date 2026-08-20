@@ -58,22 +58,12 @@
           <el-tab-pane label="奇迹MU" name="6"></el-tab-pane>
         </el-tabs>
       </div> -->
-      <!-- <div class="btnsbox fr mgt10">
-        <el-button size="small" type="primary" :disabled="selectList.length === 0" @click="sortArea">排序</el-button>
-        <el-button size="small" type="danger" :disabled="selectList.length === 0"
-          @click="handleClose(selectList)">删除</el-button>
-      </div> -->
     </div>
     <div class="tablebox pdb15 pdt20">
       <div class="gs_tablebox padding_change">
         <el-table ref="moduleTable" size="mini" @selection-change="selchange" :data="tableData" border style="width: 100%"
           stripe>
           <el-table-column type="selection" width="42">
-          </el-table-column>
-          <el-table-column prop="date" label="排序" width="60">
-            <template slot-scope="scope">
-              <el-input size="small" v-model="scope.row.sort" type="number"></el-input>
-            </template>
           </el-table-column>
           <el-table-column prop="id" label="编号" width="60">
           </el-table-column>
@@ -119,7 +109,6 @@
           layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
         <div class="btnsbox fl mgt10">
-        <el-button size="small" type="primary" :disabled="selectList.length === 0" @click="sortArea">排序</el-button>
         <el-button v-if="canDeletePartition" size="small" type="danger" :disabled="selectList.length === 0"
           @click="handleClose(selectList)">删除</el-button>
         <el-button size="small" type="warning" :disabled="selectList.length === 0"
@@ -308,38 +297,6 @@ export default {
       this.selectList = data.map((item) => {
         return { id: item.id };
       });
-    },
-    // 排序
-    sortArea() {
-      let flag = true;
-      let arr1 = this.selectList.map((item) => {
-        let sel = this.tableData.filter((li) => {
-          return li.id === item.id;
-        })[0];
-        if (sel.sort === '') {
-          flag = false;
-        } else {
-          return {
-            id: item.id,
-            sort: sel.sort
-          };
-        }
-      });
-      if (flag) {
-        this.$api.groupmange
-          .sortAreas(arr1)
-          .then((data) => {
-            if (data.status === 200) {
-              this.$messageSuccess('排序成功！');
-              this.getlist();
-            }
-          })
-          .catch((err) => {
-            this.$messageError(err.message);
-          });
-      } else {
-        this.$messageError('排序不能为空！');
-      }
     },
     // 多行删除
     sigleDelarea(selc) {
