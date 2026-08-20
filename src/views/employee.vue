@@ -58,14 +58,14 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" width="325">
+          <el-table-column label="操作" width="190">
             <template slot-scope="scope">
-              <el-button-group>
+              <div class="operation-actions">
                 <el-button size="mini" type="success" @click="openEditDialog(scope.row)">编辑</el-button>
                 <el-button size="mini" type="primary" @click="openGroupDialog(scope.row)">设置分组</el-button>
                 <el-button size="mini" type="warning" @click="openPasswordDialog(scope.row)">重置密码</el-button>
                 <el-button size="mini" type="danger" @click.prevent="handleClose(scope.row.id)">删除</el-button>
-              </el-button-group>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -83,7 +83,7 @@
       width="460px"
       @close="resetEditDialog"
     >
-      <el-form label-width="90px" @submit.native.prevent>
+      <el-form v-loading="editDialog.loading" label-width="90px" @submit.native.prevent>
         <el-form-item label="登录账号">
           <el-input :value="editDialog.userName" disabled />
         </el-form-item>
@@ -254,6 +254,7 @@ export default {
       },
       editDialog: {
         show: false,
+        loading: false,
         saving: false,
         employeeId: 0,
         userName: '',
@@ -407,13 +408,33 @@ export default {
       this.editDialog.employeeId = employee.id;
       this.editDialog.userName = employee.userName || '';
       this.editDialog.nickname = employee.nickName || '';
-      this.editDialog.roleId = employee.roleId || '';
+      const matchedRole = this.roleOptions.find(role => role.name === employee.permissionGroupName);
+      this.editDialog.roleId = employee.roleId || (matchedRole ? matchedRole.id : '');
       this.editDialog.email = employee.email || '';
       this.editDialog.qqNumber = employee.qqNumber || '';
       this.editDialog.phoneNumber = employee.phoneNumber || '';
       this.editDialog.show = true;
+      this.editDialog.loading = true;
+      this.$api.employee
+        .getMerchant({ id: employee.id })
+        .then((data) => {
+          const detail = data.data || {};
+          this.editDialog.userName = detail.userName || this.editDialog.userName;
+          this.editDialog.nickname = detail.nickname || this.editDialog.nickname;
+          this.editDialog.roleId = detail.roleId || this.editDialog.roleId;
+          this.editDialog.email = detail.email || '';
+          this.editDialog.qqNumber = detail.qqNumber || this.editDialog.qqNumber;
+          this.editDialog.phoneNumber = detail.phoneNumber || '';
+        })
+        .catch((err) => {
+          this.$messageError(err.message);
+        })
+        .finally(() => {
+          this.editDialog.loading = false;
+        });
     },
     resetEditDialog() {
+      this.editDialog.loading = false;
       this.editDialog.saving = false;
       this.editDialog.employeeId = 0;
       this.editDialog.userName = '';
@@ -678,6 +699,18 @@ export default {
 
 .time-value {
   color: #999;
+}
+
+.operation-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 82px);
+  justify-content: center;
+  gap: 6px;
+}
+
+.operation-actions .el-button {
+  width: 82px;
+  margin: 0;
 }
 
 .group-dialog-toolbar {
