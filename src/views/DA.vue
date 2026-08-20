@@ -322,7 +322,7 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="个人IPS统计" name="6">
+          <el-tab-pane v-if="!isRestrictedAccount" label="个人IPS统计" name="6">
             <div class="opeartbox">
               <ul class="clearfix">
                 <li>
@@ -367,7 +367,7 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="全局IPS统计" name="8">
+          <el-tab-pane v-if="!isRestrictedAccount" label="全局IPS统计" name="8">
             <div class="opeartbox" id="ishow" v-show="money >= 498">
               <ul class="clearfix">
                 <li>
@@ -501,7 +501,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(['userType'])
+    ...mapState(['userType', 'settlementType']),
+    isRestrictedAccount() {
+      const settlementType = Number(this.settlementType);
+      return settlementType === 3 || settlementType === 4;
+    }
   },
   methods: {
     // 获取帐户信息
