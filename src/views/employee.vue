@@ -40,23 +40,28 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="partitionsCount" label="最后登陆">
+          <el-table-column prop="partitionsCount" label="最后登陆" width="155">
             <template slot-scope="scope">
-              <p style="height:18px;">{{ scope.row.lastDate ? scope.row.lastDate.split(' ')[0] : '' }}</p>
-              <p style="color:#999;height:18px;">{{ scope.row.lastDate ? scope.row.lastDate.split(' ')[1] : '' }}</p>
+              <div class="time-cell">
+                <span>{{ scope.row.lastDate ? scope.row.lastDate.split(' ')[0] : '' }}</span>
+                <span class="time-value">{{ scope.row.lastDate ? scope.row.lastDate.split(' ')[1] : '' }}</span>
+              </div>
             </template>
           </el-table-column>
 
-          <el-table-column prop="joinDate" label="注册时间" width="170">
+          <el-table-column prop="joinDate" label="注册时间" width="155">
             <template slot-scope="scope">
-              <p style="height:18px;">{{ scope.row.joinDate ? scope.row.joinDate.split(' ')[0] : '' }}</p>
-              <p style="color:#999;height:18px;">{{ scope.row.joinDate ? scope.row.joinDate.split(' ')[1] : '' }}</p>
+              <div class="time-cell">
+                <span>{{ scope.row.joinDate ? scope.row.joinDate.split(' ')[0] : '' }}</span>
+                <span class="time-value">{{ scope.row.joinDate ? scope.row.joinDate.split(' ')[1] : '' }}</span>
+              </div>
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" width="270">
+          <el-table-column label="操作" width="325">
             <template slot-scope="scope">
               <el-button-group>
+                <el-button size="mini" type="success" @click="openEditDialog(scope.row)">编辑</el-button>
                 <el-button size="mini" type="primary" @click="openGroupDialog(scope.row)">设置分组</el-button>
                 <el-button size="mini" type="warning" @click="openPasswordDialog(scope.row)">重置密码</el-button>
                 <el-button size="mini" type="danger" @click.prevent="handleClose(scope.row.id)">删除</el-button>
@@ -72,6 +77,44 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog
+      :title="`编辑员工${editDialog.userName ? ' - ' + editDialog.userName : ''}`"
+      :visible.sync="editDialog.show"
+      width="460px"
+      @close="resetEditDialog"
+    >
+      <el-form label-width="90px" @submit.native.prevent>
+        <el-form-item label="登录账号">
+          <el-input :value="editDialog.userName" disabled />
+        </el-form-item>
+        <el-form-item label="昵称">
+          <el-input v-model="editDialog.nickname" maxlength="50" />
+        </el-form-item>
+        <el-form-item label="权限组">
+          <el-select v-model="editDialog.roleId" placeholder="请选择权限组" style="width: 100%">
+            <el-option
+              v-for="role in roleOptions"
+              :key="role.id"
+              :label="role.name"
+              :value="role.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="editDialog.email" maxlength="100" />
+        </el-form-item>
+        <el-form-item label="联系QQ">
+          <el-input v-model="editDialog.qqNumber" maxlength="11" />
+        </el-form-item>
+        <el-form-item label="联系电话">
+          <el-input v-model="editDialog.phoneNumber" maxlength="50" @keyup.enter.native="saveEmployee" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialog.show = false">取消</el-button>
+        <el-button type="primary" :loading="editDialog.saving" @click="saveEmployee">保存</el-button>
+      </span>
+    </el-dialog>
     <el-dialog
       :title="`设置员工分组${groupDialog.employeeName ? ' - ' + groupDialog.employeeName : ''}`"
       :visible.sync="groupDialog.show"
@@ -208,6 +251,17 @@ export default {
       total: 0, // 总数据的条数
       teamdata: {
         Options: []
+      },
+      editDialog: {
+        show: false,
+        saving: false,
+        employeeId: 0,
+        userName: '',
+        nickname: '',
+        roleId: '',
+        email: '',
+        qqNumber: '',
+        phoneNumber: ''
       },
       groupDialog: {
         show: false,
@@ -347,6 +401,72 @@ export default {
         })
         .catch((err) => {
           this.$messageError(err.message);
+        });
+    },
+    openEditDialog(employee) {
+      this.editDialog.employeeId = employee.id;
+      this.editDialog.userName = employee.userName || '';
+      this.editDialog.nickname = employee.nickName || '';
+      this.editDialog.roleId = employee.roleId || '';
+      this.editDialog.email = employee.email || '';
+      this.editDialog.qqNumber = employee.qqNumber || '';
+      this.editDialog.phoneNumber = employee.phoneNumber || '';
+      this.editDialog.show = true;
+    },
+    resetEditDialog() {
+      this.editDialog.saving = false;
+      this.editDialog.employeeId = 0;
+      this.editDialog.userName = '';
+      this.editDialog.nickname = '';
+      this.editDialog.roleId = '';
+      this.editDialog.email = '';
+      this.editDialog.qqNumber = '';
+      this.editDialog.phoneNumber = '';
+    },
+    saveEmployee() {
+      if (!this.editDialog.nickname.trim()) {
+        this.$messageError('请输入昵称！');
+        return;
+      }
+      if (!this.editDialog.roleId) {
+        this.$messageError('请选择权限组！');
+        return;
+      }
+      if (!/^\S+@\S+\.\S+$/.test(this.editDialog.email)) {
+        this.$messageError('请输入正确的邮箱！');
+        return;
+      }
+      if (!/^\d{5,11}$/.test(this.editDialog.qqNumber)) {
+        this.$messageError('请输入5-11位QQ号码！');
+        return;
+      }
+      if (!this.editDialog.phoneNumber.trim()) {
+        this.$messageError('请输入联系电话！');
+        return;
+      }
+
+      this.editDialog.saving = true;
+      this.$api.employee
+        .updateMerchant({
+          id: this.editDialog.employeeId,
+          nickname: this.editDialog.nickname.trim(),
+          roleId: this.editDialog.roleId,
+          email: this.editDialog.email.trim(),
+          qqNumber: this.editDialog.qqNumber,
+          phoneNumber: this.editDialog.phoneNumber.trim()
+        })
+        .then((data) => {
+          if (data.status === 200) {
+            this.$messageSuccess('员工信息已更新！');
+            this.editDialog.show = false;
+            this.getlist();
+          }
+        })
+        .catch((err) => {
+          this.$messageError(err.message);
+        })
+        .finally(() => {
+          this.editDialog.saving = false;
         });
     },
     openGroupDialog(employee) {
@@ -546,6 +666,18 @@ export default {
 
 .group-names:hover {
   text-decoration: underline;
+}
+
+.time-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.time-value {
+  color: #999;
 }
 
 .group-dialog-toolbar {

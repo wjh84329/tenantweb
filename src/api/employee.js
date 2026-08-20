@@ -40,6 +40,16 @@ export default {
       headers: { Authorization: 'Bearer ' + header }
     });
   },
+  // 编辑员工基本信息和权限组
+  async updateMerchant(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/UserManage/UpdateEmployeeAsync',
+      method: 'post',
+      data: params,
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
   // 重置员工登录密码
   async resetPassword(params) {
     let header = await mgr();
