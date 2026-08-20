@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
 -->
 <template>
-  <div class="main" >
+  <div v-if="accessChecked" class="main">
     <div class="header" :style="headerStyle">
       <div class="headbox clearfix" :style="headerStyle" style="display: flex;">
         <div class="logo"><site-logo variant="logo3" style="width: 250px;height: 50px;" alt="网站logo" /></div>
@@ -88,6 +88,7 @@ export default {
     return {
       activeNav: '/employee', // 默认选中首页
       skinNum: Number(localStorage.getItem('skinNum')) || 0,
+      accessChecked: false,
       hoverNav: '' // 当前 hover 的菜单 path
     };
   },
@@ -149,6 +150,13 @@ export default {
           this.$store.commit('saveType', data.data.type);
           this.$store.commit('changeNickName', data.data.userName);
           this.$store.commit('changeId', data.data.id);
+          this.$store.commit('settlementType', data.data.settlementType);
+          this.$store.commit('setRoleInfo', data.data.roleinfon);
+          if ([3, 4].includes(Number(data.data.settlementType))) {
+            this.$router.replace({ path: '/main/home' }).catch(() => { });
+            return;
+          }
+          this.accessChecked = true;
         })
         .catch((err) => {
           this.$messageError(err.message);
