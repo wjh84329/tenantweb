@@ -44,7 +44,7 @@
                 <el-button size="mini" type="info" @click="downLink(scope.row.uuid,scope.$index)" :loading="loading&&loadingIndex===scope.$index">推广下载</el-button>
                 <el-button size="mini" type="primary" @click="editgroup(scope.row.id,scope.row.name)" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">编辑</el-button>
                 <el-button size="mini" type="success" @click="getCircuite(scope.row.uuid)">充值</el-button>
-                <el-button size="mini" type="danger" @click.prevent="handleClose(scope.row.id)" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">删除</el-button>
+                <el-button size="mini" type="danger" @click.prevent="handleClose(scope.row.id)" v-if="canDeleteGroup">删除</el-button>
               </el-button-group>
             </template>
           </el-table-column>
@@ -98,6 +98,12 @@ import { url as tenantApiUrl } from '../assets/js/version';
 import { normalizeDownloadUrl } from '../utils/downloadFile';
 
 export default {
+  computed: {
+    canDeleteGroup() {
+      const settlementType = Number(this.$store.state.settlementType);
+      return settlementType !== 4 && (settlementType !== 3 || this.hasPermission(103));
+    }
+  },
   data() {
     return {
       loading: false, // 推广下载loading
@@ -118,6 +124,12 @@ export default {
     };
   },
   methods: {
+    hasPermission(permissionId) {
+      return (this.$store.state.roleInfo || '')
+        .split(',')
+        .map(id => Number(id))
+        .includes(permissionId);
+    },
     // 获取列表
     getlist() {
       this.$api.groupmange

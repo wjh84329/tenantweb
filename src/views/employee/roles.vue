@@ -87,7 +87,8 @@ export default {
           label: '操作权限',
           children: [
             { id: 101, label: '删除模板' },
-            { id: 102, label: '删除分区' }
+            { id: 102, label: '删除分区' },
+            { id: 103, label: '删除分组' }
           ]
         },
         {
