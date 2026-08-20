@@ -1033,7 +1033,7 @@ export default {
     },
     // 玩家手机号码
     phoneOff() {
-      if (this.$store.state.settlementType === 3 && !this.hasMenu(11)) {
+      if (this.$store.state.settlementType === 3 && !this.hasMenu(30)) {
         this.$messageError('没有操作权限！');
         if (this.functionSet.phoneSwitch) {
           this.functionSet.phoneSwitch = false;

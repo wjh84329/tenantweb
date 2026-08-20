@@ -154,7 +154,7 @@ export default {
           ]
         },
         {
-          id: 11,
+          id: 30,
           label: '手机号码',
           children: [
 
