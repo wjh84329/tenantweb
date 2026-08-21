@@ -340,13 +340,13 @@ export default {
     },
     sliderStyle() {
       switch (this.skinNum) {
-        case 1: return { background: '#eee2e4', color: 'grey' };
-        case 2: return { background: 'var(--312143a6)', color: 'grey' };
-        case 3: return { background: '#e5e6f6', color: 'grey' };
-        case 4: return { background: '#f6e5e0', color: 'grey' };
-        case 5: return { background: '#e9e3f4', color: 'grey' };
-        case 6: return { background: '#e5e0e2', color: 'grey' };
-        default: return { background: 'linear-gradient(to bottom,#f2f2f2 0,#f8f8f8 100%', color: 'grey' };
+        case 1: return { background: '#eee2e4', color: '#303133' };
+        case 2: return { background: 'var(--312143a6)', color: '#303133' };
+        case 3: return { background: '#e5e6f6', color: '#303133' };
+        case 4: return { background: '#f6e5e0', color: '#303133' };
+        case 5: return { background: '#e9e3f4', color: '#303133' };
+        case 6: return { background: '#e5e0e2', color: '#303133' };
+        default: return { background: 'linear-gradient(to bottom,#f2f2f2 0,#f8f8f8 100%', color: '#303133' };
       }
     },
     activeNavStyle() {

@@ -389,7 +389,7 @@ input[type="number"]{
 .gs_colorSelcet {
   .el-select-dropdown__item {
     &.templateColor0 {
-      color: #606266
+      color: #303133
     }
     &.templateColor1 {
       color: #fe0000
@@ -444,4 +444,34 @@ input[type="number"]{
     right: 12px;
     max-width: 100px;
   }
+}
+
+// 下拉选项较多时始终显示清晰的滚动条
+.el-select-dropdown .el-scrollbar__bar.is-vertical {
+  width: 9px;
+  right: 2px;
+  opacity: 1 !important;
+  background-color: transparent;
+}
+
+.el-select-dropdown .el-scrollbar__bar.is-vertical .el-scrollbar__thumb {
+  background-color: #909399 !important;
+}
+
+.el-select-dropdown .el-scrollbar__bar.is-vertical .el-scrollbar__thumb:hover {
+  background-color: #7d8087 !important;
+}
+
+// 提高常用表单和浮层正文的对比度，提示及禁用状态仍沿用组件默认浅色
+body,
+.el-input__inner,
+.el-textarea__inner,
+.el-form-item__label,
+.el-select-dropdown__item,
+.el-cascader-node__label,
+.el-dropdown-menu__item,
+.el-checkbox__label,
+.el-radio__label,
+.el-dialog__body {
+  color: #303133;
 }

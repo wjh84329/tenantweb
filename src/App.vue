@@ -36,7 +36,9 @@ export default {
         const resp = await fetch('https://icanhazip.com');
         if (resp.ok) {
           const txt = (await resp.text()).trim();
-          if (/^\d{1,3}(\.\d{1,3}){3}$/.test(txt)) localStorage.setItem('user_ip', txt);
+          const isIpv4 = /^\d{1,3}(\.\d{1,3}){3}$/.test(txt);
+          const isIpv6 = txt.includes(':') && /^[0-9a-f:.]+$/i.test(txt);
+          if (isIpv4 || isIpv6) localStorage.setItem('user_ip', txt);
         }
         // localStorage.setItem('user_ip', res);
       } catch (e) {

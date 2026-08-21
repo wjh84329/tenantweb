@@ -131,20 +131,20 @@
           <div class="chargebox_t">
             <ul>
               <li>
-                <p class="tit">昨日充值</p>
-                <p class="num">{{ chargeInfoData.yesterdayPayAmount }}</p>
-              </li>
-              <li>
-                <p class="tit">昨日收入</p>
-                <p class="num">{{ chargeInfoData.yesterdayProfit }}</p>
-              </li>
-              <li>
                 <p class="tit">今日充值</p>
                 <p class="num">{{ chargeInfoData.todaycharge }}</p>
               </li>
               <li>
                 <p class="tit">今日收入</p>
                 <p class="num">{{ chargeInfoData.todayProfit }}</p>
+              </li>
+              <li>
+                <p class="tit">昨日充值</p>
+                <p class="num">{{ chargeInfoData.yesterdayPayAmount }}</p>
+              </li>
+              <li>
+                <p class="tit">昨日收入</p>
+                <p class="num">{{ chargeInfoData.yesterdayProfit }}</p>
               </li>
               <li v-loading="chargeInfoData.waitFlag">
                 <p class="tit">等待发送</p>
