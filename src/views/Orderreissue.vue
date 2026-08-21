@@ -13,6 +13,13 @@
         <h4 style="padding-left: 20px;margin-top: 10px;display: none;">手动补发</h4>
         <!-- <el-divider style="width: 90%;display: none;"></el-divider> -->
         <el-form class="reissue-form" label-width="100px">
+          <el-form-item label="游戏分组：">
+            <el-select v-model="gameGroup" popper-class="gs_colorSelcet" size="small" clearable
+              placeholder="可不选，用于筛选模板和分区" @change="groupChanged">
+              <el-option v-for="(item, i) in gameGroupdrow" :key="'gameGroup' + i" :label="item.name"
+                :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="游戏模板：">
             <el-select v-model="template" popper-class="gs_colorSelcet" size="small" clearable
               placeholder="可不选，用于筛选分区"
@@ -230,6 +237,8 @@ export default {
       isClose: true, // 关闭转区点赠送
       rechargemodepage: '', // 充值方式
       rechargemodedrow: [], // 充值方式下拉
+      gameGroupdrow: [], // 游戏分组下拉
+      gameGroup: '', // 游戏分组，可不选
       templateDropdown: [], // 模板下拉
       template: '', // 选中模板
       allGameDivisiondrow: [], // 当前账号可用的全部分区
@@ -322,24 +331,64 @@ export default {
     closeQrcodeDialog() {
       this.qrcodeDialog = false;
     },
+    // 分组可选；未选择时显示当前账号下全部可用模板
+    groupChanged(data) {
+      const group = this.gameGroupdrow.find(item => item.id === data);
+      this.templateDropdown = data ? (group ? group.reissueTemplates || [] : []) : this.mergeReissueTemplates(this.gameGroupdrow);
+      this.template = '';
+      this.gamearea = '';
+      this.gameDivisiondrow = this.getGroupPartitions(group);
+    },
+    getGroupPartitions(group) {
+      if (!group) {
+        return this.allGameDivisiondrow;
+      }
+      const partitionIds = new Set();
+      (group.reissueTemplates || []).forEach(template => {
+        (template.partitions || []).forEach(partition => partitionIds.add(partition.id));
+      });
+      return this.allGameDivisiondrow.filter(partition => partitionIds.has(partition.id));
+    },
+    mergeReissueTemplates(groups) {
+      const templates = {};
+      (groups || []).forEach(group => {
+        (group.reissueTemplates || []).forEach(item => {
+          if (!templates[item.id]) {
+            templates[item.id] = Object.assign({}, item, { partitions: [] });
+          }
+          const partitionIds = new Set(templates[item.id].partitions.map(partition => partition.id));
+          (item.partitions || []).forEach(partition => {
+            if (!partitionIds.has(partition.id)) {
+              templates[item.id].partitions.push(partition);
+              partitionIds.add(partition.id);
+            }
+          });
+        });
+      });
+      return Object.keys(templates).map(id => templates[id]);
+    },
     // 模板
     templateChanged(data) {
       if (data === '' || data === null || typeof data === 'undefined') {
         this.gamearea = '';
-        this.gameDivisiondrow = this.allGameDivisiondrow;
+        this.gameDivisiondrow = this.getGroupPartitions(this.gameGroupdrow.find(item => item.id === this.gameGroup));
         return;
       }
-      this.gameDivisiondrow = this.allGameDivisiondrow.filter((partition) => partition.templateId === data);
+      const group = this.gameGroupdrow.find(item => item.id === this.gameGroup);
+      this.gameDivisiondrow = this.getGroupPartitions(group)
+        .filter((partition) => partition.templateId === data);
       this.gamearea = ''; // 游戏分区
     },
     // 分区模板下拉
-    templateDrow() {
-      this.$api.groupmange
-        .gameDrow()
+    gameteamDrow() {
+      this.$api.reorder
+        .gameTeam()
         .then((data) => {
           if (data.status === 200) {
-            this.templateDropdown = data.data;
+            this.gameGroupdrow = data.data;
+            this.templateDropdown = this.mergeReissueTemplates(data.data);
           } else if (data.status === 204) {
+            this.gameGroupdrow = [];
             this.templateDropdown = [];
           }
         })
@@ -394,6 +443,10 @@ export default {
     },
     // 手动补单接口发送
     handOrder() {
+      if (this.handFlag) {
+        return;
+      }
+      this.handFlag = true;
       this.$api.reorder
         .handOrder({
           partitionId: this.gamearea,
@@ -411,6 +464,7 @@ export default {
           isQd: this.isQd
         })
         .then((data) => {
+          this.handFlag = false;
           if (data.status === 200) {
             this.gamearea = '';
             this.rechargemodepage = this.rechargemodedrow.length > 0 ? this.rechargemodedrow[0].id : '';
@@ -422,13 +476,19 @@ export default {
             this.$messageSuccess('补发成功！');
             this.getlist();
             this.closeQrcodeDialog();
-            this.handFlag = false;
           }
         })
         .catch((err) => {
           this.handFlag = false;
           this.$messageError(err.message);
         });
+    },
+    handleConfirmKeydown(event) {
+      if (!this.qrcodeDialog || event.key !== 'Enter' || event.isComposing || event.keyCode === 229) {
+        return;
+      }
+      event.preventDefault();
+      this.handOrder();
     },
     handOrderOk() {
       this.$api.reorder
@@ -698,7 +758,7 @@ export default {
     }
   },
   created() {
-    this.templateDrow();
+    this.gameteamDrow();
     this.gameareaDrow();
     this.gamepayDrow();
     this.getlist();
@@ -706,6 +766,12 @@ export default {
       this.gamearea = this.$route.query.id;
       this.gamearea = this.$route.query.id;
     }
+  },
+  mounted() {
+    document.addEventListener('keydown', this.handleConfirmKeydown);
+  },
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.handleConfirmKeydown);
   }
 };
 </script>
