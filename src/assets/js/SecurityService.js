@@ -8,7 +8,7 @@ const TOKEN_KEY = 'access_token';
 const USER_INFO_KEY = 'user_info';
 
 function getStoredItem(key) {
-  return localStorage.getItem(key) || sessionStorage.getItem(key);
+  return sessionStorage.getItem(key) || localStorage.getItem(key);
 }
 
 function clearStoredLogin() {
