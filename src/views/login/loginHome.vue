@@ -1217,7 +1217,8 @@ export default {
   min-height: 22px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 10px;
   color: #52627a;
   font-size: 14px;
 }
