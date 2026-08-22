@@ -34,7 +34,7 @@ let mgr = new Mgr();
  * 响应拦截器
  */
 AxiosInstance.interceptors.request.use(config => {
-  const token = sessionStorage.getItem('access_token');
+  const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
   if (token) {
     config.headers.Authorization = 'Bearer ' + token;
   }

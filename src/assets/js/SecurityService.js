@@ -7,14 +7,25 @@ import { url, authUrl } from '../js/version';
 const TOKEN_KEY = 'access_token';
 const USER_INFO_KEY = 'user_info';
 
+function getStoredItem(key) {
+  return localStorage.getItem(key) || sessionStorage.getItem(key);
+}
+
+function clearStoredLogin() {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_INFO_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(USER_INFO_KEY);
+}
+
 export default class SecurityService {
   /**
    * 使用账号密码 + 验证码登录：
    * 1. 调后端 /Account/LoginApi 做验证码/账号状态校验并登录
    * 2. 后端直接返回 access_token + 用户信息
-   * 3. 存 token + 用户信息 到 sessionStorage，并设置 axios 默认头
+   * 3. 根据“保持登录”存入 localStorage 或 sessionStorage
    */
-  async loginByPassword({ username, password, code, checkKey, rememberLogin = true, clientIp = null }) {
+  async loginByPassword({ username, password, code, checkKey, rememberLogin = false, clientIp = null }) {
     const payload = {
       Username: username,
       Password: password,
@@ -45,8 +56,10 @@ export default class SecurityService {
       throw new Error('后台未返回 access_token');
     }
 
-    sessionStorage.setItem(TOKEN_KEY, loginData.access_token);
-    sessionStorage.setItem(USER_INFO_KEY, JSON.stringify(userInfo));
+    clearStoredLogin();
+    const storage = rememberLogin ? localStorage : sessionStorage;
+    storage.setItem(TOKEN_KEY, loginData.access_token);
+    storage.setItem(USER_INFO_KEY, JSON.stringify(userInfo));
     // AxiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + loginData.access_token;
     // 全局 axios 带上 Token
     // axios.defaults.headers.common['Authorization'] = 'Bearer ' + loginData.access_token;
@@ -60,13 +73,13 @@ export default class SecurityService {
   // === 统一基于本地存储的辅助方法 ===
 
   getAcessToken() {
-    return Promise.resolve(sessionStorage.getItem(TOKEN_KEY) || null);
+    return Promise.resolve(getStoredItem(TOKEN_KEY) || null);
   }
 
   getSignedIn() {
     return new Promise((resolve) => {
-      const token = sessionStorage.getItem(TOKEN_KEY);
-      const userInfoStr = sessionStorage.getItem(USER_INFO_KEY);
+      const token = getStoredItem(TOKEN_KEY);
+      const userInfoStr = getStoredItem(USER_INFO_KEY);
       if (!token || !userInfoStr) return resolve('');
       try {
         const user = JSON.parse(userInfoStr);
@@ -87,7 +100,7 @@ export default class SecurityService {
 
   getRole() {
     return new Promise((resolve) => {
-      const userInfoStr = sessionStorage.getItem(USER_INFO_KEY);
+      const userInfoStr = getStoredItem(USER_INFO_KEY);
       if (!userInfoStr) return resolve(null);
       try {
         const user = JSON.parse(userInfoStr);
@@ -113,8 +126,7 @@ export default class SecurityService {
   }
 
   signOut() {
-    sessionStorage.removeItem(TOKEN_KEY);
-    sessionStorage.removeItem(USER_INFO_KEY);
+    clearStoredLogin();
     delete axios.defaults.headers.common['Authorization'];
   }
 

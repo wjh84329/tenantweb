@@ -103,6 +103,10 @@
                   <img class="lh-captcha" id="code" :src="randomCode" alt="" @click="getQrcode()" />
                 </div>
               </div>
+              <div class="lh-remember-login">
+                <el-checkbox v-model="form.rememberLogin">保持登录</el-checkbox>
+                <span>有效期24小时</span>
+              </div>
               <button type="submit" class="lh-submit" :disabled="isLoading">
                 {{ isLoading ? '登录中' : '登录' }}
               </button>
@@ -344,7 +348,8 @@ export default {
         password: '',
         code: '',
         checkKey: '',
-        returnUrl: ''
+        returnUrl: '',
+        rememberLogin: false
       },
       qqSignin: '',
       wxQrSignin: '',
@@ -621,7 +626,7 @@ export default {
           password: this.form.password,
           code: this.form.code,
           checkKey: this.form.checkKey,
-          rememberLogin: true,
+          rememberLogin: this.form.rememberLogin,
           clientIp
         });
         trace('LoginApiDone');
@@ -748,8 +753,13 @@ export default {
   beforeCreate() {
     const mgr = new Mgr();
     mgr.getSignedIn().then(
-      (user) => {
+      async (user) => {
         if (!user || user === '') return;
+        const isTokenValid = await mgr.isAuthToMeatch();
+        if (!isTokenValid) {
+          mgr.signOut();
+          return;
+        }
         const roles = user.roles || [];
         if (user.state === 'CustomRole' || roles.includes('CustomRole')) {
           this.$router.push('/employeemain/employeehome');
@@ -921,8 +931,8 @@ export default {
 
 .lh-login-card {
   padding: 30px 28px;
-  min-height: 484px;
-  height: 484px;
+  min-height: 520px;
+  height: 520px;
   box-sizing: border-box;
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid #dce8f6;
@@ -1201,6 +1211,20 @@ export default {
   width: min(1300px, calc(100% - 48px));
   margin: 0 auto;
   padding: 18px 0 58px;
+}
+
+.lh-remember-login {
+  min-height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #52627a;
+  font-size: 14px;
+}
+
+.lh-remember-login::v-deep .el-checkbox__label {
+  color: #263750;
+  font-size: 14px;
 }
 
 .lh-section-head {
