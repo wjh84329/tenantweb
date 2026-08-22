@@ -1050,8 +1050,12 @@ body.tenant-ui-modern {
   position: static;
   box-sizing: border-box;
   width: 100%;
+  min-height: 60px;
   margin: 0 !important;
-  padding: 14px 18px 16px !important;
+  padding: 10px 18px !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   border: 1px solid var(--tenant-border);
   border-top: 0;
   border-radius: 0 0 8px 8px;
@@ -1061,6 +1065,22 @@ body.tenant-ui-modern {
 }
 
 .contentbox .partition-install-page .install-save-panel .el-button { min-width: 112px; height: 38px; }
+
+/* 新版筛选表单：输入控件与紧随其后的操作按钮保持清晰间距 */
+.contentbox .el-form--inline .el-form-item__content > .el-input + .el-button,
+.contentbox .el-form--inline .el-form-item__content > .el-select + .el-button,
+.contentbox .el-form--inline .el-form-item__content > .el-date-editor + .el-button {
+  margin-left: 10px;
+}
+
+.contentbox .opeartbox .txtbox + .el-button,
+.contentbox .opeartbox .el-input + .el-button,
+.contentbox .opeartbox .el-select + .el-button,
+.contentbox .opeartbox .el-date-editor + .el-button,
+.contentbox .bind-query-form .el-input + .el-button,
+.contentbox .bind-query-form .el-select + .el-button {
+  margin-left: 10px;
+}
 
 .employee-page-head { align-items: center !important; margin-bottom: 20px !important; }
 .employee-page-head h1 { font-size: 24px !important; line-height: 34px !important; }
