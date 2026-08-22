@@ -1,6 +1,35 @@
 <template>
-  <div class="home" v-loading="pageLoading">
-    <div class="settingbox clearfix">
+  <div class="home" :class="{ 'tenant-dashboard': $root.uiMode === 'modern' }" v-loading="pageLoading">
+    <div v-if="$root.uiMode === 'modern'" class="tenant-dashboard__welcome">
+      <h1>您好，{{ userInfo.userName || 'Tenant' }}</h1>
+    </div>
+    <div v-if="$root.uiMode === 'modern'" class="tenant-design-summary">
+      <div class="tenant-design-summary__item is-blue">
+        <span class="tenant-design-summary__icon"><tenant-icon name="wallet" /></span>
+        <div><p>账户余额</p><strong>¥{{ accountInfo.accout }}</strong><small>可用余额</small></div>
+      </div>
+      <div class="tenant-design-summary__item is-cyan">
+        <span class="tenant-design-summary__icon"><tenant-icon name="cash" /></span>
+        <div><p>可提现金额</p><strong>¥{{ accountInfo.withdraw }}</strong><small>可提现余额</small></div>
+      </div>
+      <div class="tenant-design-summary__item is-green">
+        <span class="tenant-design-summary__icon"><tenant-icon name="arrowDown" /></span>
+        <div><p>今日充值</p><strong>¥{{ chargeInfoData.todaycharge }}</strong><small>今日 00:00–23:59</small></div>
+      </div>
+      <div class="tenant-design-summary__item is-orange">
+        <span class="tenant-design-summary__icon"><tenant-icon name="send" /></span>
+        <div>
+          <p>等待发送</p>
+          <el-tooltip v-if="chargeInfoData.waitSend > 0" effect="dark" content="点击下发" placement="bottom">
+            <strong class="is-clickable" @click="waitSentAll">{{ chargeInfoData.waitSend }}</strong>
+          </el-tooltip>
+          <strong v-else>{{ chargeInfoData.waitSend }}</strong>
+          <small>待发送数量</small>
+        </div>
+      </div>
+    </div>
+    <div class="settingbox clearfix" :class="{ 'tenant-account-grid': $root.uiMode === 'modern' }">
+      <div v-if="$root.uiMode === 'modern'" class="tenant-section-heading">账户概览</div>
       <div class="userinfo gs_shadow" style="height: 150px;width: 23%;">
         <div class="infobox">
           <div style="display: flex;padding-left: 5px;">
@@ -125,7 +154,8 @@
         </div>
       </div>
     </div>
-    <div class="settingbox clearfix">
+    <div class="settingbox clearfix" :class="{ 'tenant-metrics-grid': $root.uiMode === 'modern' }">
+      <div v-if="$root.uiMode === 'modern'" class="tenant-section-heading">经营概览</div>
       <div class="topinfo clearfix" style="width: 100%;">
         <div class="chargebox gs_shadow">
           <div class="chargebox_t">
@@ -471,39 +501,51 @@
       width="1024px">
       <el-divider content-position="left">商户后台</el-divider>
       <ul class="areaContainer clearfix">
-        <li :class="{ on: dialogSkins.skinNums === 0 }" @click="handleSkinChange(0)">
+        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 0 }" @click="handleSkinChange(0)">
           <el-tooltip class="item" effect="dark" content="默认皮肤（怀旧）" placement="bottom">
             <img class="imgskin" src="../assets/images/skin0.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.skinNums === 1 }" @click="handleSkinChange(1)">
+        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 1 }" @click="handleSkinChange(1)">
           <el-tooltip class="item" effect="dark" content="深沉红" placement="bottom">
             <img class="imgskin" src="../assets/images/skin1.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.skinNums === 2 }" @click="handleSkinChange(2)">
+        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 2 }" @click="handleSkinChange(2)">
           <el-tooltip class="item" effect="dark" content="莫兰迪" placement="bottom">
             <img class="imgskin" src="../assets/images/skin2.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.skinNums === 3 }" @click="handleSkinChange(3)">
+        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 3 }" @click="handleSkinChange(3)">
           <el-tooltip class="item" effect="dark" content="海洋蓝" placement="bottom">
             <img class="imgskin" src="../assets/images/skin3.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.skinNums === 4 }" @click="handleSkinChange(4)">
+        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 4 }" @click="handleSkinChange(4)">
           <el-tooltip class="item" effect="dark" content="活力橙" placement="bottom">
             <img class="imgskin" src="../assets/images/skin4.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.skinNums === 5 }" @click="handleSkinChange(5)">
+        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 5 }" @click="handleSkinChange(5)">
           <el-tooltip class="item" effect="dark" content="晶莹紫" placement="bottom">
             <img class="imgskin" src="../assets/images/skin5.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.skinNums === 6 }" @click="handleSkinChange(6)">
+        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 6 }" @click="handleSkinChange(6)">
           <el-tooltip class="item" effect="dark" content="商务灰" placement="bottom">
             <img class="imgskin" src="../assets/images/skin6.png" alt="">
+          </el-tooltip>
+        </li>
+        <li :class="{ on: dialogSkins.uiMode === 'modern' }" @click="handleUiModeChange('modern')">
+          <el-tooltip class="item" effect="dark" content="焕新版（新版布局）" placement="bottom">
+            <div class="modern-skin-preview" aria-label="焕新版界面预览">
+              <span class="modern-skin-preview__sidebar"></span>
+              <span class="modern-skin-preview__topbar"></span>
+              <span class="modern-skin-preview__card modern-skin-preview__card--one"></span>
+              <span class="modern-skin-preview__card modern-skin-preview__card--two"></span>
+              <span class="modern-skin-preview__table"></span>
+              <strong>焕新版</strong>
+            </div>
           </el-tooltip>
         </li>
       </ul>
@@ -544,8 +586,11 @@
 </template>
 
 <script>
+import TenantIcon from '../components/TenantIcon';
+
 export default {
   name: 'Home',
+  components: { TenantIcon },
   data() {
     return {
       // 帐户信息
@@ -644,7 +689,8 @@ export default {
       },
       dialogSkins: {
         show: false,
-        skinNums: 0
+        skinNums: 0,
+        uiMode: localStorage.getItem('tenantUiMode') === 'modern' ? 'modern' : 'classic'
       },
 
       bank: {
@@ -1432,8 +1478,16 @@ export default {
     // 实时修改皮肤
     handleSkinChange(num) {
       this.dialogSkins.skinNums = num;
+      this.dialogSkins.uiMode = 'classic';
       localStorage.setItem('skinNum', num); // 立即保存
+      localStorage.setItem('tenantUiMode', 'classic');
       this.$root.$emit('skin-change', num); // 通知主页面
+      this.$root.$emit('ui-theme-change', 'classic');
+    },
+    handleUiModeChange(mode) {
+      this.dialogSkins.uiMode = mode === 'modern' ? 'modern' : 'classic';
+      localStorage.setItem('tenantUiMode', this.dialogSkins.uiMode);
+      this.$root.$emit('ui-theme-change', this.dialogSkins.uiMode);
     },
     // 获取皮肤类型
     getSkin() {
@@ -1441,10 +1495,13 @@ export default {
         this.$messageError('没有操作权限！');
         return;
       }
+      this.dialogSkins.uiMode = localStorage.getItem('tenantUiMode') === 'modern' ? 'modern' : 'classic';
       this.dialogSkin.show = true;
     },
     // 设置皮肤
     setSkin() {
+      localStorage.setItem('tenantUiMode', this.dialogSkins.uiMode);
+      this.$root.$emit('ui-theme-change', this.dialogSkins.uiMode);
       this.$api.home
         .setSkin({
           skinIndex: this.dialogSkins.skinNums,
@@ -2051,6 +2108,25 @@ export default {
   }
 }
 
+.modern-skin-preview {
+  position: relative;
+  box-sizing: border-box;
+  width: 200px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: #f3f6fb;
+
+  > span { position: absolute; display: block; }
+  &__sidebar { inset: 0 auto 0 0; width: 38px; background: linear-gradient(180deg, #102b50, #071a31); }
+  &__topbar { top: 0; right: 0; left: 38px; height: 18px; border-bottom: 1px solid #e6eaf1; background: #fff; }
+  &__card { top: 29px; height: 30px; border: 1px solid #e4e9f1; border-radius: 3px; background: #fff; box-shadow: 0 2px 5px rgba(31,48,80,.08); }
+  &__card--one { left: 48px; width: 62px; }
+  &__card--two { left: 117px; right: 9px; }
+  &__table { top: 68px; right: 9px; bottom: 16px; left: 48px; border: 1px solid #e4e9f1; border-radius: 3px; background: repeating-linear-gradient(180deg, #fff 0, #fff 12px, #eef2f8 13px); }
+  strong { position: absolute; right: 12px; bottom: 2px; color: #5268f7; font-size: 11px; font-weight: 700; }
+}
+
 .stateColor {
   background: #409eff;
   color: #fff;
@@ -2103,5 +2179,318 @@ export default {
     left: -10px;
     border-right-color: #409eff;
   }
+}
+
+/* 新版工作台：仅重排现有数据与操作，不改变任何接口或事件 */
+.tenant-dashboard {
+  padding-bottom: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(330px, 1fr);
+  gap: 16px;
+}
+
+.tenant-dashboard__welcome {
+  margin: 0 0 14px;
+  grid-column: 1 / -1;
+
+  h1 {
+    margin: 0;
+    color: #172033;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 34px;
+  }
+}
+
+.tenant-design-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+  grid-column: 1 / -1;
+}
+
+.tenant-design-summary__item {
+  box-sizing: border-box;
+  min-height: 118px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid #e5eaf2;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(31,48,80,.07);
+
+  .tenant-design-summary__icon {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  p { margin: 0 0 7px; color: #667085; font-size: 14px; }
+  strong { display: block; color: #172033; font-size: 22px; line-height: 28px; }
+  small { display: block; margin-top: 5px; color: #98a2b3; font-size: 12px; }
+  .is-clickable { cursor: pointer; }
+
+  &.is-blue .tenant-design-summary__icon { color: #3370ff; background: #edf3ff; }
+  &.is-cyan .tenant-design-summary__icon { color: #13b8c8; background: #e8fbfd; }
+  &.is-green .tenant-design-summary__icon { color: #16b364; background: #eaf9f0; }
+  &.is-orange .tenant-design-summary__icon { color: #f59e0b; background: #fff7e5; }
+}
+
+.tenant-dashboard .tenant-account-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 0;
+  grid-column: 2;
+  grid-row: 3;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid #e5eaf2;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(31,48,80,.07);
+
+  .tenant-section-heading {
+    padding: 17px 20px 14px;
+    color: #172033;
+    font-size: 16px;
+    font-weight: 700;
+    border-bottom: 1px solid #eef1f5;
+  }
+
+  .userinfo {
+    float: none !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 176px;
+    padding: 20px 18px 14px;
+    border: 0 !important;
+    border-radius: 0 !important;
+    color: #172033;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .userinfo .infobox { margin-top: 0; }
+  .userinfo .avatar { width: 74px; height: 74px; object-fit: contain; }
+  .userinfo .textbox { margin-top: 5px !important; }
+  .userinfo .textbox .acout { color: #344054; font-size: 17px; }
+  .userinfo .textbox .text { color: #98a2b3; line-height: 20px; }
+  .userinfo .operbox { margin-top: 14px; padding-top: 12px; border-top: 1px solid #eef1f5; }
+  .userinfo .operbox li { width: auto; padding: 0 12px; border-color: #d9e2ef; }
+  .userinfo .operbox span { color: #3370ff; }
+
+  .topinfo {
+    float: none !important;
+    width: auto !important;
+    height: auto !important;
+    border-top: 1px solid #eef1f5;
+  }
+
+  .moneybox {
+    box-sizing: border-box;
+    height: 100% !important;
+    min-height: 176px;
+    padding: 18px 20px 12px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .moneybox .numberbox > ul {
+    padding: 2px 290px 20px 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(110px, 1fr));
+    gap: 0;
+    border-bottom: 1px solid #eef1f5 !important;
+  }
+
+  .moneybox .numberbox > ul > li:nth-child(1),
+  .moneybox .numberbox > ul > li:nth-child(2) { display: none; }
+
+  .moneybox .numberbox > ul { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+
+  .moneybox .numberbox > ul > li {
+    width: auto !important;
+    padding: 6px 18px;
+    text-align: left;
+    border-right: 1px solid #eef1f5;
+  }
+
+  .moneybox .numberbox > ul > li:first-child { padding-left: 0; }
+  .moneybox .numberbox > ul > li:nth-last-child(1) { border-right: 0; }
+  .moneybox .numberbox > ul > .linebox { display: none; }
+  .moneybox .tit { color: #667085 !important; font-size: 13px !important; }
+  .moneybox .number { margin-top: 9px !important; font-size: 23px !important; font-weight: 700; letter-spacing: -.3px; }
+  .moneybox .getbtn { top: 20px; right: 20px; display: flex; gap: 8px; }
+  .moneybox .getbtn .el-button + .el-button { margin-left: 0; }
+  .moneybox .btns { display: flex; flex-wrap: wrap; gap: 8px 0; padding: 10px 0 0; }
+  .moneybox .btns span { margin-top: 0; color: #4f6bff; }
+}
+
+.tenant-dashboard .tenant-metrics-grid {
+  margin: 0;
+  grid-column: 1;
+  grid-row: 3;
+
+  > .tenant-section-heading {
+    position: relative;
+    z-index: 1;
+    margin-bottom: -52px;
+    padding: 17px 20px 14px;
+    color: #172033;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  > .topinfo {
+    float: none !important;
+    width: 100% !important;
+  }
+
+  .chargebox {
+    margin: 0 !important;
+    padding: 58px 18px 18px !important;
+    border: 1px solid #e5eaf2 !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    box-shadow: 0 4px 14px rgba(31,48,80,.07) !important;
+  }
+
+  .chargebox_t { margin: 0 !important; padding: 0 !important; border: 0 !important; }
+
+  .chargebox ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  .chargebox ul li {
+    box-sizing: border-box;
+    width: auto !important;
+    min-height: 104px;
+    padding: 20px 22px 18px;
+    text-align: left;
+    border: 1px solid #e5eaf2;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: none;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+
+  .chargebox ul li:nth-child(1),
+  .chargebox ul li:nth-child(5) { display: none; }
+
+  .chargebox ul li:hover { transform: translateY(-3px); border-color: #d8dff9; box-shadow: 0 18px 36px rgba(31,48,80,.1); }
+
+  .chargebox ul .tit { color: #667085 !important; font-size: 13px !important; }
+  .chargebox ul .num { margin-top: 14px !important; color: #172033 !important; font-size: 24px !important; font-weight: 700; letter-spacing: -.3px; }
+
+  .carousel {
+    margin-top: 16px;
+    padding: 0 20px 0 52px !important;
+    border: 1px solid #e5eaf2;
+    border-radius: 14px;
+    background-color: #fff !important;
+    background-position: 20px center !important;
+    box-shadow: 0 4px 16px rgba(31, 48, 80, .05);
+  }
+}
+
+.tenant-dashboard .functionbox {
+  margin: 0 0 16px !important;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e5eaf2 !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: 0 10px 32px rgba(31, 48, 80, .07) !important;
+  grid-column: 1 / -1;
+
+  > .gs_title {
+    margin: 0 !important;
+    padding: 20px 24px 13px !important;
+    font-size: 18px !important;
+  }
+
+  > div[style*="display: flex"] {
+    padding: 0 22px 22px;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 14px;
+  }
+
+  ul {
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  ul li {
+    box-sizing: border-box;
+    min-height: 58px;
+    height: auto !important;
+    margin-bottom: 10px;
+    padding: 11px 14px 11px 42px !important;
+    line-height: 36px !important;
+    border: 1px solid #edf0f5;
+    border-radius: 12px;
+    background-position: 14px center !important;
+    background-color: #f8faff !important;
+    transition: background .18s ease, border-color .18s ease, transform .18s ease;
+  }
+
+  ul li:hover { transform: translateX(2px); border-color: #dce3fb; background-color: #f4f6ff !important; }
+}
+
+.tenant-dashboard > .tablebox {
+  margin: 0 !important;
+  padding-top: 0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 32px rgba(31,48,80,.07) !important;
+  grid-column: 1 / -1;
+
+  > .gs_title {
+    margin: 0 !important;
+    padding: 16px 20px 10px !important;
+    font-size: 18px !important;
+  }
+}
+
+.tenant-dashboard .stateColor {
+  height: 24px;
+  padding: 0 9px;
+  line-height: 24px;
+  border-radius: 5px;
+  background: #4f6bff;
+}
+
+.tenant-dashboard .stateColor::before,
+.tenant-dashboard .stateColor::after { display: none; }
+
+.tenant-dashboard .stateColor.color1 { color: #087443; background: #ecfdf3; }
+.tenant-dashboard .stateColor.color2 { color: #d92d20; background: #fff1f2; }
+
+@media (max-width: 1380px) {
+  .tenant-design-summary { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+  .tenant-dashboard { grid-template-columns: 1fr; }
+  .tenant-dashboard .tenant-account-grid,
+  .tenant-dashboard .tenant-metrics-grid { grid-column: 1; grid-row: auto; }
+  .tenant-dashboard .tenant-account-grid { grid-template-columns: 1fr; }
+  .tenant-dashboard .tenant-account-grid .moneybox .numberbox > ul { padding-right: 0; }
+  .tenant-dashboard .tenant-account-grid .moneybox .getbtn { position: static; margin-top: 12px; }
 }
 </style>

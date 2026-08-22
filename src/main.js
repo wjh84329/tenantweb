@@ -10,6 +10,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/common.scss';
 import './assets/css/main.css';
+import './assets/css/tenant-v2.scss';
 import echarts from 'echarts';
 import mixin from './assets/js/mixin';
 import api from './api/index';
@@ -103,5 +104,28 @@ VueRouter.prototype.push = function push(location, onComplete, onAbort) {
 new Vue({
   router,
   store,
+  data() {
+    return {
+      uiMode: localStorage.getItem('tenantUiMode') === 'modern' ? 'modern' : 'classic'
+    };
+  },
+  created() {
+    this.$on('ui-theme-change', this.setUiMode);
+    this.applyUiMode();
+  },
+  beforeDestroy() {
+    this.$off('ui-theme-change', this.setUiMode);
+  },
+  methods: {
+    setUiMode(mode) {
+      this.uiMode = mode === 'modern' ? 'modern' : 'classic';
+      localStorage.setItem('tenantUiMode', this.uiMode);
+      this.applyUiMode();
+    },
+    applyUiMode() {
+      document.body.classList.toggle('tenant-ui-modern', this.uiMode === 'modern');
+      document.body.classList.toggle('tenant-ui-classic', this.uiMode !== 'modern');
+    }
+  },
   render: h => h(App)
 }).$mount('#app');

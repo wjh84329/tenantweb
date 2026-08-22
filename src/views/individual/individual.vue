@@ -102,7 +102,7 @@
       <div class="gs_listcontainer">
         <p class="tip_red">账户信息</p>
         <div class="opeartbox" style="margin-bottom: 10px;">
-          <el-form label-width="100px">
+          <el-form class="compact-two-column-form" label-width="100px">
             <el-form-item label="开户银行：">
               <el-select
                 v-model="accountInfo.bank"

@@ -8,7 +8,7 @@
 <template>
   <div class="partinstall">
     <div class="bg_fff pdb15">
-      <div class="gs_listcontainer personInfo mgt10">
+      <div class="gs_listcontainer personInfo mgt10 two-column-list-form">
         <p class="tip_red">完善个人信息</p>
         <dl class="clearfix">
           <dt>二级密码</dt>
@@ -127,7 +127,7 @@
           </dd>
         </dl>
       </div>
-      <p class="mgt15" style="padding-left: 150px">
+      <p class="mgt15 two-column-form-actions" :style="$root.uiMode === 'modern' ? null : { paddingLeft: '150px' }">
         <el-button size="small" type="primary" @click="setPersonInfo"
           >确定</el-button
         >

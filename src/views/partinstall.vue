@@ -6,9 +6,13 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="partinstall">
+  <div class="partinstall" :class="{ 'partition-install-page': $root.uiMode === 'modern' }">
+    <div v-if="$root.uiMode === 'modern'" class="partition-page-head">
+      <h1>安装分区</h1>
+      <p>配置网关、模板与开区计划</p>
+    </div>
     <div class="bg_fff">
-      <div class="gs_title" style="color: white;">安装分区</div>
+      <div class="gs_title" style="color: white;">{{ $root.uiMode === 'modern' ? '分区配置' : '安装分区' }}</div>
       <div class="gs_listcontainer">
         <dl class="clearfix">
           <dt>分区类型：</dt>
@@ -354,7 +358,7 @@
           </dd>
         </dl>
       </div>
-      <p class="tc pdb20">
+      <p class="tc pdb20" :class="{ 'install-save-panel': $root.uiMode === 'modern' }">
         <el-button type="primary" @click="partinstall" :loading="!installFlag">保存</el-button>
       </p>
     </div>

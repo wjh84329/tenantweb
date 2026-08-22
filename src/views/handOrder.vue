@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
+  <div class="home hand-order-page">
     <div class="gs_title" style="color: white;">手动补发</div>
     <div class="opeartbox">
       <ul class="clearfix" style="padding-right:200px;">

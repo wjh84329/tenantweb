@@ -6,7 +6,25 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="main">
+  <div class="main" :class="{ 'tenant-ui-modern-shell': $root.uiMode === 'modern' }">
+    <aside v-if="$root.uiMode === 'modern'" class="tenant-sub-sidebar tenant-employee-sidebar">
+      <div class="tenant-sub-brand" @click="refresh('/employeemain/employeehome')">
+        <site-logo variant="logo3" logo-type="site" width="188px" height="54px" fit="contain" alt="网站logo" />
+      </div>
+      <nav class="tenant-employee-nav">
+        <button :class="{ active: $route.path === '/employeemain/employeehome' }" @click="refresh('/employeemain/employeehome')">
+          <tenant-icon name="home" /><span>首页</span>
+        </button>
+        <button :class="{ active: $route.path === '/employeemain/employeeOrdermanagement' }" @click="refresh('/employeemain/employeeOrdermanagement')">
+          <tenant-icon name="order" /><span>订单管理</span>
+        </button>
+      </nav>
+      <button class="tenant-sub-back" @click="loginOut"><tenant-icon name="logout" /><span>退出登录</span></button>
+    </aside>
+    <header v-if="$root.uiMode === 'modern'" class="tenant-sub-topbar">
+      <div><span>员工中心</span><i>/</i><strong>{{ $route.path === '/employeemain/employeeOrdermanagement' ? '订单管理' : '首页' }}</strong></div>
+      <div class="tenant-sub-profile"><span>{{ (nickName || 'T').slice(0, 1).toUpperCase() }}</span><strong>{{ nickName || 'Tenant' }}</strong></div>
+    </header>
     <div class="header">
       <div class="headbox clearfix">
         <div class="logo"><site-logo variant="legacy" alt="网站logo" /></div>
@@ -44,6 +62,7 @@
 import { mapState } from 'vuex';
 import chargeLink from '../components/chargeLink';
 import Mgr from '../assets/js/SecurityService';
+import TenantIcon from '../components/TenantIcon';
 // import mgrs from '../assets/js/securityapi';
 // import { netUrl } from '../assets/js/version';
 // import axios from 'axios';
@@ -52,7 +71,8 @@ export default {
   inject: ['reload'],
   components: {
     // eslint-disable-next-line vue/no-unused-components
-    chargeLink
+    chargeLink,
+    TenantIcon
   },
   data() {
     return {

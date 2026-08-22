@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home" style="padding: 20px 20px;">
+  <div class="home transfer-point-page" style="padding: 20px 20px;">
     <!-- <div class="person_tit">结算记录</div> -->
     <el-tabs v-model="activeName" @tab-click="handleClick" type="card">
       <el-tab-pane label="用户记录" name="user">

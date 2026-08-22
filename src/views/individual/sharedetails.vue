@@ -6,12 +6,12 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="partinstall">
+  <div class="partinstall" :class="{ 'sharedetails-modern': $root.uiMode === 'modern' }">
     <div class="bg_fff pdb25">
       <div v-if="dialogshow">
         <!-- 增加：账户类型选择 -->
         <el-form ref="openForm" :model="form" :rules="rules" label-width="120px" class="open-account-form">
-          <el-form-item label="账户类型" prop="accountType">
+          <el-form-item class="form-span-full" label="账户类型" prop="accountType">
             <el-radio-group v-model="form.accountType">
               <el-radio-button label="personal">个人</el-radio-button>
               <el-radio-button label="company">企业</el-radio-button>
@@ -69,7 +69,7 @@
               placeholder="选择起始日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="身份证照片" label-width="150px" prop="idCard">
+          <el-form-item class="form-span-full" label="身份证照片" label-width="150px" prop="idCard">
             <div style="display:flex;gap:8px;align-items:center;">
               <el-upload class="upload-id" :before-upload="beforeUploadIdFront" :on-remove="removeIdFront" :limit="1"
                 action="" :show-file-list=true>
@@ -92,7 +92,7 @@
             </div>
           </el-form-item>
           <!-- 企业额外字段（仅示例常用项） -->
-          <div v-if="form.accountType === 'company'">
+          <div v-if="form.accountType === 'company'" class="company-fields-grid">
             <el-form-item label-width="150px" label="统一社会信用代码" prop="usci">
               <el-input v-model="form.usci" placeholder="请输入统一社会信用代码" />
             </el-form-item>
@@ -148,7 +148,7 @@
           </div>
 
           <!-- 保留：证明材料（只上传该项文件） -->
-          <el-form-item label-width="150px" label="证明材料" prop="proofFile" v-if="form.accountType === 'company'">
+          <el-form-item class="form-span-full" label-width="150px" label="证明材料" prop="proofFile" v-if="form.accountType === 'company'">
             <el-upload class="upload-demo" :before-upload="fileSelect" :on-remove="removeFile" :limit=1 drag
               action="https://jsonplaceholder.typicode.com/posts/" multiple>
               <i class="el-icon-upload"></i>
@@ -159,7 +159,7 @@
             <span v-if="filename != ''">{{ filename }}</span>
           </el-form-item>
 
-          <el-form-item>
+          <el-form-item class="form-span-full">
             <el-button type="primary" @click="submitForm">提交</el-button>
             <el-button type="warning" @click="closeForm">取消</el-button>
           </el-form-item>
@@ -552,6 +552,28 @@ export default {
   max-width: 520px;
   margin: 0 auto;
   padding-top: 18px;
+}
+
+.sharedetails-modern .open-account-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px 28px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+
+  > .el-form-item { min-width: 0; }
+  .form-span-full { grid-column: 1 / -1; }
+  .company-fields-grid { display: contents; }
+
+  ::v-deep .el-select,
+  ::v-deep .el-date-editor,
+  ::v-deep .el-input { width: 100%; }
+}
+
+@media (max-width: 1280px) {
+  .sharedetails-modern .open-account-form { grid-template-columns: 1fr; }
+  .sharedetails-modern .open-account-form .form-span-full { grid-column: 1; }
 }
 
 .result-row {

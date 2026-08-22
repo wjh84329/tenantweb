@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-if="signedIn">
+  <div id="app" v-if="signedIn" :class="`tenant-ui-${$root.uiMode}`">
     <router-view />
   </div>
 </template>

@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
+  <div class="home" :class="{ 'partition-list-page': $root.uiMode === 'modern' }">
     <div class="gs_title" style="color: white;">分区管理</div>
     <div class="opeartbox">
       <ul class="clearfix">
@@ -46,36 +46,28 @@
         </li>
       </ul>
     </div>
-    <div class="gs_tabbox clearfix mgt15">
-      <!-- <div class="tabbox">
-        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane label="全部" name="0"></el-tab-pane>
-          <el-tab-pane label="传奇" name="1"></el-tab-pane>
-          <el-tab-pane label="传世" name="2"></el-tab-pane>
-          <el-tab-pane label="传奇三" name="3"></el-tab-pane>
-          <el-tab-pane label="SQL通用" name="4"></el-tab-pane>
-          <el-tab-pane label="Web通讯" name="5"></el-tab-pane>
-          <el-tab-pane label="奇迹MU" name="6"></el-tab-pane>
-        </el-tabs>
-      </div> -->
-    </div>
-    <div class="tablebox pdb15 pdt20">
+    <div v-if="$root.uiMode !== 'modern'" class="gs_tabbox clearfix mgt15"></div>
+    <div class="tablebox pdb15 pdt20" :class="{ mgt15: $root.uiMode === 'modern' }">
       <div class="gs_tablebox padding_change">
         <el-table ref="moduleTable" size="mini" @selection-change="selchange" :data="tableData" border style="width: 100%"
           stripe>
           <el-table-column type="selection" width="42">
           </el-table-column>
-          <el-table-column prop="id" label="编号" width="60">
+          <el-table-column prop="id" label="编号" :width="$root.uiMode === 'modern' ? 70 : 60">
           </el-table-column>
-          <el-table-column prop="name" label="名称" width="160">
+          <el-table-column prop="name" label="名称" :width="$root.uiMode === 'modern' ? undefined : 160"
+            :min-width="$root.uiMode === 'modern' ? 260 : undefined" :show-overflow-tooltip="$root.uiMode === 'modern'">
           </el-table-column>
-          <el-table-column prop="currencyName" label="游戏币" width="80">
+          <el-table-column prop="currencyName" label="游戏币" :width="$root.uiMode === 'modern' ? undefined : 80"
+            :min-width="$root.uiMode === 'modern' ? 160 : undefined" :show-overflow-tooltip="$root.uiMode === 'modern'">
           </el-table-column>
-          <el-table-column prop="serverIp" label="服务器" width="100">
+          <el-table-column prop="serverIp" label="服务器" :width="$root.uiMode === 'modern' ? undefined : 100"
+            :min-width="$root.uiMode === 'modern' ? 220 : undefined" :show-overflow-tooltip="$root.uiMode === 'modern'">
           </el-table-column>
-          <el-table-column prop="scriptPath" label="路径">
+          <el-table-column prop="scriptPath" label="路径" :width="$root.uiMode === 'modern' ? 360 : undefined"
+            :show-overflow-tooltip="$root.uiMode === 'modern'">
           </el-table-column>
-          <el-table-column prop="scriptPath" label="是否通区" width='80'>
+          <el-table-column prop="scriptPath" label="是否通区" :width="$root.uiMode === 'modern' ? 90 : 80">
             <template slot-scope="scope">
               <span v-if="scope.row.tongQu">是</span>
               <span v-else>否</span>
@@ -86,19 +78,21 @@
               {{ formatPartitionScanLabel(scope.row.scan != null ? scope.row.scan : scope.row.Scan) }}
             </template>
           </el-table-column> -->
-          <el-table-column prop="name" label="操作" width='370'>
+          <el-table-column prop="name" label="操作" :width="$root.uiMode === 'modern' ? 420 : 370">
             <template slot-scope="scope">
-              <el-button-group>
+              <component :is="$root.uiMode === 'modern' ? 'div' : 'el-button-group'"
+                :class="{ 'partition-row-actions': $root.uiMode === 'modern' }">
                 <el-button size="mini" type="primary" @click="rechargeTeam(scope.row.uuid)">充值</el-button>
-                <el-button size="mini" type="primary" @click="checklink(scope.row.id, scope.$index)"
+                <el-button size="mini" :type="$root.uiMode === 'modern' ? 'success' : 'primary'"
+                  :plain="$root.uiMode === 'modern'" @click="checklink(scope.row.id, scope.$index)"
                   :loading="!checkflag && checkIndex === scope.$index">检测</el-button>
-                <el-button size="mini" type="primary" @click="editarea(scope.row.id)">编辑</el-button>
-                <el-button size="mini" type="primary" @click="openScriptPreview(scope.row)">脚本预览</el-button>
-                <el-button size="mini" type="primary" @click="showdialog(scope.row.id)">加载</el-button>
-                <el-button size="mini" type="primary" @click="areaClone(scope.row.id)">克隆</el-button>
-                <el-button size="mini" type="primary" @click="toOrderreissue(scope.row.id)">补发</el-button>
+                <el-button size="mini" :type="$root.uiMode === 'modern' ? undefined : 'primary'" @click="editarea(scope.row.id)">编辑</el-button>
+                <el-button size="mini" :type="$root.uiMode === 'modern' ? 'info' : 'primary'" :plain="$root.uiMode === 'modern'" @click="openScriptPreview(scope.row)">脚本预览</el-button>
+                <el-button size="mini" :type="$root.uiMode === 'modern' ? 'warning' : 'primary'" :plain="$root.uiMode === 'modern'" @click="showdialog(scope.row.id)">加载</el-button>
+                <el-button size="mini" :type="$root.uiMode === 'modern' ? 'info' : 'primary'" :plain="$root.uiMode === 'modern'" @click="areaClone(scope.row.id)">克隆</el-button>
+                <el-button size="mini" :type="$root.uiMode === 'modern' ? 'warning' : 'primary'" @click="toOrderreissue(scope.row.id)">补发</el-button>
                 <el-button v-if="canDeletePartition" size="mini" type="danger" @click.prevent="handleClose([{ id: scope.row.id }])">删除</el-button>
-              </el-button-group>
+              </component>
             </template>
           </el-table-column>
         </el-table>

@@ -7,7 +7,7 @@
  -->
 <template>
   <div class="home">
-    <div class="gs_title" style="color: white;">电子户转账记录</div>
+    <div class="gs_title" style="color: white;">{{ $root.uiMode === 'modern' ? '转账记录' : '电子户转账记录' }}</div>
     <div class="opeartbox">
       <ul class="clearfix">
         <li>

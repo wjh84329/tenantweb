@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
+  <div class="home partition-template-page">
     <div class="gs_title" style="color: white;">分区模版</div>
     <div class="gs_tabbox clearfix mgt15">
       <!-- <div class="tabbox">

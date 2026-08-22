@@ -1,5 +1,5 @@
 <template>
-  <div class="site-setting-page">
+  <div class="site-setting-page" :class="{ 'site-setting-modern': $root.uiMode === 'modern' }">
     <div class="gs_title">网站设置</div>
     <div class="setting-card" v-loading="loading">
       <div class="setting-intro">
@@ -350,5 +350,33 @@ export default {
   .field-help {
     margin-top: 4px;
   }
+}
+
+.site-setting-modern {
+  min-height: 0;
+
+  .setting-card { padding: 24px 28px 32px; }
+
+  .setting-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 36px;
+    row-gap: 4px;
+    width: 100%;
+
+    > .el-form-item { min-width: 0; margin-bottom: 18px; }
+    ::v-deep .el-input { width: 100%; }
+    > .el-form-item:last-child { grid-column: 1 / -1; }
+  }
+
+  .setting-section-title { grid-column: 1 / -1; margin: 18px 0 8px 120px; }
+  .legal-tip { grid-column: 1 / -1; }
+}
+
+@media (max-width: 1280px) {
+  .site-setting-modern .setting-form { grid-template-columns: 1fr; }
+  .site-setting-modern .setting-section-title,
+  .site-setting-modern .legal-tip,
+  .site-setting-modern .setting-form > .el-form-item:last-child { grid-column: 1; }
 }
 </style>

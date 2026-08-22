@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="partinstall">
+  <div class="partinstall two-column-config-page">
     <div class="bg_fff">
       <div class="gs_title" style="color: white;">编辑分区</div>
       <div class="gs_listcontainer">

@@ -6,14 +6,24 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
-    <div class="gs_title" style="color: white;">员工管理</div>
-    <div class="btnsbox mgt10" style="margin-left: 2%;">
-      <el-button size='small' type="primary" @click="subMerchant.dialog.show = true">添加员工</el-button>
+  <div class="home" :class="{ 'employee-modern-page': $root.uiMode === 'modern' }">
+    <template v-if="$root.uiMode !== 'modern'">
+      <div class="gs_title" style="color: white;">员工管理</div>
+      <div class="btnsbox mgt10" style="margin-left: 2%;">
+        <el-button size="small" type="primary" @click="subMerchant.dialog.show = true">添加员工</el-button>
+      </div>
+    </template>
+    <div v-else class="employee-page-head">
+      <div>
+        <h1>员工管理</h1>
+        <p>维护员工账号、所属分组与角色权限</p>
+      </div>
+      <el-button size="small" type="primary" icon="el-icon-plus" @click="subMerchant.dialog.show = true">添加员工</el-button>
     </div>
-    <div class="tablebox pdb15 pdt20">
+    <div class="tablebox" :class="{ 'employee-table-card': $root.uiMode === 'modern', 'pdb15': $root.uiMode !== 'modern', 'pdt20': $root.uiMode !== 'modern' }">
       <div class="gs_tablebox">
-        <el-table ref="moduleTable" size="mini" :data="subMerchant.tableData" border style="width: 100%" stripe>
+        <el-table ref="moduleTable" :size="$root.uiMode === 'modern' ? undefined : 'mini'"
+          :data="subMerchant.tableData" :border="$root.uiMode !== 'modern'" :stripe="$root.uiMode !== 'modern'" style="width: 100%">
           <el-table-column prop="nickName" label="昵称">
           </el-table-column>
           <el-table-column prop="userName" label="帐号">
@@ -70,7 +80,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="mgt15 pdl20">
+      <div :class="$root.uiMode === 'modern' ? 'employee-pagination' : 'mgt15 pdl20'">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" background
           :page-sizes="[10, 20, 30, 40]" :current-page="subMerchant.pageIndex" :page-size="subMerchant.pageSize"
           layout="total, sizes, prev, pager, next, jumper" :total="subMerchant.total">
@@ -651,6 +661,60 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.home.employee-modern-page {
+  padding: 0;
+  color: var(--tenant-text);
+}
+
+.employee-modern-page .employee-page-head {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  h1 {
+    margin: 0;
+    color: var(--tenant-text);
+    font-size: 22px;
+    line-height: 1.4;
+    font-weight: 700;
+  }
+
+  .el-button {
+    min-width: 104px;
+    height: 38px;
+    border-radius: 8px;
+  }
+}
+
+.employee-modern-page .employee-table-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.employee-modern-page .employee-pagination {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--tenant-border);
+  background: #fff;
+}
+
+.employee-modern-page ::v-deep .employee-table-card .el-table {
+  color: #344054;
+  font-size: 13px;
+}
+
+.employee-modern-page ::v-deep .employee-table-card .el-table::before { display: none; }
+.employee-modern-page ::v-deep .employee-table-card .el-table th {
+  height: 46px;
+  color: #667085;
+  font-weight: 600;
+  background: #f8faff;
+}
+.employee-modern-page ::v-deep .employee-table-card .el-table td { padding: 13px 0; border-bottom-color: #edf0f5; }
+.employee-modern-page ::v-deep .employee-table-card .el-table tr:hover > td { background: #f8faff !important; }
+
 .gs_title {
   background: var(--theme-color);
 }

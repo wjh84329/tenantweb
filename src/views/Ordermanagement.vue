@@ -6,9 +6,13 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
-    <div class="gs_title" style="color: white;">订单管理</div>
-    <div class="opeartbox">
+  <div class="home" :class="{ 'order-page': $root.uiMode === 'modern' }">
+    <div v-if="$root.uiMode !== 'modern'" class="gs_title" style="color: white;">订单管理</div>
+    <div v-else class="order-page-head">
+      <h1>订单管理</h1>
+      <p>查询、筛选与导出商户充值订单</p>
+    </div>
+    <div class="opeartbox" :class="{ 'order-filter-card': $root.uiMode === 'modern' }">
       <ul class="clearfix">
         <li>
           <span class='tit'>起始时间：</span>
@@ -125,7 +129,7 @@
         </div>
       </div>
     </div>
-    <div style="padding: 30px 20px;border: 1px solid #facd89;margin: 0px 20px;">
+    <div :class="{ 'order-stat-grid': $root.uiMode === 'modern' }" style="padding: 30px 20px;border: 1px solid #facd89;margin: 0px 20px;">
       <ul style="display: flex;justify-content: space-around;text-align: center;">
         <li>
           <p class="tit" style="margin-bottom: 15px;">昨日充值金额</p>
@@ -153,7 +157,7 @@
         </li>
       </ul>
     </div>
-    <div class="tablebox pdb15" style="margin-top: 3%;">
+    <div class="tablebox pdb15" :class="{ 'order-table-card': $root.uiMode === 'modern' }" style="margin-top: 3%;">
       <div class="gs_tablebox">
         <el-table ref="moduleTable" size="mini" :data="tableData" border style="width: 100%" stripe v-loading="loading">
           <el-table-column prop="orderDate" label="下单时间" width="168">

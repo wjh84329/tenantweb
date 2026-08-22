@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
+  <div class="home replacement-record-page">
     <div class="gs_title" style="color: white;">补发记录</div>
     <div class="opeartbox">
       <ul class="clearfix">

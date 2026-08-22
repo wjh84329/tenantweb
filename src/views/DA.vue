@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
+  <div class="home analytics-page">
     <div class="gs_title" style="color: white;">充值统计</div>
     <div class="gs_tabbox clearfix mgt15">
       <div class="tabbox">

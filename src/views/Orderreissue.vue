@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
+  <div class="home order-reissue-page">
     <div class="gs_title" style="color: white;">手动补发</div>
     <div class="opeartbox">
       <div class="alignmentleft">

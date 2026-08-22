@@ -6,7 +6,18 @@
  * @LastEditors: gao shuai
 -->
 <template>
-  <div class="main">
+  <div class="main" :class="{ 'tenant-ui-modern-shell': $root.uiMode === 'modern' }">
+    <aside v-if="$root.uiMode === 'modern'" class="tenant-sub-sidebar">
+      <div class="tenant-sub-brand" @click="refresh('/main/home')">
+        <site-logo variant="logo3" logo-type="site" width="188px" height="54px" fit="contain" alt="网站logo" />
+      </div>
+      <tenant-global-nav active-section="agent" :sub-items="agentSubItems" @navigate="refresh" />
+      <button class="tenant-sub-back" @click="refresh('/main/home')"><tenant-icon name="home" /><span>返回平台</span></button>
+    </aside>
+    <header v-if="$root.uiMode === 'modern'" class="tenant-sub-topbar">
+      <div><span>商户中心</span><i>/</i><strong>代理系统</strong></div>
+      <div class="tenant-sub-profile"><span>{{ (nickName || 'T').slice(0, 1).toUpperCase() }}</span><strong>{{ nickName || 'Tenant' }}</strong></div>
+    </header>
     <div class="header" :style="headerStyle">
       <div class="headbox clearfix" :style="headerStyle" style="display: flex;">
         <div class="logo"><site-logo variant="logo3" style="width: 250px;height: 50px;" alt="网站logo" /></div>
@@ -83,13 +94,25 @@
 
 <script>
 import { mapState } from 'vuex';
+import TenantIcon from '../../components/TenantIcon';
+import TenantGlobalNav from '../../components/TenantGlobalNav';
 export default {
   name: 'agentSystem',
   inject: ['reload'],
+  components: { TenantIcon, TenantGlobalNav },
   data() {
     return {
       activeNav: '/agentsystem', // 默认选中首页
       skinNum: Number(localStorage.getItem('skinNum')) || 0,
+      agentSubItems: [
+        { label: '网站设置', path: '/agentsystem/setting', icon: 'account' },
+        { label: '下属商户', path: '/agentsystem/merchant', icon: 'agent' },
+        { label: '代理订单', path: '/agentsystem/agentOrder', icon: 'order' },
+        { label: '充值记录', path: '/agentsystem/deductedlog', icon: 'record' },
+        { label: '用户分组', path: '/agentsystem/userGroup', icon: 'group' },
+        { label: '数据统计', path: '/agentsystem/Statistics', icon: 'chart' },
+        { label: '分区管理', path: '/agentsystem/agentManagement', icon: 'partition' }
+      ],
       hoverNav: '' // 当前 hover 的菜单 path
     };
   },
@@ -424,4 +447,25 @@ export default {
     }
   }
 }
+</style>
+
+<style lang="scss" scoped>
+.tenant-sub-sidebar { position: fixed; z-index: 50; inset: 0 auto 0 0; width: 232px; display: flex; flex-direction: column; color: #c7d4e8; background: linear-gradient(180deg, var(--tenant-sidebar) 0%, var(--tenant-sidebar-deep) 100%); box-shadow: 10px 0 30px rgba(8,27,54,.08); }
+.tenant-sub-brand { min-height: 78px; padding: 0 20px; display: flex; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,.08); img { max-width: 100%; object-position: left center; } }
+.tenant-sub-nav {
+  flex: 1; min-height: 0; padding: 16px 10px; overflow-y: auto;
+  button { width: 100%; height: 43px; padding: 0 15px; margin-bottom: 5px; display: flex; align-items: center; gap: 12px; border: 0; border-radius: 8px; color: #aebed4; background: transparent; font: inherit; font-size: 13px; cursor: pointer;
+    svg { width: 18px; height: 18px; } &:hover { color: #fff; background: rgba(255,255,255,.06); } &.active { color: #fff; background: linear-gradient(90deg,#526dff,#6a5cff); box-shadow: 0 8px 18px rgba(79,107,255,.2); } }
+}
+.tenant-sub-back { height: 46px; margin: 10px; padding: 0 16px; display: flex; align-items: center; gap: 12px; border: 0; border-radius: 8px; color: #aebed4; background: rgba(255,255,255,.04); font: inherit; cursor: pointer; svg { width: 18px; height: 18px; } &:hover { color: #fff; background: rgba(255,255,255,.08); } }
+.tenant-sub-topbar { position: fixed; z-index: 40; top: 0; right: 0; left: 232px; height: 64px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--tenant-border); background: rgba(255,255,255,.96); box-shadow: 0 4px 18px rgba(16,24,40,.03);
+  > div:first-child { display: flex; align-items: center; gap: 10px; color: var(--tenant-text-secondary); font-size: 13px; } i { color: #c4cad4; font-style: normal; } strong { color: var(--tenant-text); font-weight: 600; } }
+.tenant-sub-profile { display: flex; align-items: center; gap: 9px; }
+.tenant-sub-profile > span { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; color: #fff; font-weight: 700; background: linear-gradient(135deg,#20c4d9,#4f6bff); }
+.main.tenant-ui-modern-shell { padding: 0 !important; background: var(--tenant-page) !important; }
+.main.tenant-ui-modern-shell > .header { display: none !important; }
+.main.tenant-ui-modern-shell > .container { height: 100% !important; padding: 84px 20px 24px 252px !important; background: var(--tenant-page); overflow-y: auto; }
+.main.tenant-ui-modern-shell > .container .midleContaner { width: 100% !important; max-width: none !important; margin: 0 !important; background: transparent !important; box-shadow: none !important; }
+.main.tenant-ui-modern-shell > .container .slider { display: none !important; }
+.main.tenant-ui-modern-shell > .container .contentbox { margin-left: 0 !important; min-height: calc(100vh - 108px); }
 </style>

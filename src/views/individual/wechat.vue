@@ -21,7 +21,7 @@
               介绍：<font color="#0000FF">玩家扫码绑定公众号，可有效积累玩家资源、防止游戏账号被盗。推荐使用自己的公众号</font>
             </p>
             <el-divider></el-divider>
-            <el-form ref="form" :model="form" label-width="160px">
+            <el-form ref="form" :model="form" label-width="160px" class="wechat-settings-form">
               <el-form-item label="功能状态：">
                 <span v-if="isEnabledWxValid">已开通</span>
                 <span v-else>未开通</span>
@@ -34,11 +34,11 @@
                   <el-radio :label="true">自己公众号</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <div v-if="form.isPlatOpenWxValid && !form.isOwnAccount" class="tc pdt20 pdb25">
+              <div v-if="form.isPlatOpenWxValid && !form.isOwnAccount" class="tc pdt20 pdb25 wechat-form-full">
                 <img style="width:200px;height:200px;" :src="codeimg + '?t=' + Date.now()" alt="">
                 <p class="mgt5"><span>请保存微信二维码，并配置到游戏中</span></p>
               </div>
-              <div v-if="form.isOwnAccount && isEnabledWxValid">
+              <div v-if="form.isOwnAccount && isEnabledWxValid" class="wechat-form-fields">
                 <el-form-item label="查看消息关键字：">
                   <el-row :gutter="10">
                     <el-col :span="4">
@@ -159,7 +159,7 @@
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="自定义回复" name="second">
-            <el-form ref="replay" :model="replay" label-width="160px">
+            <el-form ref="replay" :model="replay" label-width="160px" class="wechat-reply-form">
               <el-form-item label="">
                 多个关键字请用半角逗号<font color="#ff0000">,</font>分隔
               </el-form-item>

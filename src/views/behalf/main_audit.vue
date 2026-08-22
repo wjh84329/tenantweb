@@ -6,7 +6,18 @@
  * @LastEditors: gao shuai
 -->
 <template>
-  <div class="main">
+  <div class="main" :class="{ 'tenant-ui-modern-shell': $root.uiMode === 'modern' }">
+    <aside v-if="$root.uiMode === 'modern'" class="tenant-sub-sidebar">
+      <div class="tenant-sub-brand" @click="setActive('/main/home')">
+        <site-logo variant="logo3" logo-type="site" width="188px" height="54px" fit="contain" alt="网站logo" />
+      </div>
+      <tenant-global-nav active-section="behalf" :sub-items="behalfSubItems" @navigate="setActive" />
+      <button class="tenant-sub-back" @click="setActive('/main/home')"><tenant-icon name="home" /><span>返回平台</span></button>
+    </aside>
+    <header v-if="$root.uiMode === 'modern'" class="tenant-sub-topbar">
+      <div><span>商户中心</span><i>/</i><strong>代付管理</strong></div>
+      <div class="tenant-sub-profile"><span>{{ (nickName || 'T').slice(0, 1).toUpperCase() }}</span><strong>{{ nickName || 'Tenant' }}</strong></div>
+    </header>
     <div class="header" :style="headerStyle">
       <div class="headbox clearfix" :style="headerStyle" style="display: flex;">
       <div class="logo">
@@ -72,14 +83,30 @@
 
 <script>
 import { mapState } from 'vuex';
+import TenantIcon from '../../components/TenantIcon';
+import TenantGlobalNav from '../../components/TenantGlobalNav';
 export default {
   name: 'personal',
   inject: ['reload'],
+  components: { TenantIcon, TenantGlobalNav },
   data() {
     return {
       name: 'baseInfo',
       activeNav: '/main/home', // 默认选中首页
       skinNum: Number(localStorage.getItem('skinNum')) || 0,
+      behalfSubItems: [
+        { label: '账户概览', path: '/behalf/baseInfo', icon: 'account' },
+        { label: '版本管理', path: '/behalf/version', icon: 'template' },
+        { label: '余额明细', path: '/behalf/detail', icon: 'record' },
+        { label: '待审核订单', path: '/audit/audit', icon: 'clock' },
+        { label: '已完成订单', path: '/audit/success', icon: 'record' },
+        { label: '错误账号', path: '/audit/error', icon: 'account' },
+        { label: '黑名单管理', path: '/audit/blacklist', icon: 'key' },
+        { label: '每日统计', path: '/rollout/everyday', icon: 'chart' },
+        { label: '分区统计', path: '/rollout/partition', icon: 'partition' },
+        { label: '角色统计', path: '/rollout/role', icon: 'employee' },
+        { label: '支付宝统计', path: '/rollout/alipay', icon: 'transfer' }
+      ],
       hoverNav: '' // 当前 hover 的菜单 path
     };
   },

@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
+  <div class="home batch-reissue-page">
     <div class="gs_title" style="color: white;">整区补发</div>
     <div class="opeartbox">
       <div style="height:500px;border-right:1px dashed #888;float:left;display: none;"></div>

@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home">
+  <div class="home" :class="{ 'settlement-record-page': $root.uiMode === 'modern' }">
     <div class="person_tit">结算记录</div>
     <div class="opeartbox">
       <ul class="clearfix">
@@ -18,16 +18,18 @@
           <el-date-picker style="width:190px;" :picker-options="pickerOptions0" v-model="time2" size="small" default-time="23:59:59" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期">
           </el-date-picker>
         </li>
-        <!-- <li>
+        <li v-if="$root.uiMode === 'modern'">
           <span class='tit'>提现金额：</span>
           <span class="txtbox">
-            <el-input style="width:100px;" size="small" type="number" v-model="ontherecharge" placeholder="请输入内容"></el-input> --
-            <el-input style="width:100px;" size="small" type="number" v-model="undertherecharge" placeholder="请输入内容"></el-input>
+            <el-input style="width:120px;" size="small" type="number" v-model="ontherecharge" placeholder="最低金额"></el-input>
+            <span class="amount-separator">至</span>
+            <el-input style="width:120px;" size="small" type="number" v-model="undertherecharge" placeholder="最高金额"></el-input>
           </span>
-        </li> -->
-        <span class="mgl10">
+        </li>
+        <component :is="$root.uiMode === 'modern' ? 'li' : 'span'"
+          :class="$root.uiMode === 'modern' ? 'settlement-query-actions' : 'mgl10'">
           <el-button size="small" type="primary" @click="getlist">查询</el-button>
-        </span>
+        </component>
       </ul>
     </div>
     <div class="tablebox pdb15">
@@ -65,8 +67,8 @@ export default {
     return {
       time1: '', // 起始时间
       time2: '', // 起始时间
-      // ontherecharge: '', // 提现金额上
-      // undertherecharge: '', // 提现金额下
+      ontherecharge: '', // 提现金额下限
+      undertherecharge: '', // 提现金额上限
       pageIndex: 1, // 页码
       pageSize: 20, // 每页的条数
       total: 0, // 总数据的条数
@@ -127,8 +129,8 @@ export default {
         .settleRecrod({
           StartTime: this.time1 ? this.time1 : '',
           EndTime: this.time2 ? this.time2 : '',
-          // StartAmount: this.ontherecharge,
-          // EndAmount: this.undertherecharge,
+          StartAmount: this.ontherecharge,
+          EndAmount: this.undertherecharge,
           PageNumber: this.pageIndex,
           PageSize: this.pageSize
         })

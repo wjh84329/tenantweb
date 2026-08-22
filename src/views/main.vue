@@ -6,7 +6,83 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="main">
+  <div class="main" :class="{ 'tenant-ui-modern-shell': isModernUi }">
+    <aside v-if="isModernUi" class="tenant-sidebar">
+      <div class="tenant-brand" @click="setActive('/main/home')">
+        <site-logo
+          class="tenant-brand__logo"
+          variant="logo3"
+          logo-type="site"
+          width="188px"
+          height="54px"
+          fit="contain"
+          alt="网站logo"
+        />
+      </div>
+      <nav class="tenant-nav tenant-nav--legacy">
+        <button v-if="hasMenu(1) || $store.state.settlementType != 3"
+          class="tenant-nav__item" :class="{ active: activeNav === '/main/home' }"
+          @click="setActive('/main/home')">
+          <tenant-icon name="home" /><span>工作台</span>
+        </button>
+        <button v-if="canShowTopMenu(2)" class="tenant-nav__item"
+          :class="{ active: activeNav === '/main/Ordermanagement' }"
+          @click="setActive('/main/Ordermanagement')">
+          <tenant-icon name="order" /><span>订单管理</span><tenant-icon class="tenant-nav__arrow" name="chevron" />
+        </button>
+        <div v-if="canShowTopMenu(3)" class="tenant-nav__group is-open">
+          <button class="tenant-nav__item" :class="{ active: activeNav === '/main/Zoningmanagement' }"
+            @click="setActive('/main/Zoningmanagement')">
+            <tenant-icon name="partition" /><span>分区管理</span><tenant-icon class="tenant-nav__arrow" name="chevron" />
+          </button>
+          <div class="tenant-nav__children">
+            <button v-if="canShowSideMenu(11)" :class="{ active: $route.path === '/main/partmodules' }" @click="refresh('/main/partmodules')"><tenant-icon name="template" />分区模板</button>
+            <button v-if="canShowSideMenu(12)" :class="{ active: $route.path === '/main/partinstalls' }" @click="refresh('/main/partinstalls')"><tenant-icon name="install" />安装分区</button>
+            <button v-if="canShowSideMenu(13)" :class="{ active: $route.path === '/main/Zoningmanagement' }" @click="refresh('/main/Zoningmanagement')"><tenant-icon name="zone" />分区管理</button>
+            <button v-if="canShowSideMenu(14)" :class="{ active: $route.path === '/main/Groupmanagement' }" @click="refresh('/main/Groupmanagement')"><tenant-icon name="group" />分组管理</button>
+            <button v-if="canShowSideMenu(15)" :class="{ active: $route.path === '/main/Orderreissue' }" @click="refresh('/main/Orderreissue')"><tenant-icon name="reissue" />手动补发</button>
+            <button v-if="canShowSideMenu(20)" :class="{ active: $route.path === '/main/BetchOrderreissue' }" @click="refresh('/main/BetchOrderreissue')"><tenant-icon name="batch" />整区补发</button>
+            <button v-if="canShowSideMenu(16)" :class="{ active: $route.path === '/main/Replacementofrecords' }" @click="refresh('/main/Replacementofrecords')"><tenant-icon name="record" />补发记录</button>
+            <button v-if="canShowSideMenu(16)" :class="{ active: $route.path === '/main/orderInterval' }" @click="refresh('/main/orderInterval')"><tenant-icon name="clock" />定时任务</button>
+            <button v-if="canShowSideMenu(21)" :class="{ active: $route.path === '/main/transfer' }" @click="refresh('/main/transfer')"><tenant-icon name="transfer" />转区点记录</button>
+            <button v-if="canShowSideMenu(17)" :class="{ active: $route.path === '/main/conectKey' }" @click="refresh('/main/conectKey')"><tenant-icon name="key" />通讯秘钥</button>
+          </div>
+        </div>
+        <button v-if="hasMenu(4) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)"
+          class="tenant-nav__item" :class="{ active: activeNav === '/main/DA' }" @click="setActive('/main/DA')">
+          <tenant-icon name="chart" /><span>数据分析</span><tenant-icon class="tenant-nav__arrow" name="chevron" />
+        </button>
+        <button v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4"
+          class="tenant-nav__item" @click="setActive('/personal/baseInfo')">
+          <tenant-icon name="account" /><span>账户管理</span><tenant-icon class="tenant-nav__arrow" name="chevron" />
+        </button>
+        <button v-if="$store.state.isEnabledPaid && $store.state.settlementType != 3 && $store.state.settlementType != 4"
+          class="tenant-nav__item" @click="setActive('/behalf')">
+          <tenant-icon name="transfer" /><span>代付管理</span><tenant-icon class="tenant-nav__arrow" name="chevron" />
+        </button>
+        <button v-if="$store.state.userType && $store.state.settlementType != 3 && $store.state.settlementType != 4"
+          class="tenant-nav__item" @click="setActive('/agentsystem')">
+          <tenant-icon name="agent" /><span>代理系统</span><tenant-icon class="tenant-nav__arrow" name="chevron" />
+        </button>
+        <button v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4"
+          class="tenant-nav__item" @click="setActive('/employee')">
+          <tenant-icon name="employee" /><span>员工管理</span><tenant-icon class="tenant-nav__arrow" name="chevron" />
+        </button>
+      </nav>
+      <tenant-global-nav :active-section="activeSectionKey" @navigate="refresh" />
+      <div class="tenant-sidebar__utilities">
+        <button v-if="canShowSideMenu(18)" @click="refresh('/main/gaincode')"><tenant-icon name="code" /><span>获取代码</span></button>
+        <button v-if="canShowSideMenu(19)" @click="startGatewayDownload"><tenant-icon name="download" /><span>下载网关</span></button>
+        <button v-if="siteBrandingResolved && !isAgentSite && !isRestrictedAccount" @click="openApiDoc"><tenant-icon name="document" /><span>教程文档</span></button>
+        <button class="is-danger" @click="loginOut"><tenant-icon name="logout" /><span>退出登录</span></button>
+      </div>
+    </aside>
+    <header v-if="isModernUi" class="tenant-topbar">
+      <div class="tenant-breadcrumb"><span>商户中心</span><i>/</i><strong>{{ shellTitle }}</strong></div>
+      <div class="tenant-topbar__actions">
+        <div class="tenant-profile"><span>{{ (nickName || 'T').slice(0, 1).toUpperCase() }}</span><strong>{{ nickName || 'Tenant' }}</strong></div>
+      </div>
+    </header>
     <div class="header" :style="headboxStyle">
       <div class="headbox clearfix" :style="headboxStyle" style="display: flex;">
         <div class="logo"><site-logo variant="logo3" style="width: 250px;height: 50px;" alt="网站logo" /></div>
@@ -255,6 +331,8 @@
 <script>
 import { mapState } from 'vuex';
 import chargeLink from '../components/chargeLink';
+import TenantIcon from '../components/TenantIcon';
+import TenantGlobalNav from '../components/TenantGlobalNav';
 import Mgr from '../assets/js/SecurityService';
 import mgrs from '../assets/js/securityapi';
 import { loginUrl, netUrl } from '../assets/js/version';
@@ -264,7 +342,9 @@ export default {
   name: 'Home',
   inject: ['reload'],
   components: {
-    chargeLink
+    chargeLink,
+    TenantIcon,
+    TenantGlobalNav
   },
   data() {
     return {
@@ -299,7 +379,7 @@ export default {
       isDisablePayApi: false,
       isAgentSite: false,
       siteBrandingResolved: false,
-      floatDockCollapsed: false,
+      floatDockCollapsed: this.$root.uiMode === 'modern',
       // 微信验证 / 助手下载 / 备用下载 统一打开的站点
       floatDockPortalUrl: 'https://www.haozs.com/',
       // 平台技术、助手技术：客服 QQ 号（用于 wpa 拉起会话）；若某项填了 floatDockQqHrefOverride 则优先用完整链接
@@ -323,9 +403,43 @@ export default {
       'id',
       'nickName'
     ]),
+    isModernUi() {
+      return this.$root.uiMode === 'modern';
+    },
+    activeSectionKey() {
+      const path = (this.$route && this.$route.path) || '';
+      if (path.startsWith('/personal')) return 'account';
+      if (path.startsWith('/behalf') || path.startsWith('/audit') || path.startsWith('/rollout')) return 'behalf';
+      if (path.startsWith('/agentsystem')) return 'agent';
+      if (path.startsWith('/employee')) return 'employee';
+      if (path === '/main/home') return 'home';
+      if (path === '/main/Ordermanagement') return 'order';
+      if (path === '/main/DA') return 'analysis';
+      if (path.startsWith('/main/')) return 'partition';
+      return '';
+    },
     isRestrictedAccount() {
       const settlementType = Number(this.$store.state.settlementType);
       return settlementType === 3 || settlementType === 4;
+    },
+    shellTitle() {
+      const titleMap = {
+        '/main/home': '业务总览',
+        '/main/Ordermanagement': '订单管理',
+        '/main/partmodules': '分区模板',
+        '/main/partinstalls': '安装分区',
+        '/main/Zoningmanagement': '分区管理',
+        '/main/Groupmanagement': '分组管理',
+        '/main/Orderreissue': '手动补发',
+        '/main/BetchOrderreissue': '整区补发',
+        '/main/Replacementofrecords': '补发记录',
+        '/main/orderInterval': '定时任务',
+        '/main/transfer': '转区点记录',
+        '/main/conectKey': '通讯秘钥',
+        '/main/DA': '数据分析',
+        '/main/gaincode': '获取代码'
+      };
+      return titleMap[this.$route.path] || '工作台';
     },
     headboxStyle() {
       switch (this.skinNum) {
@@ -487,6 +601,9 @@ export default {
     },
     skinNum() {
       this.updateThemeVars();
+    },
+    isModernUi(modern) {
+      this.floatDockCollapsed = modern;
     }
   },
   methods: {
@@ -961,7 +1078,7 @@ export default {
 
         li {
           float: left;
-          padding: 0 35px;
+          padding: 0 24px;
           height: 60px;
           line-height: 60px;
           // border-right: 1px solid #fff;
@@ -1567,5 +1684,214 @@ export default {
   &.is-collapsed &__label {
     display: none;
   }
+}
+</style>
+<style lang="scss" scoped>
+.main.tenant-ui-modern-shell {
+  padding: 0 !important;
+  background: var(--tenant-page) !important;
+}
+
+.main.tenant-ui-modern-shell > .header,
+.main.tenant-ui-modern-shell .midleContaner > .slider {
+  display: none !important;
+}
+
+.tenant-sidebar {
+  position: fixed;
+  z-index: 1200;
+  inset: 0 auto 0 0;
+  width: 216px;
+  display: flex;
+  flex-direction: column;
+  color: #c7d4e8;
+  background:
+    radial-gradient(circle at 20% 4%, rgba(74, 123, 255, .18), transparent 24%),
+    linear-gradient(180deg, var(--tenant-sidebar) 0%, var(--tenant-sidebar-deep) 100%);
+  box-shadow: 14px 0 40px rgba(8, 27, 54, 0.1);
+}
+
+.tenant-brand {
+  height: 64px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+  &__logo {
+    max-width: 100%;
+    object-position: left center;
+  }
+}
+
+.tenant-nav {
+  flex: 1;
+  min-height: 0;
+  padding: 14px 10px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.15) transparent;
+
+  button { font-family: inherit; }
+
+  &__item,
+  &__children button {
+    width: 100%;
+    border: 0;
+    color: #aebed4;
+    background: transparent;
+    cursor: pointer;
+    transition: color .18s, background .18s;
+  }
+
+  &__item {
+    height: 46px;
+    padding: 0 13px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: left;
+  }
+
+  &__item > span { flex: 1; }
+  &__item:hover { color: #fff; background: rgba(255,255,255,.055); }
+  &__item.active { color: #fff; background: linear-gradient(90deg, #3e5cf2, #5576ff); box-shadow: 0 7px 18px rgba(50, 79, 220, .28); }
+  &__arrow { width: 14px !important; height: 14px !important; transition: transform .2s; }
+  &__group.is-open > &__item:not(.active) { color: #d9e4f3; }
+  &__group.is-open > &__item &__arrow { transform: rotate(180deg); }
+
+  &__children {
+    position: relative;
+    margin: 4px 0 7px 24px;
+    padding-left: 12px;
+    border-left: 1px solid rgba(144, 169, 205, .22);
+  }
+
+  &__children button {
+    min-height: 38px;
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border-radius: 7px;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  &__children button .tenant-icon { width: 16px; height: 16px; }
+  &__children button:hover { color: #fff; background: rgba(255,255,255,.05); }
+  &__children button.active { color: #7fc7ff; background: rgba(79,107,255,.14); }
+}
+
+.tenant-nav--legacy { display: none !important; }
+
+.tenant-sidebar__utilities {
+  padding: 12px 10px 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+
+  button {
+    width: 100%;
+    height: 38px;
+    padding: 0 13px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    border: 0;
+    border-radius: 7px;
+    color: #94a9c5;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  button:hover { color: #fff; background: rgba(255,255,255,.055); }
+  button.is-danger:hover { color: #ff8f8f; background: rgba(239,68,68,.1); }
+  .tenant-icon { width: 17px; height: 17px; }
+}
+
+.tenant-topbar {
+  position: fixed;
+  z-index: 1100;
+  top: 0;
+  right: 0;
+  left: 216px;
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--tenant-border);
+  box-shadow: 0 2px 10px rgba(31,48,80,.035);
+}
+
+.tenant-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #98a2b3;
+
+  i { color: #d0d5dd; font-style: normal; }
+  strong { color: #344054; font-weight: 600; }
+}
+
+.tenant-topbar__actions { display: flex; align-items: center; gap: 8px; }
+
+.tenant-profile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #344054;
+
+  > span {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #45c6de, #5268f7 58%, #7658e8);
+    box-shadow: 0 7px 18px rgba(82,104,247,.28);
+  }
+
+  strong { font-size: 14px; font-weight: 600; }
+}
+
+.main.tenant-ui-modern-shell > .container {
+  height: 100% !important;
+  padding: 84px 24px 24px 240px !important;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 76% -12%, rgba(82,104,247,.08), transparent 26%),
+    var(--tenant-page);
+}
+
+.main.tenant-ui-modern-shell > .container .midleContaner {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: calc(100vh - 108px);
+  margin: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.main.tenant-ui-modern-shell > .container .contentbox {
+  width: 100%;
+  min-height: calc(100vh - 108px) !important;
+  margin-left: 0 !important;
+  background: transparent !important;
+}
+
+@media (max-width: 1180px) {
+  .tenant-sidebar { width: 200px; }
+  .tenant-topbar { left: 200px; }
+  .main.tenant-ui-modern-shell > .container { padding-left: 220px !important; padding-right: 20px !important; }
 }
 </style>

@@ -6,14 +6,14 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="partinstall">
+  <div class="partinstall communication-key-page">
     <div class="bg_fff">
       <div class="gs_listcontainer">
         <p class="tip_red">通讯密匙</p>
         <el-divider></el-divider>
         <div>
-          <p class="mgb10" style="color: #909399;margin-left: 5%;line-height: 50px;">这是网站与您的充值服务器网关的通讯密匙，建议您不定期更换密匙</p>
-          <div style="margin-left: 20%;width: 55%;">
+          <p class="mgb10 key-description" :style="$root.uiMode === 'modern' ? null : { color: '#909399', marginLeft: '5%', lineHeight: '50px' }">这是网站与您的充值服务器网关的通讯密匙，建议您不定期更换密匙</p>
+          <div class="key-field-row" :style="$root.uiMode === 'modern' ? null : { marginLeft: '20%', width: '55%' }">
             <el-input placeholder="请输入内容" v-model="baseInfo.serverKey" :readonly="true">
               <template slot="prepend">通讯秘钥</template>
               <template slot="append">
@@ -21,7 +21,7 @@
               </template>
             </el-input>
           </div>
-          <p class="mgb10" style="color: #909399;margin-left: 30%;line-height: 70px;">系统将同步到您的充值服务器网关，请开启您的充值网关</p>
+          <p class="mgb10 key-sync-note" :style="$root.uiMode === 'modern' ? null : { color: '#909399', marginLeft: '30%', lineHeight: '70px' }">系统将同步到您的充值服务器网关，请开启您的充值网关</p>
           <!-- <el-button type="danger" style="margin-left: 30%;width: 180px;">确定保存</el-button> -->
         </div>
       </div>
@@ -29,8 +29,8 @@
         <p class="tip_red">接口秘钥</p>
         <el-divider></el-divider>
         <div>
-          <p class="mgb10" style="color: #909399;margin-left: 5%;line-height: 50px;">这是API接口校验使用的秘钥，建议您不定期更换密匙</p>
-          <div style="margin-left: 20%;width: 55%;">
+          <p class="mgb10 key-description" :style="$root.uiMode === 'modern' ? null : { color: '#909399', marginLeft: '5%', lineHeight: '50px' }">这是API接口校验使用的秘钥，建议您不定期更换密匙</p>
+          <div class="key-field-row" :style="$root.uiMode === 'modern' ? null : { marginLeft: '20%', width: '55%' }">
             <el-input placeholder="请输入内容" v-model="baseInfo.signKey" :readonly="true">
               <template slot="prepend">接口秘钥</template>
               <template slot="append">

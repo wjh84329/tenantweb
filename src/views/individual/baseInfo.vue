@@ -6,7 +6,20 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="partinstall">
+  <div class="partinstall" :class="{ 'account-profile-page': $root.uiMode === 'modern' }">
+    <div v-if="$root.uiMode === 'modern'" class="account-page-head">
+      <h1>基本资料</h1>
+      <p>维护账号联系信息、结算资料与收货地址</p>
+    </div>
+    <div v-if="$root.uiMode === 'modern'" class="account-profile-summary">
+      <div class="account-profile-summary__avatar">{{ (baseInfo.account || 'T').slice(0, 1).toUpperCase() }}</div>
+      <div class="account-profile-summary__identity">
+        <strong>{{ baseInfo.account || 'Tenant' }}</strong>
+        <span>{{ baseInfo.signStatus || '账户资料' }}</span>
+      </div>
+      <dl><dt>用户ID</dt><dd>{{ baseInfo.id }}</dd></dl>
+      <dl><dt>用户UUID</dt><dd>{{ baseInfo.uuid }}</dd></dl>
+    </div>
     <div class="bg_fff pdb25">
       <!-- 基本资料 -->
       <div class="info-section">
