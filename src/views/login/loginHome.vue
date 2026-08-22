@@ -105,7 +105,7 @@
               </div>
               <div class="lh-remember-login">
                 <el-checkbox v-model="form.rememberLogin">保持登录</el-checkbox>
-                <span>有效期24小时</span>
+                <span>（有效期24小时）</span>
               </div>
               <button type="submit" class="lh-submit" :disabled="isLoading">
                 {{ isLoading ? '登录中' : '登录' }}
@@ -1218,7 +1218,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 10px;
+  gap: 4px;
   color: #52627a;
   font-size: 14px;
 }
