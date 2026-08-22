@@ -961,7 +961,7 @@ export default {
 
         li {
           float: left;
-          padding: 0 35px;
+          padding: 0 24px;
           height: 60px;
           line-height: 60px;
           // border-right: 1px solid #fff;
