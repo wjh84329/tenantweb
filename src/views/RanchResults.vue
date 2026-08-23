@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :class="{ 'ranch-results-page': $root.uiMode === 'modern' }">
     <div class="gs_title" style="color: white;">通区领取记录</div>
 
     <div class="opeartbox" style="padding:12px;">
@@ -31,19 +31,19 @@
 
     <div class="tablebox" style="margin-top:12px;background:#fff;padding:10px;">
       <el-table :data="ranchData" size="mini" stripe border style="width:100%">
-        <el-table-column prop="serverName" label="区名"></el-table-column>
-        <el-table-column prop="userId" label="账号" width="120"></el-table-column>
-        <el-table-column prop="userName" label="角色名" width="80"></el-table-column>
-        <el-table-column prop="ip" label="ip" width="80"></el-table-column>
-        <el-table-column prop="amount" label="金额" width="80">
+        <el-table-column prop="serverName" label="区名" :min-width="$root.uiMode === 'modern' ? 170 : undefined"></el-table-column>
+        <el-table-column prop="userId" label="账号" :width="$root.uiMode === 'modern' ? undefined : 120" :min-width="$root.uiMode === 'modern' ? 150 : undefined"></el-table-column>
+        <el-table-column prop="userName" label="角色名" :width="$root.uiMode === 'modern' ? undefined : 80" :min-width="$root.uiMode === 'modern' ? 140 : undefined"></el-table-column>
+        <el-table-column prop="ip" label="ip" :width="$root.uiMode === 'modern' ? undefined : 80" :min-width="$root.uiMode === 'modern' ? 130 : undefined"></el-table-column>
+        <el-table-column prop="amount" label="金额" :width="$root.uiMode === 'modern' ? undefined : 80" :min-width="$root.uiMode === 'modern' ? 90 : undefined">
           <template slot-scope="scope">
             {{ scope.row.Amount ? scope.row.Amount.toFixed(2) : '0.00' }}
           </template>
         </el-table-column>
-        <el-table-column prop="orderTime" label="时间" width="180"></el-table-column>
-        <el-table-column prop="orderNo" label="单据号" width="180"></el-table-column>
-        <el-table-column prop="playerQq" label="玩家QQ" width="100"></el-table-column>
-        <el-table-column prop="playerPhone" label="玩家电话" width="120">
+        <el-table-column prop="orderTime" label="时间" :width="$root.uiMode === 'modern' ? undefined : 180" :min-width="$root.uiMode === 'modern' ? 180 : undefined"></el-table-column>
+        <el-table-column prop="orderNo" label="单据号" :width="$root.uiMode === 'modern' ? undefined : 180" :min-width="$root.uiMode === 'modern' ? 230 : undefined"></el-table-column>
+        <el-table-column prop="playerQq" label="玩家QQ" :width="$root.uiMode === 'modern' ? undefined : 100" :min-width="$root.uiMode === 'modern' ? 130 : undefined"></el-table-column>
+        <el-table-column prop="playerPhone" label="玩家电话" :width="$root.uiMode === 'modern' ? undefined : 120" :min-width="$root.uiMode === 'modern' ? 130 : undefined">
           <template slot-scope="scope">
             {{ scope.row.PlayerPhone || '未填写' }}
           </template>

@@ -420,7 +420,7 @@
             <dd>
               <span class="inputbox">
                 <div class="tablebox" style="width: 550px;">
-                  <table>
+                  <table class="incite-rule-table">
                     <tbody>
                       <tr v-for="(item,i) in inciteInfo.giveList" :key="'incite'+i">
                         <td>

@@ -1133,6 +1133,36 @@ body.tenant-ui-modern {
 .contentbox .two-column-config-page .compact-option-grid > dl:has(.sqlsetbox),
 .contentbox .two-column-config-page .compact-option-grid > dl:has(.gs_textarea) { flex-basis: 100%; }
 
+.contentbox .two-column-config-page .compact-option-grid > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) {
+  min-height: 40px;
+  padding: 4px 0 !important;
+  border-bottom: 0 !important;
+}
+
+.contentbox .two-column-config-page .incite-rule-table {
+  width: 680px !important;
+  max-width: 100%;
+  table-layout: fixed;
+}
+
+.contentbox .two-column-config-page .tablebox:has(> .incite-rule-table) {
+  width: 680px !important;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.contentbox .two-column-config-page .incite-rule-table td {
+  box-sizing: border-box;
+  padding: 7px 10px !important;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.contentbox .two-column-config-page .incite-rule-table td:nth-child(1),
+.contentbox .two-column-config-page .incite-rule-table td:nth-child(2) { width: 280px; }
+.contentbox .two-column-config-page .incite-rule-table td:nth-child(3) { width: 90px; }
+.contentbox .two-column-config-page .incite-rule-table .el-input { width: 180px !important; }
+
 /* 配置项标签与复选/单选控件统一到同一水平基线 */
 .contentbox .two-column-config-page .compact-option-grid > dl,
 .contentbox .two-column-config-page .equipment-config-grid > dl {
@@ -1425,6 +1455,37 @@ body.tenant-ui-modern {
 
 .contentbox .order-page .order-filter-card .el-button {
   margin: 0 !important;
+}
+
+/* 旧筛选页普遍使用 ul + btnBox；新版按 DOM 顺序合并为连续操作流 */
+.contentbox .opeartbox:has(> ul + .btnBox) {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  gap: 0 16px;
+}
+
+.contentbox .opeartbox:has(> ul + .btnBox) > ul {
+  display: contents !important;
+}
+
+.contentbox .opeartbox:has(> ul + .btnBox) > ul::before,
+.contentbox .opeartbox:has(> ul + .btnBox) > ul::after {
+  display: none !important;
+}
+
+.contentbox .opeartbox:has(> ul + .btnBox) > ul > li,
+.contentbox .opeartbox:has(> ul + .btnBox) > .btnBox {
+  flex: 0 0 auto;
+  margin: 0 0 10px !important;
+}
+
+/* 通区订单按内容长度分配列宽，长编号保持完整单行显示 */
+.contentbox .ranch-results-page .el-table th,
+.contentbox .ranch-results-page .el-table td,
+.contentbox .ranch-results-page .el-table .cell {
+  white-space: nowrap;
 }
 
 .contentbox > .home > .tablebox,
