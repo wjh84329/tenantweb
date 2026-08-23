@@ -68,7 +68,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" width="190">
+          <el-table-column label="操作" :width="$root.uiMode === 'modern' ? 330 : 190">
             <template slot-scope="scope">
               <div class="operation-actions">
                 <el-button size="mini" type="success" @click="openEditDialog(scope.row)">编辑</el-button>
@@ -775,6 +775,24 @@ export default {
 .operation-actions .el-button {
   width: 82px;
   margin: 0;
+}
+
+.employee-modern-page .operation-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.employee-modern-page .operation-actions .el-button {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 64px;
+  margin: 0;
+  padding-right: 12px;
+  padding-left: 12px;
 }
 
 .group-dialog-toolbar {
