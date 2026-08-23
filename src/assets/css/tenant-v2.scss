@@ -306,6 +306,11 @@ body.tenant-ui-modern {
   box-shadow: 0 16px 40px rgba(16,24,40,.14) !important;
 }
 
+.el-select-dropdown,
+.el-picker-panel {
+  z-index: 3000 !important;
+}
+
 .contentbox .el-switch.is-checked .el-switch__core {
   background: var(--tenant-success) !important;
   border-color: var(--tenant-success) !important;
@@ -1128,6 +1133,34 @@ body.tenant-ui-modern {
 .contentbox .two-column-config-page .compact-option-grid > dl:has(.sqlsetbox),
 .contentbox .two-column-config-page .compact-option-grid > dl:has(.gs_textarea) { flex-basis: 100%; }
 
+/* 配置项标签与复选/单选控件统一到同一水平基线 */
+.contentbox .two-column-config-page .compact-option-grid > dl,
+.contentbox .two-column-config-page .equipment-config-grid > dl {
+  align-items: center !important;
+}
+
+.contentbox .two-column-config-page .compact-option-grid > dl > dt,
+.contentbox .two-column-config-page .equipment-config-grid > dl > dt {
+  padding-top: 0 !important;
+}
+
+.contentbox .two-column-config-page .compact-option-grid .inputbox,
+.contentbox .two-column-config-page .equipment-config-grid .inputbox {
+  display: inline-flex;
+  align-items: center;
+  padding-top: 0 !important;
+}
+
+.contentbox .two-column-config-page .compact-option-grid .el-checkbox,
+.contentbox .two-column-config-page .compact-option-grid .el-radio,
+.contentbox .two-column-config-page .equipment-config-grid .el-checkbox,
+.contentbox .two-column-config-page .equipment-config-grid .el-radio {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  line-height: 32px;
+}
+
 @media (max-width: 1280px) {
   .contentbox .partition-install-page .gs_listcontainer,
   .contentbox .two-column-config-page .gs_listcontainer { grid-template-columns: 1fr; }
@@ -1340,6 +1373,60 @@ body.tenant-ui-modern {
   margin: 2px 0 10px;
 }
 
+.contentbox .opeartbox .btnBox > div,
+.contentbox .tablebox .btnsbox > div,
+.contentbox .toolbar > div,
+.contentbox .recordBtn > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.contentbox .opeartbox .btnBox .el-button,
+.contentbox .tablebox .btnsbox .el-button,
+.contentbox .toolbar .el-button,
+.contentbox .recordBtn .el-button {
+  flex: 0 0 auto;
+  margin: 0 !important;
+}
+
+/* 订单筛选按钮进入正常文档流，空间不足时整组换行而不是覆盖筛选项 */
+.contentbox .order-page .order-filter-card {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  padding: 20px 20px 10px !important;
+}
+
+.contentbox .order-page .order-filter-card > ul {
+  flex: 1 1 900px;
+  min-width: 0;
+}
+
+.contentbox .order-page .order-filter-card > .btnBox {
+  position: static !important;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.contentbox .order-page .order-filter-card > .btnBox > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 !important;
+}
+
+.contentbox .order-page .order-filter-card .el-button {
+  margin: 0 !important;
+}
+
 .contentbox > .home > .tablebox,
 .contentbox > .wrap-box .tablebox,
 .contentbox > .permissions .tablebox,
@@ -1442,30 +1529,14 @@ body.tenant-ui-modern {
   border-top: 1px solid #edf0f5;
 }
 
-/* Tab 页面改为设计稿中的扁平分段导航 */
+/* Tab 外壳只负责纵向布局，具体筛选区和表格区各自承载卡片样式 */
 .contentbox .gs_tabbox,
 .contentbox .tabbox {
   box-sizing: border-box;
-  min-height: 52px;
-  margin: 0 0 16px !important;
-  padding: 0 18px !important;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--tenant-border) !important;
-  border-radius: 8px !important;
-  background: #fff !important;
-  box-shadow: var(--tenant-shadow) !important;
-}
-
-/* 嵌套 Tab 外壳只负责布局，避免与内部表格卡片叠出两到三层外框 */
-.contentbox .gs_tabbox:has(> .tabbox),
-.contentbox .gs_tabbox > .tabbox {
-  display: block;
-  box-sizing: border-box;
   width: 100% !important;
   min-height: 0;
-  margin: 0 !important;
+  margin: 0 0 16px !important;
+  display: block;
   padding: 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
@@ -1756,9 +1827,11 @@ body.tenant-ui-modern {
 .contentbox .replacement-record-page .el-tabs__header,
 .contentbox .analytics-page .el-tabs__header {
   margin: 0 !important;
-  padding: 0 16px;
+  padding: 0 !important;
   border-bottom: 1px solid var(--tenant-border);
 }
+
+.contentbox .analytics-page .el-tabs__nav { margin-left: 0 !important; }
 
 .contentbox .hand-order-page .el-tabs__content,
 .contentbox .replacement-record-page .el-tabs__content,
