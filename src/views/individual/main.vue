@@ -141,7 +141,7 @@ export default {
       accountSubItems: [
         { label: '用户信息', path: '/personal/baseInfo', icon: 'account' },
         { label: '三方开户', path: '/personal/sharedetails', icon: 'document' },
-          { label: '转账', path: '/personal/withdrawapply1', icon: 'transfer' },
+          { label: '电子户转账', path: '/personal/withdrawapply1', icon: 'transfer' },
           { label: '转账记录', path: '/personal/Withdrawal', icon: 'record' },
         { label: '结算比例', path: '/personal/rateList', icon: 'chart' },
         { label: '二级密码', path: '/personal/password', icon: 'key' },
