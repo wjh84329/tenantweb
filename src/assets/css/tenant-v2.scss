@@ -118,14 +118,14 @@ body.tenant-ui-modern {
   padding: 20px 22px 8px !important;
 }
 
-.contentbox .opeartbox ul {
+.contentbox .opeartbox > ul {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 12px 18px;
 }
 
-.contentbox .opeartbox ul > li {
+.contentbox .opeartbox > ul > li {
   float: none !important;
   margin: 0 0 10px !important;
 }
@@ -1760,6 +1760,65 @@ body.tenant-ui-modern {
 }
 
 .contentbox .analytics-page .opeartbox { margin: 0 !important; border: 0 !important; box-shadow: none !important; }
+.contentbox .analytics-page .opeartbox > ul {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 54px;
+  align-items: center !important;
+  gap: 10px 16px !important;
+  padding: 6px 0 8px;
+}
+
+.contentbox .analytics-page .opeartbox > ul > li {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  min-height: 32px;
+  margin: 0 !important;
+  white-space: nowrap;
+}
+
+.contentbox .analytics-page .opeartbox > ul > .el-button {
+  align-self: center;
+  flex: 0 0 auto;
+  margin: 0 !important;
+}
+
+.contentbox .analytics-page .tablebox > .mgt15.pdl20 {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 0 !important;
+  padding: 14px 18px 2px !important;
+  overflow-x: auto;
+  border-top: 1px solid var(--tenant-border);
+}
+
+.contentbox .analytics-page .el-pagination {
+  display: flex !important;
+  align-items: center;
+  flex-wrap: nowrap !important;
+  width: max-content;
+  min-width: 100%;
+  padding: 0 !important;
+  white-space: nowrap;
+}
+
+.contentbox .analytics-page .el-pagination > *,
+.contentbox .analytics-page .el-pagination .el-pager > li {
+  flex: 0 0 auto;
+}
+
+.contentbox .analytics-page .el-pagination .el-pager {
+  display: flex !important;
+  align-items: center;
+  flex-wrap: nowrap !important;
+  gap: 0 !important;
+  width: auto !important;
+}
+
+.contentbox .analytics-page .el-pagination .el-pager > li {
+  margin-bottom: 0 !important;
+}
 .contentbox .analytics-page .below { padding: 12px !important; }
 .contentbox .analytics-page .nodatatip { min-height: 240px; }
 .contentbox .analytics-page #tenantDaily { width: 100% !important; max-width: none !important; }
