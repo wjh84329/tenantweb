@@ -6,10 +6,10 @@
  * @LastEditors: gao shuai
  -->
  <template>
-  <div class="home">
+  <div class="home group-management-page">
     <div class="gs_title" style="color: white;">分组管理</div>
     <div class="btnsbox fl mgt10" style="margin:10px 10px;">
-      <el-button size="small" style="background: #409EFF !important;border-color: #409EFF;" type="success" @click="dialog.show = true"
+      <el-button class="group-create-button" size="small" style="background: #409EFF !important;border-color: #409EFF;" type="success" @click="dialog.show = true"
       v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">创建分组</el-button>
     </div>
     <div class="tablebox pdb15 pdt20">
@@ -37,9 +37,9 @@
               <span @click="getCircuite(scope.row.uuid)">分组充值地址</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="280">
+          <el-table-column label="操作" :width="$root.uiMode === 'modern' ? 340 : 280">
             <template slot-scope="scope">
-              <el-button-group>
+              <el-button-group class="group-row-actions">
                 <!-- <el-button size="mini" type="warning" @click="copyaddress(scope.row.uuid)">推广</el-button> -->
                 <el-button size="mini" type="info" @click="downLink(scope.row.uuid,scope.$index)" :loading="loading&&loadingIndex===scope.$index">推广下载</el-button>
                 <el-button size="mini" type="primary" @click="editgroup(scope.row.id,scope.row.name)" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">编辑</el-button>

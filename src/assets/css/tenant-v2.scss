@@ -1566,6 +1566,23 @@ body.tenant-ui-modern {
   border-radius: 4px !important;
 }
 
+.contentbox .group-management-page .group-create-button {
+  color: #fff !important;
+  border-color: var(--tenant-primary) !important;
+  background: linear-gradient(135deg, var(--tenant-primary), #637bff) !important;
+  box-shadow: 0 7px 16px rgba(79, 107, 255, .22);
+}
+
+.contentbox .group-management-page .group-row-actions {
+  flex-wrap: nowrap !important;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.contentbox .group-management-page .group-row-actions .el-button {
+  flex: 0 0 auto;
+}
+
 .contentbox .partition-row-actions {
   display: flex;
   align-items: center;
