@@ -576,6 +576,18 @@
             <img class="imgskin" src="../assets/images/sk4.png" alt="">
           </el-tooltip>
         </li>
+        <li :class="{ on: dialogSkin.skinNum === 5 }" @click="dialogSkin.skinNum = 5">
+          <el-tooltip class="item" effect="dark" content="经典红灰（兼容IE6）" placement="bottom">
+            <div class="legacy-pay-preview" aria-label="经典红灰充值皮肤预览">
+              <span class="legacy-pay-preview__top"></span>
+              <span class="legacy-pay-preview__notice"></span>
+              <span class="legacy-pay-preview__title"></span>
+              <span class="legacy-pay-preview__row legacy-pay-preview__row--one"></span>
+              <span class="legacy-pay-preview__row legacy-pay-preview__row--two"></span>
+              <strong>经典红灰</strong>
+            </div>
+          </el-tooltip>
+        </li>
       </ul>
       <p class="tc pdb10" style="padding-top: 30px;">
         <el-button size="mini" type="primary" @click="setSkin">确定</el-button>
@@ -2493,4 +2505,23 @@ export default {
   .tenant-dashboard .tenant-account-grid .moneybox .numberbox > ul { padding-right: 0; }
   .tenant-dashboard .tenant-account-grid .moneybox .getbtn { position: static; margin-top: 12px; }
 }
+
+.legacy-pay-preview {
+  position: relative;
+  box-sizing: border-box;
+  width: 142px;
+  height: 86px;
+  overflow: hidden;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+}
+
+.legacy-pay-preview span { position: absolute; display: block; }
+.legacy-pay-preview__top { top: 0; left: 0; right: 0; height: 14px; border-bottom: 2px solid #a92b1c; }
+.legacy-pay-preview__notice { top: 22px; left: 10px; width: 120px; height: 10px; background: #ededed; border-bottom: 1px solid #a92b1c; }
+.legacy-pay-preview__title { top: 39px; left: 10px; width: 46px; height: 5px; background: #a92b1c; }
+.legacy-pay-preview__row { left: 10px; width: 120px; height: 8px; border: 1px solid #ddd; background: #f5f5f5; }
+.legacy-pay-preview__row--one { top: 49px; }
+.legacy-pay-preview__row--two { top: 60px; }
+.legacy-pay-preview strong { position: absolute; right: 8px; bottom: 3px; color: #8f261a; font-size: 10px; font-weight: 600; }
 </style>
