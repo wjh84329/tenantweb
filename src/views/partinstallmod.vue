@@ -465,7 +465,7 @@
             <dd>
               <span class="inputbox">
                 <div class="tablebox" style="width: 930px;">
-                  <table>
+                  <table class="integral-rule-table">
                     <thead>
                       <tr>
                         <th width="130">附加奖励</th>
@@ -677,7 +677,7 @@
             <dd>
               <span class="inputbox">
                 <div class="tablebox" style="width: 700px;">
-                  <table>
+                  <table class="redbag-rule-table">
                     <tbody>
                       <tr v-for="(item,i) in redbag.redDetail" :key="'red'+i">
                         <td>

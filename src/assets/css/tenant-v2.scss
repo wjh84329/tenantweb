@@ -1028,6 +1028,61 @@ body.tenant-ui-modern {
   width: 100% !important;
 }
 
+/* 模板赠送规则：一条规则保持一行，宽字段按实际内容分配空间 */
+.contentbox .two-column-config-page .redbag-rule-table {
+  min-width: 860px;
+  table-layout: fixed;
+}
+
+.contentbox .two-column-config-page .redbag-rule-table td {
+  box-sizing: border-box;
+  padding: 8px 10px !important;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.contentbox .two-column-config-page .redbag-rule-table td:nth-child(1) { width: 300px; }
+.contentbox .two-column-config-page .redbag-rule-table td:nth-child(2) { width: 460px; }
+.contentbox .two-column-config-page .redbag-rule-table td:nth-child(3) { width: 84px; text-align: right; }
+.contentbox .two-column-config-page .redbag-rule-table td:nth-child(1) .el-input { width: 180px !important; }
+.contentbox .two-column-config-page .redbag-rule-table td:nth-child(2) .el-input { width: 120px !important; }
+
+.contentbox .two-column-config-page .integral-rule-table {
+  min-width: 1220px;
+  table-layout: fixed;
+}
+
+.contentbox .two-column-config-page .integral-rule-table th:nth-child(1),
+.contentbox .two-column-config-page .integral-rule-table td:nth-child(1) { width: 150px; }
+.contentbox .two-column-config-page .integral-rule-table th:nth-child(2),
+.contentbox .two-column-config-page .integral-rule-table td:nth-child(2) { width: 360px; }
+.contentbox .two-column-config-page .integral-rule-table th:nth-child(3),
+.contentbox .two-column-config-page .integral-rule-table td:nth-child(3) { width: 120px; }
+.contentbox .two-column-config-page .integral-rule-table th:nth-child(4),
+.contentbox .two-column-config-page .integral-rule-table td:nth-child(4) { width: 250px; }
+.contentbox .two-column-config-page .integral-rule-table th:nth-child(5),
+.contentbox .two-column-config-page .integral-rule-table td:nth-child(5) { width: 90px; }
+.contentbox .two-column-config-page .integral-rule-table th:nth-child(6),
+.contentbox .two-column-config-page .integral-rule-table td:nth-child(6) { width: 150px; }
+.contentbox .two-column-config-page .integral-rule-table th:nth-child(7),
+.contentbox .two-column-config-page .integral-rule-table td:nth-child(7) { width: 80px; }
+
+.contentbox .two-column-config-page .integral-rule-table td {
+  box-sizing: border-box;
+  padding: 8px 10px !important;
+  vertical-align: middle;
+}
+
+.contentbox .two-column-config-page .integral-rule-table td:nth-child(2) .el-input,
+.contentbox .two-column-config-page .integral-rule-table td:nth-child(4) .el-select {
+  width: 100% !important;
+}
+
+.contentbox .two-column-config-page .tablebox:has(.redbag-rule-table),
+.contentbox .two-column-config-page .tablebox:has(.integral-rule-table) {
+  overflow-x: auto;
+}
+
 @media (max-width: 1280px) {
   .contentbox .partition-install-page .gs_listcontainer,
   .contentbox .two-column-config-page .gs_listcontainer { grid-template-columns: 1fr; }
