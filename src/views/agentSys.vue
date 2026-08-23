@@ -51,7 +51,7 @@
                       <el-switch v-model="scope.row.state" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949" @change="stateChange(scope.row.id)"></el-switch>
                     </template>
                   </el-table-column>
-                  <el-table-column label="比率组" width="140">
+                  <el-table-column label="比率组" width="170">
                     <template slot-scope="scope">
                       <el-select v-model="scope.row.rankId" size="small" @change="rateChange(scope.row.id,scope.row.rankId)">
                         <el-option label="请选择" :value="0"></el-option>
@@ -75,7 +75,7 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="代理订单" name="1">
+          <el-tab-pane label="代理订单" name="1" class="agent-order-pane">
             <div class="opeartbox">
               <ul class="clearfix">
                 <li>
