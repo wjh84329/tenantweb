@@ -429,7 +429,7 @@
       <div class="gs_title cursor bg_eee" @click="collspa.show2 = !collspa.show2">激励赠送<span class="arrow"
           :class="{ 'active': collspa.show2 }"></span></div>
       <el-collapse-transition>
-        <div v-show="collspa.show2" class="gs_listcontainer">
+        <div v-show="collspa.show2" class="gs_listcontainer compact-option-grid">
           <dl class="clearfix">
             <dt>设置：</dt>
             <dd>
@@ -569,7 +569,7 @@
       <div class="gs_title cursor bg_eee" @click="collspa.show5 = !collspa.show5">装备赠送<span class="arrow"
           :class="{ 'active': collspa.show5 }"></span></div>
       <el-collapse-transition>
-        <div v-show="collspa.show5" class="gs_listcontainer">
+        <div v-show="collspa.show5" class="gs_listcontainer equipment-config-grid">
           <dl class="clearfix">
             <dt>显示选项：</dt>
             <dd>
@@ -656,7 +656,7 @@
       <div class="gs_title cursor bg_eee" @click="collspa.show6 = !collspa.show6">红包赠送<span class="arrow"
           :class="{ 'active': collspa.show6 }"></span></div>
       <el-collapse-transition>
-        <div v-show="collspa.show6" class="gs_listcontainer">
+        <div v-show="collspa.show6" class="gs_listcontainer compact-option-grid">
           <dl class="clearfix">
             <dt>设置：</dt>
             <dd>
@@ -762,7 +762,7 @@
       <div class="gs_title cursor bg_eee" @click="collspa.show7 = !collspa.show7">渠道赠送<span class="arrow"
           :class="{ 'active': collspa.show7 }"></span></div>
       <el-collapse-transition>
-        <div v-show="collspa.show7" class="gs_listcontainer">
+        <div v-show="collspa.show7" class="gs_listcontainer compact-option-grid">
           <dl class="clearfix">
             <dt>设置：</dt>
             <dd>

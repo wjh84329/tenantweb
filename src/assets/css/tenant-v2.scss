@@ -1030,6 +1030,8 @@ body.tenant-ui-modern {
 
 /* 模板赠送规则：一条规则保持一行，宽字段按实际内容分配空间 */
 .contentbox .two-column-config-page .redbag-rule-table {
+  width: 860px !important;
+  max-width: 100%;
   min-width: 860px;
   table-layout: fixed;
 }
@@ -1082,6 +1084,49 @@ body.tenant-ui-modern {
 .contentbox .two-column-config-page .tablebox:has(.integral-rule-table) {
   overflow-x: auto;
 }
+
+/* 装备赠送顶部选项属于同一配置组，按内容紧凑排列 */
+.contentbox .two-column-config-page .equipment-config-grid {
+  display: flex !important;
+  align-items: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  gap: 2px 28px !important;
+}
+
+.contentbox .two-column-config-page .equipment-config-grid > dl {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.contentbox .two-column-config-page .equipment-config-grid > dl > dt { flex: 0 0 105px; }
+.contentbox .two-column-config-page .equipment-config-grid > dl > dd { float: none; width: auto; }
+.contentbox .two-column-config-page .equipment-config-grid > dl:nth-child(3),
+.contentbox .two-column-config-page .equipment-config-grid > dl:nth-child(4) { flex-basis: 100%; }
+
+/* 设置、选项、一键设置等短配置按内容宽度排列，避免等宽列造成大段空白 */
+.contentbox .two-column-config-page .compact-option-grid {
+  display: flex !important;
+  align-items: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  gap: 2px 28px !important;
+}
+
+.contentbox .two-column-config-page .compact-option-grid > dl {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.contentbox .two-column-config-page .compact-option-grid > dl > dt { flex: 0 0 105px; }
+.contentbox .two-column-config-page .compact-option-grid > dl > dd { float: none; width: auto; }
+.contentbox .two-column-config-page .compact-option-grid > dl:has(.tablebox),
+.contentbox .two-column-config-page .compact-option-grid > dl:has(.sqlsetbox),
+.contentbox .two-column-config-page .compact-option-grid > dl:has(.gs_textarea) { flex-basis: 100%; }
 
 @media (max-width: 1280px) {
   .contentbox .partition-install-page .gs_listcontainer,
