@@ -93,7 +93,8 @@
             <span class="line_tip">3-30个字符，请勿输入特殊符号</span>
           </dd>
         </dl>
-        <dl class="clearfix">
+        <div class="timed-rename-group" :style="$root.uiMode === 'modern' ? null : { display: 'contents' }">
+        <dl class="clearfix timed-rename-trigger">
           <dt></dt>
           <dd>
             <span class="inputbox">
@@ -103,7 +104,7 @@
             </span>
           </dd>
         </dl>
-        <dl class="clearfix" v-if="partChecked">
+        <dl class="clearfix timed-rename-name" v-if="partChecked">
           <dt>更改名称：</dt>
           <dd>
             <span class="inputbox">
@@ -117,7 +118,7 @@
             </span>
           </dd>
         </dl>
-        <dl class="clearfix" v-show="partChecked">
+        <dl class="clearfix timed-rename-time" v-show="partChecked">
           <dt>更改时间：</dt>
           <dd>
             <span class="inputbox">
@@ -134,6 +135,7 @@
             </span>
           </dd>
         </dl>
+        </div>
         <dl class="clearfix">
           <dt>分组：</dt>
           <dd>

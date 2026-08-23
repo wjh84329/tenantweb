@@ -97,7 +97,8 @@
             <span class="block_tip">分区安装脚本目录或INI文件存放路径</span>
           </dd>
         </dl>
-        <dl class="clearfix" v-if="!batchAdd">
+        <div v-if="!batchAdd" class="timed-rename-group" :style="$root.uiMode === 'modern' ? null : { display: 'contents' }">
+        <dl class="clearfix timed-rename-trigger" v-if="!batchAdd">
           <dt></dt>
           <dd>
             <span class="inputbox">
@@ -105,7 +106,7 @@
             </span>
           </dd>
         </dl>
-        <dl class="clearfix" v-if="partChecked">
+        <dl class="clearfix timed-rename-name" v-if="partChecked">
           <dt>更改名称：</dt>
           <dd>
             <span class="inputbox">
@@ -114,7 +115,7 @@
             </span>
           </dd>
         </dl>
-        <dl class="clearfix" v-show="partChecked">
+        <dl class="clearfix timed-rename-time" v-show="partChecked">
           <dt>更改时间：</dt>
           <dd>
             <span class="inputbox">
@@ -124,6 +125,7 @@
             </span>
           </dd>
         </dl>
+        </div>
         <dl class="clearfix">
           <dt>分组：</dt>
           <dd>

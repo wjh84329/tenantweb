@@ -1033,6 +1033,23 @@ body.tenant-ui-modern {
   width: 100% !important;
 }
 
+/* 两组条件设置固定为上下对应的两列，任意开关变化都不改变阅读方向 */
+.contentbox .two-column-config-page .gs_listcontainer > .conditional-setting-pair {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "scan-setting wxmb-setting"
+    "scan-template wxmb-template";
+  gap: 2px 24px;
+  min-width: 0;
+}
+
+.contentbox .two-column-config-page .conditional-setting-pair > .scan-setting-trigger { grid-area: scan-setting; }
+.contentbox .two-column-config-page .conditional-setting-pair > .scan-template-dependent { grid-area: scan-template; }
+.contentbox .two-column-config-page .conditional-setting-pair > .wxmb-setting-trigger { grid-area: wxmb-setting; }
+.contentbox .two-column-config-page .conditional-setting-pair > .wxmb-template-dependent { grid-area: wxmb-template; }
+
 /* 模板赠送规则：一条规则保持一行，宽字段按实际内容分配空间 */
 .contentbox .two-column-config-page .redbag-rule-table {
   width: 860px !important;
@@ -1051,8 +1068,13 @@ body.tenant-ui-modern {
 .contentbox .two-column-config-page .redbag-rule-table td:nth-child(1) { width: 300px; }
 .contentbox .two-column-config-page .redbag-rule-table td:nth-child(2) { width: 460px; }
 .contentbox .two-column-config-page .redbag-rule-table td:nth-child(3) { width: 84px; text-align: right; }
-.contentbox .two-column-config-page .redbag-rule-table td:nth-child(1) .el-input { width: 180px !important; }
-.contentbox .two-column-config-page .redbag-rule-table td:nth-child(2) .el-input { width: 120px !important; }
+.contentbox .two-column-config-page .gs_listcontainer .tablebox .redbag-rule-table td:nth-child(1) .el-input {
+  width: 180px !important;
+}
+
+.contentbox .two-column-config-page .gs_listcontainer .tablebox .redbag-rule-table td:nth-child(2) .el-input {
+  width: 120px !important;
+}
 
 .contentbox .two-column-config-page .integral-rule-table {
   min-width: 1220px;
@@ -1139,14 +1161,126 @@ body.tenant-ui-modern {
   border-bottom: 0 !important;
 }
 
+/* 同一行含多组 dt/dd 时按内容连续排列，禁止 flex:1 把后组挤到控件上 */
+.contentbox .two-column-config-page .gs_listcontainer dl:has(> dt:nth-of-type(2)) {
+  column-gap: 12px;
+}
+
+.contentbox .two-column-config-page .gs_listcontainer dl:has(> dt:nth-of-type(2)) > dt {
+  flex: 0 0 auto;
+  width: auto !important;
+  padding-right: 0 !important;
+}
+
+.contentbox .two-column-config-page .gs_listcontainer dl:has(> dt:nth-of-type(2)) > dd {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+/* 渠道赠送：设置区一行，渠道比例另起一行，避免所有字段横向挤成一排 */
+.contentbox .two-column-config-page .channel-give-grid {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "setting options"
+    "values values";
+  align-items: start;
+  gap: 4px 32px !important;
+}
+
+.contentbox .two-column-config-page .channel-give-grid > .channel-give-setting {
+  grid-area: setting;
+}
+
+.contentbox .two-column-config-page .channel-give-grid > .channel-give-options {
+  grid-area: options;
+}
+
+.contentbox .two-column-config-page .channel-give-grid > .channel-give-values {
+  grid-area: values;
+  width: 100%;
+}
+
+.contentbox .two-column-config-page .channel-give-grid > .channel-give-values > dt:empty {
+  display: none;
+}
+
+.contentbox .two-column-config-page .channel-give-grid > .channel-give-values > dd {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.contentbox .two-column-config-page .channel-give-grid .chargelist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  width: 100% !important;
+}
+
+.contentbox .two-column-config-page .channel-give-grid .chargelist > li {
+  flex: 0 0 250px;
+  display: flex;
+  align-items: center;
+  margin: 0 !important;
+}
+
+.contentbox .two-column-config-page .channel-give-grid .chargelist > li > .tit,
+.contentbox .two-column-config-page .channel-give-grid .chargelist > li > .inp {
+  float: none !important;
+}
+
+/* 定时改名保持清晰的上下关系，开关不与条件字段挤在同一行 */
+.contentbox .partition-install-page .gs_listcontainer > .timed-rename-group,
+.contentbox .two-column-config-page .gs_listcontainer > .timed-rename-group {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "toggle toggle"
+    "name time";
+  gap: 2px 24px;
+  min-width: 0;
+}
+
+.contentbox .timed-rename-group > .timed-rename-trigger { grid-area: toggle; }
+.contentbox .timed-rename-group > .timed-rename-name { grid-area: name; }
+.contentbox .timed-rename-group > .timed-rename-time { grid-area: time; }
+
+@media (max-width: 1280px) {
+  .contentbox .two-column-config-page .conditional-setting-pair,
+  .contentbox .partition-install-page .gs_listcontainer > .timed-rename-group,
+  .contentbox .two-column-config-page .gs_listcontainer > .timed-rename-group {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .contentbox .two-column-config-page .conditional-setting-pair {
+    grid-template-areas:
+      "scan-setting"
+      "scan-template"
+      "wxmb-setting"
+      "wxmb-template";
+  }
+
+  .contentbox .partition-install-page .gs_listcontainer > .timed-rename-group,
+  .contentbox .two-column-config-page .gs_listcontainer > .timed-rename-group {
+    grid-template-areas:
+      "toggle"
+      "name"
+      "time";
+  }
+}
+
 .contentbox .two-column-config-page .incite-rule-table {
   width: 680px !important;
-  max-width: 100%;
+  max-width: none;
   table-layout: fixed;
 }
 
 .contentbox .two-column-config-page .tablebox:has(> .incite-rule-table) {
-  width: 680px !important;
+  display: flex !important;
+  align-items: flex-end;
+  gap: 12px;
+  width: auto !important;
   max-width: 100%;
   overflow-x: auto;
 }
@@ -1161,7 +1295,18 @@ body.tenant-ui-modern {
 .contentbox .two-column-config-page .incite-rule-table td:nth-child(1),
 .contentbox .two-column-config-page .incite-rule-table td:nth-child(2) { width: 280px; }
 .contentbox .two-column-config-page .incite-rule-table td:nth-child(3) { width: 90px; }
-.contentbox .two-column-config-page .incite-rule-table .el-input { width: 180px !important; }
+.contentbox .two-column-config-page .gs_listcontainer .tablebox .incite-rule-table td .el-input {
+  display: inline-block;
+  width: 180px !important;
+  vertical-align: middle;
+}
+
+.contentbox .two-column-config-page .tablebox:has(> .incite-rule-table) > p {
+  flex: 0 0 auto;
+  margin: 0 !important;
+  padding: 7px 0 !important;
+  white-space: nowrap;
+}
 
 /* 配置项标签与复选/单选控件统一到同一水平基线 */
 .contentbox .two-column-config-page .compact-option-grid > dl,
@@ -1572,6 +1717,37 @@ body.tenant-ui-modern {
   flex: 1;
   margin: 0 !important;
   color: #344054;
+}
+
+/* 普通表单行统一按 32px 控件中心线对齐；高内容行保留顶部对齐 */
+.contentbox .gs_listcontainer dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dt {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 32px;
+  padding: 0 14px 0 0 !important;
+  line-height: 20px !important;
+}
+
+.contentbox .gs_listcontainer .el-checkbox,
+.contentbox .gs_listcontainer .el-radio,
+.contentbox .gs_listcontainer .el-radio-group {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+}
+
+.contentbox .gs_listcontainer .el-checkbox__label,
+.contentbox .gs_listcontainer .el-radio__label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  line-height: 20px;
+}
+
+.contentbox .gs_listcontainer .inputbox.pdt5,
+.contentbox .gs_listcontainer .gs_checkbox.pdt5 {
+  padding-top: 0 !important;
 }
 
 .contentbox .gs_listcontainer .line_tip,

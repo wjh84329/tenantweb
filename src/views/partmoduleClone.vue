@@ -198,7 +198,8 @@
               <span class="block_tip">不同的引擎打开浏览器的指令可能有差异，请查阅相关帮助文档</span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <div class="conditional-setting-pair" :style="$root.uiMode === 'modern' ? null : { display: 'contents' }">
+          <dl class="clearfix scan-setting-trigger">
             <dt>扫码支付：</dt>
             <dd>
               <span class="inputbox">
@@ -207,7 +208,7 @@
               <span class="line_tip">开启后玩家可以直接在游戏内扫码支付</span>
             </dd>
           </dl>
-          <dl class="clearfix" v-if="baseInfo.isScan">
+          <dl class="clearfix scan-template-dependent" v-if="baseInfo.isScan">
             <dt>模 板：</dt>
             <dd>
               <span class="inputbox">
@@ -219,7 +220,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <dl class="clearfix wxmb-setting-trigger">
             <dt>微信密保：</dt>
             <dd>
               <span class="inputbox">
@@ -227,7 +228,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix" v-if="baseInfo.isWxmb">
+          <dl class="clearfix wxmb-template-dependent" v-if="baseInfo.isWxmb">
             <dt>模 板：</dt>
             <dd>
               <span class="inputbox">
@@ -240,6 +241,7 @@
               </span>
             </dd>
           </dl>
+          </div>
           <dl class="clearfix" style="display: none;">
             <dt>最小金额：</dt>
             <dd>
@@ -755,8 +757,8 @@
       <div class="gs_title cursor bg_eee" @click="collspa.show7 = !collspa.show7">渠道赠送<span class="arrow"
           :class="{ 'active': collspa.show7 }"></span></div>
       <el-collapse-transition>
-        <div v-show="collspa.show7" class="gs_listcontainer compact-option-grid">
-          <dl class="clearfix">
+        <div v-show="collspa.show7" class="gs_listcontainer compact-option-grid channel-give-grid">
+          <dl class="clearfix channel-give-setting">
             <dt>设置：</dt>
             <dd>
               <span class="inputbox pdt5">
@@ -764,7 +766,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <dl class="clearfix channel-give-options">
             <dt>选项：</dt>
             <dd>
               <span class="inputbox pdt5">
@@ -781,7 +783,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix" v-if="chargeInfo.select === 0">
+          <dl class="clearfix channel-give-values" v-if="chargeInfo.select === 0">
             <dt></dt>
             <dd>
               <span class="inputbox">
@@ -798,7 +800,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix" v-else>
+          <dl class="clearfix channel-give-values" v-else>
             <dd>
               <div class="accountList clearfix" v-for="(item, i) in chargeInfo.redNPC" :key="'money' + i">
                 <span class="tit">{{ item.productName }} :</span>
@@ -1056,11 +1058,6 @@ import {
 } from '../assets/js/qrcodeTemplateKind';
 // import { gameEngine, gameEngine1 } from '../assets/js/version';
 export default {
-  computed: {
-    wxmbQrcodeTemplatesList() {
-      return filterWxmbQrcodeTemplates(this.qrcodeTemplatesList);
-    }
-  },
   data() {
     return {
       editFlag: true, // 编辑请求flag防呆
@@ -1292,6 +1289,9 @@ export default {
       } else {
         return [];
       }
+    },
+    wxmbQrcodeTemplatesList() {
+      return filterWxmbQrcodeTemplates(this.qrcodeTemplatesList);
     }
   },
   methods: {
