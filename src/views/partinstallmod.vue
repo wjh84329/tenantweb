@@ -561,7 +561,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <dl class="clearfix equipment-details-row">
             <dt>装备详情：</dt>
             <dd>
               <span class="inputbox">
