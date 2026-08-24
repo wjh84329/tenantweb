@@ -607,6 +607,22 @@ export default {
     }
   },
   methods: {
+    preloadModernEmployeePages() {
+      if (!this.isModernUi) return;
+
+      // 复用路由本身的异步组件加载器，确保预加载的就是首次进入时需要的代码块。
+      // 仅新 UI 执行；旧 UI 仍保持原有的按需加载行为。
+      const employeeRoute = this.$router.options.routes.find(route => route.path === '/employee');
+      if (!employeeRoute) return;
+
+      const commonChildren = employeeRoute.children.filter(route => ['setting', 'roles'].includes(route.path));
+      const routeLoaders = [employeeRoute, ...commonChildren]
+        .map(route => route.component)
+        .filter(loader => typeof loader === 'function');
+      const preload = loader => new Promise(resolve => loader(() => resolve()));
+
+      this.$nextTick(() => Promise.all(routeLoaders.map(preload)).catch(() => { }));
+    },
     normalizeGatewayConfigUrl(url) {
       return normalizeDownloadUrl(url || '', netUrl);
     },
@@ -1003,6 +1019,7 @@ export default {
   },
   created() {
     this.getUser();
+    this.preloadModernEmployeePages();
     this.loadFloatDockSupportQq();
     // 监听皮肤切换事件
     this.$root.$on('skin-change', num => {

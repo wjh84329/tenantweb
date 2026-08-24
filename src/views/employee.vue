@@ -50,7 +50,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="partitionsCount" label="最后登陆" width="155">
+          <el-table-column prop="partitionsCount" label="最后登陆" :width="$root.uiMode === 'modern' ? 180 : 155">
             <template slot-scope="scope">
               <div class="time-cell">
                 <span>{{ scope.row.lastDate ? scope.row.lastDate.split(' ')[0] : '' }}</span>
@@ -59,7 +59,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="joinDate" label="注册时间" width="155">
+          <el-table-column prop="joinDate" label="注册时间" :width="$root.uiMode === 'modern' ? 180 : 155">
             <template slot-scope="scope">
               <div class="time-cell">
                 <span>{{ scope.row.joinDate ? scope.row.joinDate.split(' ')[0] : '' }}</span>
@@ -763,6 +763,12 @@ export default {
 
 .time-value {
   color: #999;
+}
+
+.employee-modern-page .time-cell {
+  flex-direction: row;
+  justify-content: center;
+  gap: 4px;
 }
 
 .operation-actions {

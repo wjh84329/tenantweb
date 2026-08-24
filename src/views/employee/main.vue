@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
 -->
 <template>
-  <div v-if="accessChecked" class="main" :class="{ 'tenant-ui-modern-shell': $root.uiMode === 'modern' }">
+  <div v-if="accessChecked || $root.uiMode === 'modern'" class="main" :class="{ 'tenant-ui-modern-shell': $root.uiMode === 'modern' }">
     <aside v-if="$root.uiMode === 'modern'" class="tenant-sub-sidebar">
       <div class="tenant-sub-brand" @click="refresh('/main/home')">
         <site-logo variant="logo3" logo-type="site" width="188px" height="54px" fit="contain" alt="网站logo" />
@@ -83,7 +83,12 @@
           </ul>
         </div>
         <div class="contentbox">
-          <router-view />
+          <router-view v-if="accessChecked" />
+          <div v-else-if="$root.uiMode === 'modern'" class="employee-route-loading" aria-label="员工管理加载中">
+            <div class="employee-route-loading__card">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -102,7 +107,11 @@ export default {
     return {
       activeNav: '/employee', // 默认选中首页
       skinNum: Number(localStorage.getItem('skinNum')) || 0,
-      accessChecked: false,
+      // 主平台已经取得用户信息时，新 UI 不再为同一项权限检查阻塞首次渲染。
+      // 直接访问员工管理仍会等待下方 getUser 的校验；旧 UI 保持原来的行为。
+      accessChecked: this.$root.uiMode === 'modern' &&
+        Boolean(this.$store.state.id) &&
+        ![3, 4].includes(Number(this.$store.state.settlementType)),
       employeeSubItems: [
         { label: '员工信息', path: '/employee/setting', icon: 'employee' },
         { label: '角色管理', path: '/employee/roles', icon: 'key' }
@@ -512,4 +521,33 @@ export default {
 }
 .main.tenant-ui-modern-shell > .container .slider { display: none !important; }
 .main.tenant-ui-modern-shell > .container .contentbox { margin-left: 0 !important; min-height: calc(100vh - 108px); }
+.employee-route-loading {
+  min-height: calc(100vh - 108px);
+  padding: 20px;
+  box-sizing: border-box;
+  background: var(--tenant-page);
+}
+.employee-route-loading__card {
+  padding: 28px;
+  border: 1px solid var(--tenant-border);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: var(--tenant-shadow);
+}
+.employee-route-loading__card span {
+  display: block;
+  width: 100%;
+  height: 12px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eef2f8 25%, #f7f9fc 50%, #eef2f8 75%);
+  background-size: 200% 100%;
+  animation: employee-route-loading 1.2s ease-in-out infinite;
+}
+.employee-route-loading__card span:nth-child(2) { width: 72%; }
+.employee-route-loading__card span:nth-child(3) { width: 48%; margin-bottom: 0; }
+@keyframes employee-route-loading {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
 </style>
