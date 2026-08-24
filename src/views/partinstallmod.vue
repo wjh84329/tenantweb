@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="partinstall two-column-config-page">
+  <div class="partinstall two-column-config-page" :class="{ 'template-form-modern': $root.uiMode === 'modern' }">
     <div class="gs_title" style="color: white;">创建模板</div>
     <!-- 基本信息 -->
     <div class="bg_fff mgt10">

@@ -1447,6 +1447,96 @@ body.tenant-ui-modern {
   margin-left: 0 !important;
 }
 
+/* 模板新增、编辑、克隆页在新版中统一为单列配置流 */
+.contentbox .template-form-modern .gs_listcontainer {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > .tip_red,
+.contentbox .template-form-modern .gs_listcontainer > .tablebox,
+.contentbox .template-form-modern .gs_listcontainer > dl,
+.contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair {
+  grid-column: 1 !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)),
+.contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dt,
+.contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dt {
+  flex: 0 0 150px;
+  width: 150px !important;
+  box-sizing: border-box;
+  padding-right: 18px !important;
+  text-align: right;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd,
+.contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 560px;
+  width: 560px !important;
+  max-width: 100%;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-input,
+.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-select,
+.contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-input,
+.contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-select {
+  width: 100% !important;
+  max-width: 560px;
+}
+
+.contentbox .template-form-modern .gs_listcontainer .line_tip,
+.contentbox .template-form-modern .gs_listcontainer .block_tip {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 0 10px;
+  line-height: 20px;
+}
+
+/* 同一历史 dl 中的两组字段按上下两行显示，避免现代页左右挤在一起 */
+.contentbox .template-form-modern .gs_listcontainer > dl:has(> dt:nth-of-type(2)) {
+  display: grid !important;
+  grid-template-columns: 150px minmax(220px, 360px) auto 120px minmax(220px, 1fr);
+  column-gap: 12px;
+  align-items: center;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > dl:has(> dt:nth-of-type(2)) > dt:nth-of-type(1) { grid-column: 1; grid-row: 1; }
+.contentbox .template-form-modern .gs_listcontainer > dl:has(> dt:nth-of-type(2)) > dd:nth-of-type(1) { grid-column: 2; grid-row: 1; }
+.contentbox .template-form-modern .gs_listcontainer > dl:has(> dt:nth-of-type(2)) > dd.colorBox { grid-column: 3; grid-row: 1; margin: 0 !important; }
+.contentbox .template-form-modern .gs_listcontainer > dl:has(> dt:nth-of-type(2)) > dt:nth-of-type(2) { grid-column: 4; grid-row: 1; width: auto !important; padding: 0 !important; }
+.contentbox .template-form-modern .gs_listcontainer > dl:has(> dt:nth-of-type(2)) > dd:nth-of-type(2) { grid-column: 5; grid-row: 1; }
+
+.contentbox .template-form-modern .gs_listcontainer > dl:has(> dt:nth-of-type(2)) > dd:nth-of-type(1) > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer > dl:has(> dt:nth-of-type(2)) > dd:nth-of-type(2) > .inputbox {
+  width: 100% !important;
+  max-width: none;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair {
+  display: block !important;
+}
+
+.contentbox .template-form-modern .conditional-setting-pair > dl {
+  width: 100%;
+}
+
 
 /* 新版筛选表单：输入控件与紧随其后的操作按钮保持清晰间距 */
 .contentbox .el-form--inline .el-form-item__content > .el-input + .el-button,
