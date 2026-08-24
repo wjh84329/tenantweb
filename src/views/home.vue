@@ -2568,8 +2568,19 @@ export default {
   .tenant-dashboard .tenant-account-grid,
   .tenant-dashboard .tenant-metrics-grid { grid-column: 1; grid-row: auto; }
   .tenant-dashboard .tenant-account-grid { grid-template-columns: 1fr; }
-  .tenant-dashboard .tenant-account-grid .moneybox .numberbox > ul { padding-right: 0; }
-  .tenant-dashboard .tenant-account-grid .moneybox .getbtn { margin-top: 12px; }
+  .tenant-dashboard .tenant-account-grid .moneybox .numberbox > ul {
+    flex: 0 0 100%;
+    width: 100% !important;
+    max-width: 100%;
+    padding-right: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tenant-dashboard .tenant-account-grid .moneybox .getbtn {
+    flex: 0 0 100%;
+    width: 100%;
+    margin-top: 12px;
+    justify-content: flex-start;
+  }
 }
 
 .legacy-pay-preview {
