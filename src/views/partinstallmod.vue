@@ -417,7 +417,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <dl class="clearfix incite-details-row">
             <dt>赠送详情：</dt>
             <dd>
               <span class="inputbox">

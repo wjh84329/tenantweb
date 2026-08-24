@@ -3481,4 +3481,13 @@ body.tenant-ui-modern {
   max-width: 100% !important;
 }
 
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid > .incite-details-row.incite-details-row {
+  display: flex !important;
+  flex: 0 0 100% !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
 }
