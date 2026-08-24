@@ -58,7 +58,7 @@
             </div>
           </div>
         </div>
-        <ul class="operbox">
+        <ul v-if="$root.uiMode !== 'modern'" class="operbox">
           <li>
             <el-tooltip class="item" effect="dark" content="点击去绑定微信" placement="bottom">
               <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/weixin" tag="span">绑定微信</router-link>
@@ -114,6 +114,29 @@
                 @click="$router.push({ path: '/main/withdrawapply' })">提现</el-button>
             </div>
             <div class="btns">
+              <el-tooltip class="item" effect="dark" content="点击去绑定微信" placement="bottom">
+                <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/weixin"
+                  tag="span" class="modern-account-shortcut">
+                  <span>绑定微信</span>
+                </router-link>
+                <span v-else class="modern-account-shortcut is-disabled">
+                  <span>绑定微信</span>
+                </span>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="点击修改登录密码" placement="bottom">
+                <span class="modern-account-shortcut" @click="dialog.show = true">
+                  <span>登录密码</span>
+                </span>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="点击查看操作日志" placement="bottom">
+                <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/main/conectKey"
+                  tag="span" class="modern-account-shortcut">
+                  <span>通讯秘钥</span>
+                </router-link>
+                <span v-else class="modern-account-shortcut is-disabled">
+                  <span>通讯秘钥</span>
+                </span>
+              </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看账户安全" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/acountsafe"
                   tag='span'>账户安全</router-link>
@@ -2347,8 +2370,29 @@ export default {
   .moneybox .number { margin-top: 9px !important; font-size: 23px !important; font-weight: 700; letter-spacing: -.3px; }
   .moneybox .getbtn { top: 20px; right: 20px; display: flex; gap: 8px; }
   .moneybox .getbtn .el-button + .el-button { margin-left: 0; }
-  .moneybox .btns { display: flex; flex-wrap: wrap; gap: 8px 0; padding: 10px 0 0; }
+  .moneybox .btns {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0;
+    padding: 10px 0 0;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
   .moneybox .btns span { margin-top: 0; color: #4f6bff; }
+  .moneybox .btns .modern-account-shortcut {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 10px;
+    color: #4f6bff;
+    line-height: 30px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .moneybox .btns > .el-tooltip + .el-tooltip { border-left: 1px solid #dbe3f0; }
+  .moneybox .btns .modern-account-shortcut.is-disabled { color: #b8c1d1; cursor: not-allowed; }
+  .moneybox .btns > .el-tooltip { flex: 0 0 auto; }
 }
 
 .tenant-dashboard .tenant-metrics-grid {
