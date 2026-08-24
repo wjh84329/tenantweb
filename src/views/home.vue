@@ -2402,7 +2402,7 @@ export default {
   }
   .moneybox .btns > .el-tooltip:last-child { border-right: 0; }
   .moneybox .btns > .el-tooltip span { white-space: nowrap; }
-  .moneybox .btns > .el-tooltip .linebtn {
+  .moneybox .btns .linebtn {
     margin-left: 0;
     padding-left: 0;
     border-left: 0;
