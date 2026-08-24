@@ -1576,6 +1576,8 @@ body.tenant-ui-modern {
 .contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid),
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid {
   display: flex !important;
+  width: max-content !important;
+  max-width: 100% !important;
   grid-template-columns: none !important;
 }
 
@@ -1614,8 +1616,16 @@ body.tenant-ui-modern {
 
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid {
   align-items: flex-start;
+  width: 100% !important;
+  max-width: 100% !important;
+  flex-wrap: nowrap !important;
   column-gap: 32px !important;
   row-gap: 8px !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(n + 3) {
+  flex: 0 0 100% !important;
+  width: 100% !important;
 }
 
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(1) {
@@ -1635,7 +1645,7 @@ body.tenant-ui-modern {
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .inputbox,
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .el-radio-group {
   display: flex !important;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 6px 14px;
   max-width: 100%;
@@ -1644,6 +1654,21 @@ body.tenant-ui-modern {
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .el-radio {
   margin: 0 !important;
   white-space: nowrap;
+}
+
+@media (max-width: 1280px) {
+  .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid {
+    flex-wrap: wrap !important;
+  }
+
+  .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) {
+    flex-basis: 100% !important;
+  }
+
+  .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .inputbox,
+  .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .el-radio-group {
+    flex-wrap: wrap;
+  }
 }
 
 .contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting {
