@@ -27,6 +27,14 @@
           <small>待发送数量</small>
         </div>
       </div>
+      <div class="tenant-design-summary__item is-purple">
+        <span class="tenant-design-summary__icon"><tenant-icon name="clock" /></span>
+        <div><p>提现中金额</p><strong>¥{{ cashInfo.amount }}</strong><small>处理中金额</small></div>
+      </div>
+      <div class="tenant-design-summary__item is-red">
+        <span class="tenant-design-summary__icon"><tenant-icon name="document" /></span>
+        <div><p>提现手续费</p><strong>¥{{ cashInfo.fee }}</strong><small>当前手续费</small></div>
+      </div>
     </div>
     <div class="settingbox clearfix" :class="{ 'tenant-account-grid': $root.uiMode === 'modern' }">
       <div v-if="$root.uiMode === 'modern'" class="tenant-section-heading">账户概览</div>
@@ -80,7 +88,7 @@
       <div class="topinfo clearfix" style="height: 150px;width: 76%;">
         <div class="moneybox gs_shadow" style="height: 97%;">
           <div class="numberbox">
-            <ul class="clearfix" style="border-bottom: 1px dashed #ccc">
+            <ul v-show="$root.uiMode !== 'modern'" class="clearfix" style="border-bottom: 1px dashed #ccc">
               <li>
                 <p class="tit">账户余额</p>
                 <p style="color: blue;font-weight: bold;" class="number">{{ accountInfo.accout }}</p>
@@ -2229,7 +2237,7 @@ export default {
 
 .tenant-design-summary {
   display: grid;
-  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  grid-template-columns: repeat(6, minmax(160px, 1fr));
   gap: 16px;
   margin-bottom: 16px;
   grid-column: 1 / -1;
@@ -2267,6 +2275,8 @@ export default {
   &.is-cyan .tenant-design-summary__icon { color: #13b8c8; background: #e8fbfd; }
   &.is-green .tenant-design-summary__icon { color: #16b364; background: #eaf9f0; }
   &.is-orange .tenant-design-summary__icon { color: #f59e0b; background: #fff7e5; }
+  &.is-purple .tenant-design-summary__icon { color: #7a5af8; background: #f2efff; }
+  &.is-red .tenant-design-summary__icon { color: #e5484d; background: #fff0f1; }
 }
 
 .tenant-dashboard .tenant-account-grid {
