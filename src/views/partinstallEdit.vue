@@ -167,9 +167,6 @@
           </dd>
         </dl>
         <dl class="clearfix" v-if="typeindex == 1 || typeindex == 2 || typeindex == 6">
-          <p class="tip_red" style="margin: 0">
-            <!-- 请填写网关对外 IP（与平台注册记录一致）及网关客户端上的 监听端口。保存时会与已注册设备匹配，匹配成功后使用设备实例作为消息下发标识（不再使用「网关标识」）。 -->
-          </p>
           <dt>网关 IP：</dt>
           <dd>
             <span class="inputbox">

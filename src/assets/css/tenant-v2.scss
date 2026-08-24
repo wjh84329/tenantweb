@@ -1392,7 +1392,18 @@ body.tenant-ui-modern {
   min-height: 52px;
 }
 
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dt {
+  flex: 0 0 150px;
+  width: 150px !important;
+  box-sizing: border-box;
+  padding-right: 18px !important;
+  text-align: right;
+}
+
 .contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   flex: 1 1 auto;
   min-width: 0;
 }
@@ -1400,7 +1411,8 @@ body.tenant-ui-modern {
 .contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox {
   display: inline-flex;
   align-items: center;
-  width: min(680px, 100%) !important;
+  flex: 0 1 560px;
+  width: 560px !important;
   max-width: 100%;
 }
 
@@ -1408,7 +1420,16 @@ body.tenant-ui-modern {
 .contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-select,
 .contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-date-editor {
   width: 100% !important;
-  max-width: 680px;
+  max-width: 560px;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .line_tip,
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .block_tip {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 0 10px;
+  line-height: 20px;
+  white-space: normal;
 }
 
 .contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox:has(> .el-select) {
@@ -1426,11 +1447,6 @@ body.tenant-ui-modern {
   margin-left: 0 !important;
 }
 
-.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .line_tip,
-.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .block_tip {
-  display: block;
-  margin: 4px 0 0;
-}
 
 /* 新版筛选表单：输入控件与紧随其后的操作按钮保持清晰间距 */
 .contentbox .el-form--inline .el-form-item__content > .el-input + .el-button,
