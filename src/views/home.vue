@@ -116,26 +116,16 @@
             <div class="btns">
               <el-tooltip class="item" effect="dark" content="点击去绑定微信" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/weixin"
-                  tag="span" class="account-quick-link">
-                  <span>绑定微信</span>
-                </router-link>
-                <span v-else class="account-quick-link is-disabled">
-                  <span>绑定微信</span>
-                </span>
+                  tag="span" class="account-quick-link">绑定微信</router-link>
+                <span v-else class="account-quick-link is-disabled">绑定微信</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击修改登录密码" placement="bottom">
-                <span class="account-quick-link" @click="dialog.show = true">
-                  <span>登录密码</span>
-                </span>
+                <span class="account-quick-link" @click="dialog.show = true">登录密码</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看操作日志" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/main/conectKey"
-                  tag="span" class="account-quick-link">
-                  <span>通讯秘钥</span>
-                </router-link>
-                <span v-else class="account-quick-link is-disabled">
-                  <span>通讯秘钥</span>
-                </span>
+                  tag="span" class="account-quick-link">通讯秘钥</router-link>
+                <span v-else class="account-quick-link is-disabled">通讯秘钥</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看账户安全" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/acountsafe"
