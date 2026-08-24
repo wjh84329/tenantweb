@@ -3490,4 +3490,14 @@ body.tenant-ui-modern {
   min-width: 0 !important;
 }
 
+/* 赠送详情标题与顶部“设置”共用左边线，表格仍从统一内容列开始 */
+.contentbox .template-form-modern .incite-details-row > dt,
+.contentbox .template-form-modern .equipment-details-row > dt,
+.contentbox .template-form-modern .redbag-npc-row > dt,
+.contentbox .template-form-modern .redbag-details-row > dt {
+  padding-left: 0 !important;
+  padding-right: 18px !important;
+  text-align: left !important;
+}
+
 }
