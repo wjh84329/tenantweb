@@ -1578,6 +1578,66 @@ body.tenant-ui-modern {
   grid-template-columns: none !important;
 }
 
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting {
+  grid-area: setting !important;
+  display: flex !important;
+  align-items: center;
+  width: auto !important;
+  min-height: 40px;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-options {
+  grid-area: options !important;
+  display: flex !important;
+  align-items: center;
+  width: auto !important;
+  min-height: 40px;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting > dt,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-options > dt {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  padding: 0 10px 0 0 !important;
+  min-height: 32px;
+  text-align: right;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting > dd,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-options > dd {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-height: 32px;
+  align-items: center;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-values {
+  grid-area: values !important;
+  display: flex !important;
+  align-items: flex-start;
+  width: 100% !important;
+  min-height: 0;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-values > dt {
+  flex: 0 0 0 !important;
+  width: 0 !important;
+  padding: 0 !important;
+  display: none;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-values > dd {
+  display: block !important;
+  flex: 1 1 auto !important;
+  width: 100% !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-values > dd > .inputbox {
+  display: block !important;
+  width: 100% !important;
+}
+
 
 /* 新版筛选表单：输入控件与紧随其后的操作按钮保持清晰间距 */
 .contentbox .el-form--inline .el-form-item__content > .el-input + .el-button,
