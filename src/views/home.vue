@@ -2369,7 +2369,7 @@ export default {
   .moneybox .number { margin-top: 9px !important; font-size: 23px !important; font-weight: 700; letter-spacing: -.3px; }
   .moneybox .getbtn {
     position: static;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
     max-width: 100%;
     margin-top: 2px;
     display: flex;
