@@ -117,9 +117,9 @@
                       <tr>
                         <th width="230">NPC名称</th>
                         <th width="110">地图</th>
-                        <th width="110">外观</th>
                         <th width="110">X坐标</th>
                         <th width="110">y坐标</th>
+                        <th width="110">外观</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -132,13 +132,13 @@
                           <el-input size="small" :ref="'baseChargeMap'+i" v-model="item.map"></el-input>
                         </td>
                         <td>
-                          <el-input size="small" :ref="'baseChargeLooks'+i" v-model="item.looks" type="number"></el-input>
-                        </td>
-                        <td>
                           <el-input size="small" :ref="'baseChargexAxis'+i" v-model="item.xAxis" type="number"></el-input>
                         </td>
                         <td>
                           <el-input size="small" :ref="'baseChargeyAxis'+i" v-model="item.yAxis" type="number"></el-input>
+                        </td>
+                        <td>
+                          <el-input size="small" :ref="'baseChargeLooks'+i" v-model="item.looks" type="number"></el-input>
                         </td>
                         <td>
                           <el-button size="small" type="danger" @click="delchargeNpc(i)">删除</el-button>
@@ -638,9 +638,9 @@
                       <tr>
                         <th width="230">NPC名称</th>
                         <th width="110">地图</th>
-                        <th width="110">外观</th>
                         <th width="110">X坐标</th>
                         <th width="110">y坐标</th>
+                        <th width="110">外观</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -653,13 +653,13 @@
                           <el-input size="small" :ref="'redbagMap'+i" v-model="item.map"></el-input>
                         </td>
                         <td>
-                          <el-input size="small" :ref="'redbagLooks'+i" v-model="item.looks" type="number"></el-input>
-                        </td>
-                        <td>
                           <el-input size="small" :ref="'redbagxAxis'+i" v-model="item.xAxis" type="number"></el-input>
                         </td>
                         <td>
                           <el-input size="small" :ref="'redbagyAxis'+i" v-model="item.yAxis" type="number"></el-input>
+                        </td>
+                        <td>
+                          <el-input size="small" :ref="'redbagLooks'+i" v-model="item.looks" type="number"></el-input>
                         </td>
                         <td>
                           <el-button size="small" type="danger" @click="delredNpc(i)">删除</el-button>
