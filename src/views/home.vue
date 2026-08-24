@@ -2288,6 +2288,7 @@ export default {
   grid-row: 3;
   grid-template-columns: 1fr;
   align-content: start;
+  align-self: start;
   gap: 0;
   overflow: hidden;
   border: 1px solid #e5eaf2;
@@ -2307,8 +2308,8 @@ export default {
     float: none !important;
     width: auto !important;
     height: auto !important;
-    min-height: 176px;
-    padding: 20px 18px 14px;
+    min-height: 0;
+    padding: 14px 18px 12px;
     border: 0 !important;
     border-radius: 0 !important;
     color: #172033;
@@ -2317,8 +2318,8 @@ export default {
   }
 
   .userinfo .infobox { margin-top: 0; }
-  .userinfo .avatar { width: 74px; height: 74px; object-fit: contain; }
-  .userinfo .textbox { margin-top: 5px !important; }
+  .userinfo .avatar { width: 64px; height: 64px; object-fit: contain; }
+  .userinfo .textbox { margin-top: 1px !important; }
   .userinfo .textbox .acout { color: #344054; font-size: 17px; }
   .userinfo .textbox .text { color: #98a2b3; line-height: 20px; }
   .userinfo .operbox { margin-top: 14px; padding-top: 12px; border-top: 1px solid #eef1f5; }
@@ -2329,14 +2330,15 @@ export default {
     float: none !important;
     width: auto !important;
     height: auto !important;
+    min-height: 0;
     border-top: 1px solid #eef1f5;
   }
 
   .moneybox {
     box-sizing: border-box;
-    height: 100% !important;
-    min-height: 176px;
-    padding: 18px 20px 12px !important;
+    height: auto !important;
+    min-height: 0;
+    padding: 14px 20px 10px !important;
     border: 0 !important;
     border-radius: 0 !important;
     background: #fff !important;
@@ -2344,6 +2346,8 @@ export default {
   }
 
   .moneybox .numberbox {
+    width: 100%;
+    min-width: 0;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -2390,6 +2394,9 @@ export default {
   .moneybox .getbtn .el-button + .el-button { margin-left: 0; }
   .moneybox .btns {
     flex: 0 0 100%;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
