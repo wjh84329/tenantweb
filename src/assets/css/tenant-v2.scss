@@ -1602,6 +1602,40 @@ body.tenant-ui-modern {
   align-items: center;
 }
 
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid {
+  align-items: flex-start;
+  column-gap: 32px !important;
+  row-gap: 8px !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(1) {
+  flex: 0 0 auto !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) {
+  flex: 1 1 auto !important;
+  min-width: 0;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) > dd {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .inputbox,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .el-radio-group {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  max-width: 100%;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .el-radio {
+  margin: 0 !important;
+  white-space: nowrap;
+}
+
 .contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting {
   grid-area: setting !important;
   display: flex !important;
