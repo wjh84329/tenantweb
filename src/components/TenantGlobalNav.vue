@@ -47,6 +47,8 @@ export default {
   },
   computed: {
     defaultSectionItems() {
+      const settlementType = Number(this.$store.state.settlementType);
+      const isRestrictedAccount = settlementType === 3 || settlementType === 4;
       return {
         order: [
           { label: '订单管理', path: '/main/Ordermanagement', icon: 'order' }
@@ -65,8 +67,15 @@ export default {
           { label: '获取代码', path: '/main/gaincode', icon: 'code', menuId: 18 }
         ].filter(item => this.canShowSideMenu(item.menuId)),
         analysis: [
-          { label: '数据分析', path: '/main/DA', icon: 'chart' }
-        ],
+          { label: '充值统计', path: '/main/DA?tab=1', icon: 'chart', tab: '1' },
+          { label: '时段统计', path: '/main/DA?tab=2', icon: 'clock', tab: '2' },
+          { label: '分区统计', path: '/main/DA?tab=3', icon: 'partition', tab: '3' },
+          { label: '分组统计', path: '/main/DA?tab=4', icon: 'group', tab: '4' },
+          { label: '模版统计', path: '/main/DA?tab=7', icon: 'template', tab: '7' },
+          { label: '充值排行', path: '/main/DA?tab=5', icon: 'order', tab: '5' },
+          { label: '个人IPS统计', path: '/main/DA?tab=6', icon: 'account', tab: '6', restricted: true },
+          { label: '全局IPS统计', path: '/main/DA?tab=8', icon: 'chart', tab: '8', restricted: true }
+        ].filter(item => !item.restricted || !isRestrictedAccount),
         account: [
           { label: '用户信息', path: '/personal/baseInfo', icon: 'account' },
           { label: '三方开户', path: '/personal/sharedetails', icon: 'document' },
@@ -154,6 +163,9 @@ export default {
     },
     isSubActive(item) {
       const path = this.$route.path;
+      if (item.tab) {
+        return path === '/main/DA' && String(this.$route.query.tab || '1') === item.tab;
+      }
       return path === item.path || (item.matchPrefix && path.indexOf(item.matchPrefix) === 0);
     }
   }

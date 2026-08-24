@@ -6,8 +6,8 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="home analytics-page">
-    <div class="gs_title" style="color: white;">充值统计</div>
+  <div class="home analytics-page" :class="{ 'analytics-page--sidebar': $root.uiMode === 'modern' }">
+    <div class="gs_title" style="color: white;">{{ $root.uiMode === 'modern' ? activeAnalyticsLabel : '充值统计' }}</div>
     <div class="gs_tabbox clearfix mgt15">
       <div class="tabbox">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -422,7 +422,9 @@ import { mapState } from 'vuex';
 export default {
   data() {
     return {
-      activeName: '1', // tab切换
+      activeName: this.$root.uiMode === 'modern' && ['1', '2', '3', '4', '5', '6', '7', '8'].includes(String(this.$route.query.tab || ''))
+        ? String(this.$route.query.tab)
+        : '1', // tab切换
       gameDrawList: [], // 分区下拉list
       agentDraw: [], // 商户下拉
       money: 0, // 余额
@@ -505,6 +507,28 @@ export default {
     isRestrictedAccount() {
       const settlementType = Number(this.settlementType);
       return settlementType === 3 || settlementType === 4;
+    },
+    activeAnalyticsLabel() {
+      const labels = {
+        1: '充值统计',
+        2: '时段统计',
+        3: '分区统计',
+        4: '分组统计',
+        5: '充值排行',
+        6: '个人IPS统计',
+        7: '模版统计',
+        8: '全局IPS统计'
+      };
+      return labels[this.activeName] || '充值统计';
+    }
+  },
+  watch: {
+    '$route.query.tab'(tab) {
+      if (this.$root.uiMode !== 'modern') return;
+      const target = String(tab || '1');
+      if (!['1', '2', '3', '4', '5', '6', '7', '8'].includes(target) || target === this.activeName) return;
+      this.activeName = target;
+      this.$nextTick(() => this.handleClick());
     }
   },
   methods: {
@@ -1496,7 +1520,11 @@ export default {
     this.subMerchantDraw();
     this.getAccountInfo();
     this.$nextTick(() => {
-      this.getechart1();
+      if (this.$root.uiMode === 'modern' && this.activeName !== '1') {
+        this.handleClick();
+      } else {
+        this.getechart1();
+      }
     });
   }
 };
@@ -1508,6 +1536,12 @@ export default {
 }
 .tabbox {
   width: 100%;
+}
+.analytics-page--sidebar ::v-deep .el-tabs__header {
+  display: none;
+}
+.analytics-page--sidebar .gs_tabbox {
+  margin-top: 0 !important;
 }
 .nodatatip {
   width: 100%;
