@@ -3500,4 +3500,9 @@ body.tenant-ui-modern {
   text-align: left !important;
 }
 
+/* Vue v-show 的收缩状态必须高于现代布局的 flex/grid 显示规则 */
+.contentbox .template-form-modern.template-form-modern .gs_listcontainer.gs_listcontainer[style*="display: none"] {
+  display: none !important;
+}
+
 }
