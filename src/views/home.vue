@@ -2467,7 +2467,7 @@ export default {
 
   .chargebox ul {
     display: grid;
-    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
     gap: 12px;
     padding: 0 !important;
     border: 0 !important;
@@ -2582,6 +2582,7 @@ export default {
 @media (max-width: 1380px) {
   .tenant-design-summary { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
   .tenant-dashboard { grid-template-columns: 1fr; }
+  .tenant-dashboard .tenant-metrics-grid .chargebox ul { grid-template-columns: repeat(2, minmax(150px, 1fr)); }
   .tenant-dashboard .tenant-account-grid,
   .tenant-dashboard .tenant-metrics-grid { grid-column: 1; grid-row: auto; }
   .tenant-dashboard .tenant-account-grid { grid-template-columns: 1fr; }
