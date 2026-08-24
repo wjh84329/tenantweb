@@ -94,7 +94,7 @@
               <span class="block_tip">设置按 游戏账号 或 游戏角色充值，默认按 游戏账号 充值</span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <dl class="clearfix currency-command-row">
             <dt>游戏币名称：</dt>
             <dd>
               <span class="inputbox inputColorBox">
@@ -112,8 +112,8 @@
                 <li class="color5" :class="{ 'on': baseInfo.color === 5 }" @click="baseInfo.color = 5"></li>
               </ul>
             </dd>
-            <dt v-if="baseInfo.type === 1 || baseInfo.type === 2">脚本命令：</dt>
-            <dd v-if="baseInfo.type === 1 || baseInfo.type === 2">
+            <dt v-if="baseInfo.type === 1 || baseInfo.type === 2" class="script-command-label">脚本命令：</dt>
+            <dd v-if="baseInfo.type === 1 || baseInfo.type === 2" class="script-command-field">
               <span class="inputbox">
                 <el-input size="small" ref="baseCommand" v-model="baseInfo.command"></el-input>
               </span>

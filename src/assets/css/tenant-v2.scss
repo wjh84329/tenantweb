@@ -3505,4 +3505,52 @@ body.tenant-ui-modern {
   display: none !important;
 }
 
+/* 游戏币名称与脚本命令：按真实 DOM 顺序固定列，避免颜色选择打乱标签位置 */
+.contentbox .template-form-modern .gs_listcontainer > .currency-command-row.currency-command-row {
+  display: grid !important;
+  grid-template-columns: 150px minmax(220px, 360px) auto 120px minmax(220px, 1fr) !important;
+  column-gap: 12px;
+  align-items: center;
+}
+
+.contentbox .template-form-modern .currency-command-row > dt:nth-of-type(1) {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+}
+
+.contentbox .template-form-modern .currency-command-row > dd:nth-of-type(1) {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > .currency-command-row.currency-command-row > .script-command-label.script-command-label {
+  grid-column: 4 !important;
+  grid-row: 1 !important;
+  flex: 0 0 120px !important;
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+  box-sizing: border-box;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > .currency-command-row.currency-command-row > .script-command-field.script-command-field {
+  grid-column: 5 !important;
+  grid-row: 1 !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > .currency-command-row.currency-command-row > dd.colorBox.colorBox {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  margin: 0 !important;
+  position: relative;
+  z-index: 2;
+}
+
+.contentbox .template-form-modern .currency-command-row > .colorBox ul,
+.contentbox .template-form-modern .currency-command-row > .colorBox li {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+}
+
 }
