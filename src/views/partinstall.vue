@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="partinstall" :class="{ 'partition-install-page': $root.uiMode === 'modern' }">
+  <div class="partinstall" :class="{ 'partition-install-page': $root.uiMode === 'modern', 'partition-form-modern': $root.uiMode === 'modern' }">
     <div v-if="$root.uiMode === 'modern'" class="partition-page-head">
       <h1>安装分区</h1>
       <p>配置网关、模板与开区计划</p>

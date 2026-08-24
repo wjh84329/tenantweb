@@ -1374,6 +1374,64 @@ body.tenant-ui-modern {
 
 .contentbox .partition-install-page .install-save-panel .el-button { min-width: 112px; height: 38px; }
 
+/* 分区安装、编辑、克隆页在新版中按配置区纵向排列，控件充分利用内容宽度 */
+.contentbox .partition-form-modern .gs_listcontainer {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl,
+.contentbox .partition-form-modern .gs_listcontainer > .tip_red,
+.contentbox .partition-form-modern .gs_listcontainer > .tablebox,
+.contentbox .partition-form-modern .gs_listcontainer > .timed-rename-group {
+  grid-column: 1 !important;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox {
+  display: inline-flex;
+  align-items: center;
+  width: min(680px, 100%) !important;
+  max-width: 100%;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-input,
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-select,
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-date-editor {
+  width: 100% !important;
+  max-width: 680px;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox:has(> .el-select) {
+  display: flex;
+  gap: 12px;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox:has(> .el-select) > .el-select {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox:has(> .el-select) > .mgl20 {
+  flex: 0 0 auto;
+  margin-left: 0 !important;
+}
+
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .line_tip,
+.contentbox .partition-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .block_tip {
+  display: block;
+  margin: 4px 0 0;
+}
+
 /* 新版筛选表单：输入控件与紧随其后的操作按钮保持清晰间距 */
 .contentbox .el-form--inline .el-form-item__content > .el-input + .el-button,
 .contentbox .el-form--inline .el-form-item__content > .el-select + .el-button,

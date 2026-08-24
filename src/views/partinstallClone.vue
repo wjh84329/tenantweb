@@ -6,7 +6,7 @@
  * @LastEditors: gao shuai
  -->
 <template>
-  <div class="partinstall two-column-config-page">
+  <div class="partinstall two-column-config-page" :class="{ 'partition-form-modern': $root.uiMode === 'modern' }">
     <div class="bg_fff">
       <div class="gs_title" style="color: white;">克隆分区</div>
       <div class="gs_listcontainer">
