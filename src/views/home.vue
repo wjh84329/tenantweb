@@ -2380,33 +2380,40 @@ export default {
     white-space: normal;
     overflow: visible;
   }
-  .moneybox .btns .account-quick-link {
+  /* tooltip 包装层、链接和点击型 span 统一为同一条水平基线 */
+  .moneybox .btns > * {
     box-sizing: border-box;
     position: relative;
-    flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 auto;
     height: 36px;
     margin: 0;
     padding: 0 16px;
-    color: #4f6bff;
+    color: #4f6bff !important;
+    font-size: 14px;
     line-height: 36px;
     white-space: nowrap;
+    border-right: 1px solid #dbe3f0;
+  }
+  .moneybox .btns > *:last-child { border-right: 0; }
+  .moneybox .btns > * a,
+  .moneybox .btns > * span,
+  .moneybox .btns > *.account-quick-link {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    margin: 0;
+    padding: 0;
+    color: inherit !important;
+    font-size: inherit;
+    line-height: inherit;
     text-decoration: none;
     cursor: pointer;
   }
-  .moneybox .btns .account-quick-link::after {
-    content: '';
-    position: absolute;
-    top: 8px;
-    right: 0;
-    width: 1px;
-    height: 20px;
-    background: #dbe3f0;
-  }
-  .moneybox .btns .account-quick-link:last-child::after { display: none; }
-  .moneybox .btns .account-quick-link.is-disabled { color: #b8c1d1; cursor: not-allowed; }
+  .moneybox .btns > * .is-disabled,
+  .moneybox .btns > *.is-disabled { color: #b8c1d1 !important; cursor: not-allowed; }
 }
 
 .tenant-dashboard .tenant-metrics-grid {
