@@ -2333,8 +2333,17 @@ export default {
     box-shadow: none !important;
   }
 
+  .moneybox .numberbox {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    column-gap: 20px;
+  }
+
   .moneybox .numberbox > ul {
-    padding: 2px 290px 20px 0;
+    flex: 1 1 300px;
+    min-width: 0;
+    padding: 2px 0 20px;
     display: grid;
     grid-template-columns: repeat(4, minmax(110px, 1fr));
     gap: 0;
@@ -2358,9 +2367,19 @@ export default {
   .moneybox .numberbox > ul > .linebox { display: none; }
   .moneybox .tit { color: #667085 !important; font-size: 13px !important; }
   .moneybox .number { margin-top: 9px !important; font-size: 23px !important; font-weight: 700; letter-spacing: -.3px; }
-  .moneybox .getbtn { top: 20px; right: 20px; display: flex; gap: 8px; }
+  .moneybox .getbtn {
+    position: static;
+    flex: 0 1 auto;
+    max-width: 100%;
+    margin-top: 2px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
   .moneybox .getbtn .el-button + .el-button { margin-left: 0; }
   .moneybox .btns {
+    flex: 0 0 100%;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -2550,7 +2569,7 @@ export default {
   .tenant-dashboard .tenant-metrics-grid { grid-column: 1; grid-row: auto; }
   .tenant-dashboard .tenant-account-grid { grid-template-columns: 1fr; }
   .tenant-dashboard .tenant-account-grid .moneybox .numberbox > ul { padding-right: 0; }
-  .tenant-dashboard .tenant-account-grid .moneybox .getbtn { position: static; margin-top: 12px; }
+  .tenant-dashboard .tenant-account-grid .moneybox .getbtn { margin-top: 12px; }
 }
 
 .legacy-pay-preview {
