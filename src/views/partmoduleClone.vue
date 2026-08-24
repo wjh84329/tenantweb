@@ -565,7 +565,7 @@
           :class="{ 'active': collspa.show5 }"></span></div>
       <el-collapse-transition>
         <div v-show="collspa.show5" class="gs_listcontainer equipment-config-grid">
-          <dl class="clearfix">
+          <dl class="clearfix equipment-display-row">
             <dt>显示选项：</dt>
             <dd>
               <span class="inputbox pdt5">
@@ -574,7 +574,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <dl class="clearfix equipment-calculate-row">
             <dt>计算选项：</dt>
             <dd>
               <span class="inputbox pdt5">
@@ -588,7 +588,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <dl class="clearfix equipment-give-row">
             <dt>赠送选项：</dt>
             <dd>
               <span class="inputbox pdt5">
@@ -670,7 +670,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <dl class="clearfix redbag-npc-row">
             <dt>红包N P C：</dt>
             <dd>
               <span class="inputbox">
@@ -716,7 +716,7 @@
               </span>
             </dd>
           </dl>
-          <dl class="clearfix">
+          <dl class="clearfix redbag-details-row">
             <dt>红包详情：</dt>
             <dd>
               <span class="inputbox">

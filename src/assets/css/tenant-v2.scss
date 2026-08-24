@@ -1271,7 +1271,7 @@ body.tenant-ui-modern {
 }
 
 /* 模板赠送区域最终覆盖：前置控制项紧凑排列，详情内容整行 */
-.contentbox .template-form-modern .gs_listcontainer.compact-option-grid,
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid),
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid {
   display: flex !important;
   flex-flow: row wrap !important;
@@ -1780,7 +1780,7 @@ body.tenant-ui-modern {
   min-height: 52px;
 }
 
-.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dt,
+.contentbox .template-form-modern .gs_listcontainer:not(.compact-option-grid):not(.equipment-config-grid) > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dt,
 .contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dt {
   flex: 0 0 150px;
   width: 150px !important;
@@ -1789,7 +1789,7 @@ body.tenant-ui-modern {
   text-align: right;
 }
 
-.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd,
+.contentbox .template-form-modern .gs_listcontainer:not(.compact-option-grid):not(.equipment-config-grid) > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd,
 .contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd {
   display: flex;
   align-items: center;
@@ -1798,7 +1798,7 @@ body.tenant-ui-modern {
   min-width: 0;
 }
 
-.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer:not(.compact-option-grid):not(.equipment-config-grid) > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox,
 .contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox {
   display: inline-flex;
   align-items: center;
@@ -1807,8 +1807,8 @@ body.tenant-ui-modern {
   max-width: 100%;
 }
 
-.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-input,
-.contentbox .template-form-modern .gs_listcontainer > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-select,
+.contentbox .template-form-modern .gs_listcontainer:not(.compact-option-grid):not(.equipment-config-grid) > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-input,
+.contentbox .template-form-modern .gs_listcontainer:not(.compact-option-grid):not(.equipment-config-grid) > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-select,
 .contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-input,
 .contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair > dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dd > .inputbox > .el-select {
   width: 100% !important;
@@ -3132,6 +3132,353 @@ body.tenant-ui-modern {
 
 .contentbox .template-form-modern .equipment-config-grid > .equipment-details-row .tablebox > p {
   margin-left: 0 !important;
+}
+
+/* 模板赠送区最终布局：仅新皮肤生效，短选项紧跟，详情表格各占整行 */
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid {
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: flex-start !important;
+  align-content: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 8px 24px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:not(.redbag-npc-row):not(.redbag-details-row):not(:has(.tablebox)),
+.contentbox .template-form-modern .equipment-config-grid > .equipment-display-row,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-calculate-row,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-give-row {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  min-height: 40px;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:not(.redbag-npc-row):not(.redbag-details-row):not(:has(.tablebox)) > dt,
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:not(.redbag-npc-row):not(.redbag-details-row):not(:has(.tablebox)) > dd,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-display-row > dt,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-display-row > dd,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-calculate-row > dt,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-calculate-row > dd,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-give-row > dt,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-give-row > dd {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:not(.redbag-npc-row):not(.redbag-details-row):not(:has(.tablebox)) > dt,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-display-row > dt,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-calculate-row > dt,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-give-row > dt {
+  padding: 0 10px 0 0 !important;
+  white-space: nowrap;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:not(.redbag-npc-row):not(.redbag-details-row):not(:has(.tablebox)) > dd > .inputbox,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-display-row > dd > .inputbox,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-calculate-row > dd > .inputbox,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-give-row > dd > .inputbox {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  width: max-content !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+.contentbox .template-form-modern .equipment-config-grid > .equipment-details-row,
+.contentbox .template-form-modern .compact-option-grid > .redbag-npc-row,
+.contentbox .template-form-modern .compact-option-grid > .redbag-details-row {
+  display: flex !important;
+  flex: 0 0 100% !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 8px 0 !important;
+}
+
+.contentbox .template-form-modern .equipment-config-grid > .equipment-details-row > dt,
+.contentbox .template-form-modern .compact-option-grid > .redbag-npc-row > dt,
+.contentbox .template-form-modern .compact-option-grid > .redbag-details-row > dt {
+  display: block !important;
+  flex: 0 0 150px !important;
+  width: 150px !important;
+  box-sizing: border-box;
+  padding: 8px 18px 0 0 !important;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.contentbox .template-form-modern .equipment-config-grid > .equipment-details-row > dd,
+.contentbox .template-form-modern .compact-option-grid > .redbag-npc-row > dd,
+.contentbox .template-form-modern .compact-option-grid > .redbag-details-row > dd {
+  display: block !important;
+  flex: 1 1 auto !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  float: none !important;
+}
+
+.contentbox .template-form-modern .equipment-config-grid > .equipment-details-row > dd > .inputbox,
+.contentbox .template-form-modern .compact-option-grid > .redbag-npc-row > dd > .inputbox,
+.contentbox .template-form-modern .compact-option-grid > .redbag-details-row > dd > .inputbox,
+.contentbox .template-form-modern .equipment-config-grid > .equipment-details-row .tablebox,
+.contentbox .template-form-modern .compact-option-grid > .redbag-npc-row .tablebox,
+.contentbox .template-form-modern .compact-option-grid > .redbag-details-row .tablebox {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+}
+
+.contentbox .template-form-modern .equipment-config-grid > .equipment-details-row .tablebox,
+.contentbox .template-form-modern .compact-option-grid > .redbag-npc-row .tablebox,
+.contentbox .template-form-modern .compact-option-grid > .redbag-details-row .tablebox {
+  margin: 0 !important;
+  overflow-x: auto;
+}
+
+.contentbox .template-form-modern .equipment-config-grid > .equipment-details-row .tablebox > table,
+.contentbox .template-form-modern .compact-option-grid > .redbag-npc-row .tablebox > table,
+.contentbox .template-form-modern .compact-option-grid > .redbag-details-row .tablebox > table {
+  display: table !important;
+  width: 100% !important;
+  min-width: 700px;
+}
+
+@media (max-width: 1280px) {
+  .contentbox .template-form-modern .equipment-config-grid > .equipment-calculate-row,
+  .contentbox .template-form-modern .equipment-config-grid > .equipment-give-row {
+    flex-basis: 100% !important;
+    width: 100% !important;
+  }
+
+  .contentbox .template-form-modern .equipment-config-grid > .equipment-calculate-row .el-radio-group {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* 渠道赠送：顶部开关与计算方式紧跟，渠道比例固定在下一整行 */
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid {
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: flex-start !important;
+  align-content: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 8px 24px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.contentbox .template-form-modern .channel-give-grid > .channel-give-setting,
+.contentbox .template-form-modern .channel-give-grid > .channel-give-options {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+}
+
+.contentbox .template-form-modern .channel-give-grid > .channel-give-setting > dt,
+.contentbox .template-form-modern .channel-give-grid > .channel-give-setting > dd,
+.contentbox .template-form-modern .channel-give-grid > .channel-give-options > dt,
+.contentbox .template-form-modern .channel-give-grid > .channel-give-options > dd {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.contentbox .template-form-modern .channel-give-grid > .channel-give-setting > dt,
+.contentbox .template-form-modern .channel-give-grid > .channel-give-options > dt {
+  padding: 0 10px 0 0 !important;
+  white-space: nowrap;
+}
+
+.contentbox .template-form-modern .channel-give-grid > .channel-give-setting > dd > .inputbox,
+.contentbox .template-form-modern .channel-give-grid > .channel-give-options > dd > .inputbox {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  width: max-content !important;
+  max-width: none !important;
+}
+
+.contentbox .template-form-modern .channel-give-grid > .channel-give-values {
+  display: flex !important;
+  flex: 0 0 100% !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+}
+
+.contentbox .template-form-modern .channel-give-grid > .channel-give-values > dt:empty {
+  display: none !important;
+}
+
+.contentbox .template-form-modern .channel-give-grid > .channel-give-values > dd,
+.contentbox .template-form-modern .channel-give-grid > .channel-give-values > dd > .inputbox {
+  display: block !important;
+  flex: 1 1 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.contentbox .template-form-modern .channel-give-grid > .channel-give-values .chargelist {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  gap: 8px 28px;
+  width: 100% !important;
+}
+
+/* 激励、红包等赠送详情：带表格的内容永远另起整行 */
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:has(.tablebox) {
+  display: flex !important;
+  flex: 0 0 100% !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 8px 0 !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:has(.tablebox) > dt {
+  display: block !important;
+  flex: 0 0 150px !important;
+  width: 150px !important;
+  box-sizing: border-box;
+  padding: 8px 18px 0 0 !important;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:has(.tablebox) > dd {
+  display: block !important;
+  flex: 1 1 auto !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  float: none !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:has(.tablebox) > dd > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:has(.tablebox) .tablebox {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:has(.tablebox) .tablebox {
+  margin: 0 !important;
+  overflow-x: auto;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:has(.tablebox) .tablebox > table {
+  display: table !important;
+  width: auto !important;
+}
+
+/* 详情行占满可用宽度，但表格按实际内容收紧，避免列间出现大块空白 */
+.contentbox .template-form-modern .equipment-config-grid > .equipment-details-row .tablebox,
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl:has(.tablebox) .tablebox {
+  width: fit-content !important;
+  max-width: 100% !important;
+}
+
+.contentbox .template-form-modern .equipment-config-grid > .equipment-details-row .tablebox > table {
+  width: auto !important;
+}
+
+/* 装备顶部三组短选项覆盖历史固定列宽，宽屏连续排列、窄屏自然换行 */
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-display-row,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-calculate-row,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-give-row.equipment-give-row {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-display-row > dt,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-calculate-row > dt,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-give-row > dt,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-display-row > dd,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-calculate-row > dd,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-give-row > dd {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-display-row > dt,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-calculate-row > dt,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-give-row > dt {
+  padding: 0 10px 0 0 !important;
+}
+
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-display-row > dd > .inputbox,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-calculate-row > dd > .inputbox,
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-give-row > dd > .inputbox {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-details-row:has(.tablebox) .tablebox {
+  width: fit-content !important;
+  max-width: 100% !important;
+}
+
+.contentbox .template-form-modern .equipment-config-grid.equipment-config-grid > .equipment-details-row:has(.tablebox) .tablebox > table {
+  width: auto !important;
+  min-width: 700px;
+}
+
+.contentbox .template-form-modern .channel-give-grid.channel-give-grid > .channel-give-values.channel-give-values {
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 }
