@@ -1569,6 +1569,7 @@ body.tenant-ui-modern {
     "setting options"
     "values values" !important;
   align-items: start;
+  justify-content: start;
   gap: 4px 32px !important;
 }
 
@@ -1602,6 +1603,15 @@ body.tenant-ui-modern {
   align-items: center;
 }
 
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl > dd > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl > dd > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting > dd > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-options > dd > .inputbox {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid {
   align-items: flex-start;
   column-gap: 32px !important;
@@ -1613,7 +1623,7 @@ body.tenant-ui-modern {
 }
 
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) {
-  flex: 1 1 auto !important;
+  flex: 0 1 auto !important;
   min-width: 0;
 }
 
