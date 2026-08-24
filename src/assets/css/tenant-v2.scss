@@ -1885,6 +1885,33 @@ body.tenant-ui-modern {
   white-space: nowrap;
 }
 
+/* 代付订单批量操作：按钮语义区分，并取消按钮组粘连 */
+.contentbox .wrap-box .table-tool {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+}
+
+.contentbox .wrap-box .table-tool > .item {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 !important;
+}
+
+.contentbox .wrap-box .behalf-action-group {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.contentbox .wrap-box .behalf-action-group .el-button {
+  float: none;
+  margin: 0 !important;
+  border-radius: 4px !important;
+}
+
 .contentbox .el-table .el-button-group .el-button {
   flex: 0 0 auto;
   margin: 0 !important;

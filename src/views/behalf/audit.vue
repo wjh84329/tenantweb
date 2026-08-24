@@ -103,16 +103,16 @@
           </el-table>
           <div class="table-tool">
             <div class="item">
-              <el-button-group>
+              <el-button-group class="behalf-action-group">
                 <el-button
-                  type="primary"
+                  type="danger"
                   size="mini"
                   :disabled="!isdisabled"
                   @click="del"
                   >批量删除
                 </el-button>
                 <el-button
-                  type="primary"
+                  type="success"
                   size="mini"
                   :disabled="!isdisabled"
                   @click="shenhe"
@@ -125,9 +125,9 @@
               批量添加到
             </div>
             <div class="item">
-              <el-button-group>
+              <el-button-group class="behalf-action-group">
                 <el-button
-                  type="primary"
+                  type="warning"
                   size="mini"
                   :disabled="!isdisabled"
                   @click="black(1)"
@@ -141,7 +141,7 @@
                   >角色黑名单
                 </el-button>
                 <el-button
-                  type="primary"
+                  type="danger"
                   size="mini"
                   :disabled="!isdisabled"
                   @click="black(3)"
