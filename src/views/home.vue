@@ -2287,8 +2287,9 @@ export default {
   grid-column: 2;
   grid-row: 3;
   grid-template-columns: 1fr;
-  align-content: start;
-  align-self: start;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  align-content: stretch;
+  align-self: stretch;
   gap: 0;
   overflow: hidden;
   border: 1px solid #e5eaf2;
@@ -2331,14 +2332,18 @@ export default {
     width: auto !important;
     height: auto !important;
     min-height: 0;
+    display: flex;
     border-top: 1px solid #eef1f5;
   }
 
   .moneybox {
     box-sizing: border-box;
+    flex: 1 1 auto;
     height: auto !important;
     min-height: 0;
     padding: 14px 20px 10px !important;
+    display: flex;
+    align-items: center;
     border: 0 !important;
     border-radius: 0 !important;
     background: #fff !important;
