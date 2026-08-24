@@ -1011,7 +1011,7 @@ export default {
         rate: 1, // 兑换比例
         tongQuDir: 'D:\\通区目录', // 通区目录
         dir: [], // 充值脚本路径盘符
-        payDir: '7XPAY充值', // 充值脚本路径
+        payDir: 'haocz', // 充值脚本路径
         DirType: false, // 领取路径
         chargeNpc: [
           {
