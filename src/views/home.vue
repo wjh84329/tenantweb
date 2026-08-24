@@ -539,12 +539,12 @@
             <img class="imgskin" src="../assets/images/skin4.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 5 }" @click="handleSkinChange(5)">
+        <li style="display: none;" :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 5 }" @click="handleSkinChange(5)">
           <el-tooltip class="item" effect="dark" content="晶莹紫" placement="bottom">
             <img class="imgskin" src="../assets/images/skin5.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 6 }" @click="handleSkinChange(6)">
+        <li style="display: none;" :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 6 }" @click="handleSkinChange(6)">
           <el-tooltip class="item" effect="dark" content="商务灰" placement="bottom">
             <img class="imgskin" src="../assets/images/skin6.png" alt="">
           </el-tooltip>
@@ -2556,19 +2556,19 @@ export default {
 .legacy-pay-preview {
   position: relative;
   box-sizing: border-box;
-  width: 142px;
-  height: 86px;
+  width: 200px;
+  height: 150px;
   overflow: hidden;
   border: 1px solid #d8d8d8;
-  background: #fff;
+  background: linear-gradient(90deg, #f3f3f3 0 30px, #fff 30px 100%);
 }
 
 .legacy-pay-preview span { position: absolute; display: block; }
-.legacy-pay-preview__top { top: 0; left: 0; right: 0; height: 14px; border-bottom: 2px solid #a92b1c; }
-.legacy-pay-preview__notice { top: 22px; left: 10px; width: 120px; height: 10px; background: #ededed; border-bottom: 1px solid #a92b1c; }
-.legacy-pay-preview__title { top: 39px; left: 10px; width: 46px; height: 5px; background: #a92b1c; }
-.legacy-pay-preview__row { left: 10px; width: 120px; height: 8px; border: 1px solid #ddd; background: #f5f5f5; }
-.legacy-pay-preview__row--one { top: 49px; }
-.legacy-pay-preview__row--two { top: 60px; }
-.legacy-pay-preview strong { position: absolute; right: 8px; bottom: 3px; color: #8f261a; font-size: 10px; font-weight: 600; }
+.legacy-pay-preview__top { top: 0; left: 0; right: 0; height: 20px; border-bottom: 3px solid #a92b1c; background: #fff; }
+.legacy-pay-preview__notice { top: 32px; left: 42px; right: 12px; height: 14px; background: #ededed; border-bottom: 1px solid #a92b1c; }
+.legacy-pay-preview__title { top: 59px; left: 42px; width: 62px; height: 7px; background: #a92b1c; }
+.legacy-pay-preview__row { left: 42px; right: 12px; height: 15px; border: 1px solid #ddd; background: #f5f5f5; }
+.legacy-pay-preview__row--one { top: 74px; }
+.legacy-pay-preview__row--two { top: 94px; }
+.legacy-pay-preview strong { position: absolute; right: 12px; bottom: 5px; color: #8f261a; font-size: 11px; font-weight: 600; }
 </style>
