@@ -23,7 +23,7 @@
         <button v-if="hasMenu(1) || $store.state.settlementType != 3"
           class="tenant-nav__item" :class="{ active: activeNav === '/main/home' }"
           @click="setActive('/main/home')">
-          <tenant-icon name="home" /><span>工作台</span>
+          <tenant-icon name="home" /><span>首页</span>
         </button>
         <button v-if="canShowTopMenu(2)" class="tenant-nav__item"
           :class="{ active: activeNav === '/main/Ordermanagement' }"
@@ -71,7 +71,6 @@
       </nav>
       <tenant-global-nav :active-section="activeSectionKey" @navigate="refresh" />
       <div class="tenant-sidebar__utilities">
-        <button v-if="canShowSideMenu(18)" @click="refresh('/main/gaincode')"><tenant-icon name="code" /><span>获取代码</span></button>
         <button v-if="canShowSideMenu(19)" @click="startGatewayDownload"><tenant-icon name="download" /><span>下载网关</span></button>
         <button v-if="siteBrandingResolved && !isAgentSite && !isRestrictedAccount" @click="openApiDoc"><tenant-icon name="document" /><span>教程文档</span></button>
         <button class="is-danger" @click="loginOut"><tenant-icon name="logout" /><span>退出登录</span></button>
@@ -439,7 +438,7 @@ export default {
         '/main/DA': '数据分析',
         '/main/gaincode': '获取代码'
       };
-      return titleMap[this.$route.path] || '工作台';
+      return titleMap[this.$route.path] || '首页';
     },
     headboxStyle() {
       switch (this.skinNum) {
