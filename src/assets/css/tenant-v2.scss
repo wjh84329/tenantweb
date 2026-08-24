@@ -1564,7 +1564,7 @@ body.tenant-ui-modern {
 /* 模板页的渠道、装备、激励等专用配置组保留各自的紧凑布局 */
 .contentbox .template-form-modern .gs_listcontainer.channel-give-grid {
   display: grid !important;
-  grid-template-columns: auto minmax(0, 1fr) !important;
+  grid-template-columns: auto auto !important;
   grid-template-areas:
     "setting options"
     "values values" !important;
@@ -1576,6 +1576,30 @@ body.tenant-ui-modern {
 .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid {
   display: flex !important;
   grid-template-columns: none !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  display: flex !important;
+  align-items: center;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl > dt,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl > dt {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  padding: 0 10px 0 0 !important;
+  min-height: 32px;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid) > dl > dd,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl > dd {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  display: flex !important;
+  align-items: center;
 }
 
 .contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting {
