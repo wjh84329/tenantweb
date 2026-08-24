@@ -888,9 +888,9 @@
           <el-form-item v-if="wxmbDialog.form.gameType === '传奇世界'" label="补丁下载" prop="patchType">
             <div class="qrcode-tags">
               <el-tag style="margin-left:8px;cursor: pointer;font-size: 14px;"><a
-                  href="http://localhost:5003/script/七星服务Gom.zip"><i class="el-icon-paperclip"></i>4x4</a></el-tag>
+                  href="http://localhost:5003/script/好充值Gom.zip"><i class="el-icon-paperclip"></i>4x4</a></el-tag>
               <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a
-                  href="http://localhost:5003/script/七星服务Gee.zip" target="_blank"><i
+                  href="http://localhost:5003/script/好充值Gee.zip" target="_blank"><i
                     class="el-icon-paperclip"></i>8x8</a></el-tag>
             </div>
           </el-form-item>
@@ -1546,7 +1546,7 @@ export default {
             name: '元宝消费',
             show: 2,
             isShow: false,
-            file: '...\\..\\..\\..\\通区充值\\Mir200\\Envir\\QuestDiary\\7XPAY\\充值积分\\元宝消费Save.txt',
+            file: '...\\..\\..\\..\\通区充值\\Mir200\\Envir\\QuestDiary\\HAOCZ\\充值积分\\元宝消费Save.txt',
             ratio: 1,
             type: 0
           },
@@ -1554,7 +1554,7 @@ export default {
             name: '消费积分',
             show: 2,
             isShow: false,
-            file: '..\\..\\..\\..\\通区充值\\Mir200\\Envir\\QuestDiary\\7XPAY\\充值积分\\消费积分Save.txt',
+            file: '..\\..\\..\\..\\通区充值\\Mir200\\Envir\\QuestDiary\\HAOCZ\\充值积分\\消费积分Save.txt',
             ratio: 1,
             type: 0
           }
@@ -1565,7 +1565,7 @@ export default {
             name: '元宝消费',
             show: 2,
             isShow: false,
-            file: '..\\QuestDiary\\7XPAY\\充值积分\\元宝消费Save.txt',
+            file: '..\\QuestDiary\\HAOCZ\\充值积分\\元宝消费Save.txt',
             ratio: 1,
             type: 0
           },
@@ -1573,7 +1573,7 @@ export default {
             name: '消费积分',
             show: 2,
             isShow: false,
-            file: '..\\QuestDiary\\7XPAY\\充值积分\\消费积分Save.txt',
+            file: '..\\QuestDiary\\HAOCZ\\充值积分\\消费积分Save.txt',
             ratio: 1,
             type: 0
           }

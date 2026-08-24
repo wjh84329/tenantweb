@@ -897,9 +897,9 @@
           <el-form-item v-if="wxmbDialog.form.gameType === '传奇世界'" label="补丁下载" prop="patchType">
             <div class="qrcode-tags">
               <el-tag style="margin-left:8px;cursor: pointer;font-size: 14px;"><a
-                  href="http://localhost:5003/script/七星服务Gom.zip"><i class="el-icon-paperclip"></i>4x4</a></el-tag>
+                  href="http://localhost:5003/script/好充值Gom.zip"><i class="el-icon-paperclip"></i>4x4</a></el-tag>
               <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a
-                  href="http://localhost:5003/script/七星服务Gee.zip" target="_blank"><i
+                  href="http://localhost:5003/script/好充值Gee.zip" target="_blank"><i
                     class="el-icon-paperclip"></i>8x8</a></el-tag>
             </div>
           </el-form-item>

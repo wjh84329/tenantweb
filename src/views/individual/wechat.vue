@@ -482,16 +482,16 @@
                 <div class="qrcode-tags">
                   热血传奇
                   <el-tag style="margin-left:8px;cursor: pointer;font-size: 14px;"><a target="_blank"
-                      :href="`/script/七星支付Gom.zip`"><i class="el-icon-paperclip"></i>Gom</a></el-tag>
-                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/七星支付Gee.zip"
+                      :href="`/script/好充值Gom.zip`"><i class="el-icon-paperclip"></i>Gom</a></el-tag>
+                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/好充值Gee.zip"
                       target="_blank"><i class="el-icon-paperclip"></i>Gee</a></el-tag>
-                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/七星支付BLUE2.zip"
+                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/好充值BLUE2.zip"
                       target="_blank"><i class="el-icon-paperclip"></i>BLUE2</a></el-tag>
-                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/七星支付996PCM2.zip"
+                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/好充值996PCM2.zip"
                       target="_blank"><i class="el-icon-paperclip"></i>996PCM2</a></el-tag>
-                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/七星支付HeroX.zip"
+                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/好充值HeroX.zip"
                       target="_blank"><i class="el-icon-paperclip"></i>HeroX</a></el-tag>
-                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/七星支付翎风.zip"
+                  <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a href="/script/好充值翎风.zip"
                       target="_blank"><i class="el-icon-paperclip"></i>翎风</a></el-tag>
                 </div>
               </div>
@@ -683,10 +683,10 @@
                     <el-form-item v-if="wxmbDialog.form.gameType === '传奇世界'" label="补丁下载" prop="patchType">
                       <div class="qrcode-tags">
                         <el-tag style="margin-left:8px;cursor: pointer;font-size: 14px;"><a
-                            href="http://localhost:5003/script/七星服务Gom.zip"><i
+                            href="http://localhost:5003/script/好充值Gom.zip"><i
                               class="el-icon-paperclip"></i>4x4</a></el-tag>
                         <el-tag style="margin-left:4px;cursor: pointer;font-size: 14px;"><a
-                            href="http://localhost:5003/script/七星服务Gee.zip" target="_blank"><i
+                            href="http://localhost:5003/script/好充值Gee.zip" target="_blank"><i
                               class="el-icon-paperclip"></i>8x8</a></el-tag>
                       </div>
                     </el-form-item>

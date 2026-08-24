@@ -55,7 +55,7 @@ export default {
       return this.escapeHtml(text).replace(/`/g, '&#96;');
     },
     normalizeFooterText(text) {
-      return (text || '').replace(/钻石/g, '七星');
+      return (text || '').replace(/钻石/g, '好充值');
     },
     renderLegalLink(text, url) {
       const label = String(text || '').trim();

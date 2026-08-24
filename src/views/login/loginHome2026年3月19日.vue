@@ -155,7 +155,7 @@
         <section class="fixed-section core-advantage"
             v-hover-active="{ inView: true, inViewAnimation: 'animate__animated animate__backInUp', once: true }">
             <div class="label_box">
-                <div class="label_title">七星·核心优势</div>
+                <div class="label_title">好充值·核心优势</div>
                 <div class="label_content">欢迎您来电来函咨询洽谈!</div>
             </div>
             <div class="core_box">

@@ -1,7 +1,7 @@
 <template>
   <div :class="{ 'header-top': true, fixed: true }">
     <div  class="contanct1">
-      <span class="tel">七星传奇游戏技术服务平台   |   7x24服务客服电话:{{ servicePhone }}</span>
+      <span class="tel">好充值传奇游戏技术服务平台   |   7x24服务客服电话:{{ servicePhone }}</span>
     </div>
     <div class="contanct">
       <img src="../assets/img/logo3.png" style="width: 166px;height: 50px;" class="logo" />

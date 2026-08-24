@@ -1128,7 +1128,7 @@ export default {
             name: '元宝消费',
             show: 2,
             isShow: false,
-            file: '..\\QuestDiary\\7XPAY充值元宝\\充值积分\\元宝消费Save.txt',
+            file: '..\\QuestDiary\\HAOCZ充值元宝\\充值积分\\元宝消费Save.txt',
             ratio: 1,
             type: 0
           },
@@ -1136,7 +1136,7 @@ export default {
             name: '消费积分',
             show: 2,
             isShow: false,
-            file: '..\\QuestDiary\\7XPAY充值元宝\\充值积分\\消费积分Save.txt',
+            file: '..\\QuestDiary\\HAOCZ充值元宝\\充值积分\\消费积分Save.txt',
             ratio: 1,
             type: 0
           }
