@@ -88,7 +88,7 @@
       <div class="topinfo clearfix" style="height: 150px;width: 76%;">
         <div class="moneybox gs_shadow" style="height: 97%;">
           <div class="numberbox">
-            <ul v-show="$root.uiMode !== 'modern'" class="clearfix" style="border-bottom: 1px dashed #ccc">
+            <ul v-if="$root.uiMode !== 'modern'" class="clearfix" style="border-bottom: 1px dashed #ccc">
               <li>
                 <p class="tit">账户余额</p>
                 <p style="color: blue;font-weight: bold;" class="number">{{ accountInfo.accout }}</p>
