@@ -2831,4 +2831,102 @@ body.tenant-ui-modern {
   .contentbox .partition-row-actions { min-width: 360px; }
   .contentbox .replacement-record-page > .opeartbox > .btnBox { width: 100%; }
 }
+
+/* 模板赠送配置最终布局：顶部控制项按内容紧跟，禁止空白伸展 */
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100% !important;
+  justify-content: flex-start !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid > dl,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-options {
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid > dl > dt,
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid > dl > dd,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl > dt,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl > dd,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting > dt,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting > dd,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-options > dt,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-options > dd {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid > dl > dd > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl > dd > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-setting > dd > .inputbox,
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-options > dd > .inputbox {
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  max-width: none !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(n + 3),
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-values {
+  flex-basis: 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* 宽屏下装备计算选项按自身内容占宽，不压缩单选文字 */
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(1) {
+  flex: 0 0 auto !important;
+  width: max-content !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) {
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  max-width: none !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) > dd,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .inputbox,
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .el-radio-group {
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  max-width: none !important;
+  min-width: max-content !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .el-radio {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 1280px) {
+  .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2),
+  .contentbox .template-form-modern .gs_listcontainer.channel-give-grid > .channel-give-options {
+    flex-basis: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) > dd,
+  .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .inputbox,
+  .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .el-radio-group {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .contentbox .template-form-modern .gs_listcontainer.equipment-config-grid > dl:nth-child(2) .el-radio-group {
+    flex-wrap: wrap !important;
+  }
+}
 }
