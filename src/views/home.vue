@@ -2372,27 +2372,41 @@ export default {
   .moneybox .getbtn .el-button + .el-button { margin-left: 0; }
   .moneybox .btns {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0;
     padding: 10px 0 0;
-    white-space: nowrap;
-    overflow-x: auto;
+    white-space: normal;
+    overflow: visible;
   }
   .moneybox .btns span { margin-top: 0; color: #4f6bff; }
   .moneybox .btns .modern-account-shortcut {
     display: inline-flex;
     align-items: center;
     min-height: 30px;
-    padding: 0 10px;
+    padding: 0;
     color: #4f6bff;
     line-height: 30px;
     text-decoration: none;
     cursor: pointer;
   }
-  .moneybox .btns > .el-tooltip + .el-tooltip { border-left: 1px solid #dbe3f0; }
   .moneybox .btns .modern-account-shortcut.is-disabled { color: #b8c1d1; cursor: not-allowed; }
-  .moneybox .btns > .el-tooltip { flex: 0 0 auto; }
+  .moneybox .btns > .el-tooltip {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    min-height: 30px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    border-right: 1px solid #dbe3f0;
+  }
+  .moneybox .btns > .el-tooltip:last-child { border-right: 0; }
+  .moneybox .btns > .el-tooltip span { white-space: nowrap; }
+  .moneybox .btns > .el-tooltip .linebtn {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: 0;
+  }
 }
 
 .tenant-dashboard .tenant-metrics-grid {

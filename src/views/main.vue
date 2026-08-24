@@ -1692,6 +1692,24 @@ export default {
   background: var(--tenant-page) !important;
 }
 
+/* 新版工具栏收起后只保留展开把手，避免整列图标遮挡页面内容 */
+.main.tenant-ui-modern-shell .merchant-float-dock.is-collapsed .merchant-float-dock__inner {
+  min-width: 0;
+  border-radius: 10px 0 0 10px;
+}
+
+.main.tenant-ui-modern-shell .merchant-float-dock.is-collapsed .merchant-float-dock__item:not(.merchant-float-dock__item--toggle) {
+  display: none;
+}
+
+.main.tenant-ui-modern-shell .merchant-float-dock.is-collapsed .merchant-float-dock__item--toggle {
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-bottom: 0;
+}
+
 .main.tenant-ui-modern-shell > .header,
 .main.tenant-ui-modern-shell .midleContaner > .slider {
   display: none !important;
