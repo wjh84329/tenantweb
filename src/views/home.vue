@@ -116,61 +116,61 @@
             <div class="btns">
               <el-tooltip class="item" effect="dark" content="点击去绑定微信" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/weixin"
-                  tag="span" class="modern-account-shortcut">
+                  tag="span" class="account-quick-link">
                   <span>绑定微信</span>
                 </router-link>
-                <span v-else class="modern-account-shortcut is-disabled">
+                <span v-else class="account-quick-link is-disabled">
                   <span>绑定微信</span>
                 </span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击修改登录密码" placement="bottom">
-                <span class="modern-account-shortcut" @click="dialog.show = true">
+                <span class="account-quick-link" @click="dialog.show = true">
                   <span>登录密码</span>
                 </span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看操作日志" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/main/conectKey"
-                  tag="span" class="modern-account-shortcut">
+                  tag="span" class="account-quick-link">
                   <span>通讯秘钥</span>
                 </router-link>
-                <span v-else class="modern-account-shortcut is-disabled">
+                <span v-else class="account-quick-link is-disabled">
                   <span>通讯秘钥</span>
                 </span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看账户安全" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/acountsafe"
-                  tag='span'>账户安全</router-link>
-                <span v-else style="color: #ccc; cursor: not-allowed;">账户安全</span>
+                  tag='span' class="account-quick-link">账户安全</router-link>
+                <span v-else class="account-quick-link is-disabled">账户安全</span>
               </el-tooltip>
               <el-tooltip effect="dark" content="点击查看产品结算比率" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/rateList" tag='span'
-                  class="linebtn">结算比率</router-link>
-                <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">结算比率</span>
+                  class="account-quick-link">结算比率</router-link>
+                <span v-else class="account-quick-link is-disabled">结算比率</span>
               </el-tooltip>
               <!-- <el-tooltip class="item" effect="dark" content="点击查看帐户提现记录" placement="bottom">
                 <router-link to="/main/Withdrawalrecords" tag="span" class="linebtn">提现记录</router-link>
               </el-tooltip> -->
               <el-tooltip class="item" effect="dark" content="点击查看账户收支记录" placement="bottom"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/Withdrawalrecords" tag="span"
-                  class="linebtn">账户收支</router-link>
-                <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">账户收支</span>
+                  class="account-quick-link">账户收支</router-link>
+                <span v-else class="account-quick-link is-disabled">账户收支</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看微信动态密保" placement="bottom" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/wechat" tag="span"
-                  class="linebtn">微信动态密保</router-link>
-                <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">微信动态密保</span>
+                  class="account-quick-link">微信动态密保</router-link>
+                <span v-else class="account-quick-link is-disabled">微信动态密保</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看定时任务" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/orderInterval" tag="span"
-                  class="linebtn">定时任务</router-link>
-                <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">定时任务</span>
+                  class="account-quick-link">定时任务</router-link>
+                <span v-else class="account-quick-link is-disabled">定时任务</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看登录日志" placement="bottom">
-                <router-link to="/main/Userlogs" tag="span" class="linebtn">登录日志</router-link>
+                <router-link to="/main/Userlogs" tag="span" class="account-quick-link">登录日志</router-link>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击领取礼品" placement="bottom"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <!-- <input type="button" class="linebtn" value="领取礼品" @click="goOrder"> -->
-                <span class="linebtn" style="cursor:pointer;" @click="goOrder">领取礼品</span>
+                <span class="account-quick-link" @click="goOrder">领取礼品</span>
               </el-tooltip>
             </div>
           </div>
@@ -2374,39 +2374,39 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0;
-    padding: 10px 0 0;
+    column-gap: 0;
+    row-gap: 6px;
+    padding: 12px 0 2px;
     white-space: normal;
     overflow: visible;
   }
-  .moneybox .btns span { margin-top: 0; color: #4f6bff; }
-  .moneybox .btns .modern-account-shortcut {
+  .moneybox .btns .account-quick-link {
+    box-sizing: border-box;
+    position: relative;
+    flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
-    min-height: 30px;
-    padding: 0;
+    justify-content: center;
+    height: 36px;
+    margin: 0;
+    padding: 0 16px;
     color: #4f6bff;
-    line-height: 30px;
+    line-height: 36px;
+    white-space: nowrap;
     text-decoration: none;
     cursor: pointer;
   }
-  .moneybox .btns .modern-account-shortcut.is-disabled { color: #b8c1d1; cursor: not-allowed; }
-  .moneybox .btns > .el-tooltip {
-    box-sizing: border-box;
-    flex: 0 0 auto;
-    min-height: 30px;
-    padding: 0 10px;
-    display: inline-flex;
-    align-items: center;
-    border-right: 1px solid #dbe3f0;
+  .moneybox .btns .account-quick-link::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 0;
+    width: 1px;
+    height: 20px;
+    background: #dbe3f0;
   }
-  .moneybox .btns > .el-tooltip:last-child { border-right: 0; }
-  .moneybox .btns > .el-tooltip span { white-space: nowrap; }
-  .moneybox .btns .linebtn {
-    margin-left: 0;
-    padding-left: 0;
-    border-left: 0;
-  }
+  .moneybox .btns .account-quick-link:last-child::after { display: none; }
+  .moneybox .btns .account-quick-link.is-disabled { color: #b8c1d1; cursor: not-allowed; }
 }
 
 .tenant-dashboard .tenant-metrics-grid {
