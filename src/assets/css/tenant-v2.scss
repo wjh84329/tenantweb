@@ -1561,6 +1561,23 @@ body.tenant-ui-modern {
   width: 100%;
 }
 
+/* 模板页的渠道、装备、激励等专用配置组保留各自的紧凑布局 */
+.contentbox .template-form-modern .gs_listcontainer.channel-give-grid {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  grid-template-areas:
+    "setting options"
+    "values values" !important;
+  align-items: start;
+  gap: 4px 32px !important;
+}
+
+.contentbox .template-form-modern .gs_listcontainer.compact-option-grid:not(.channel-give-grid),
+.contentbox .template-form-modern .gs_listcontainer.equipment-config-grid {
+  display: flex !important;
+  grid-template-columns: none !important;
+}
+
 
 /* 新版筛选表单：输入控件与紧随其后的操作按钮保持清晰间距 */
 .contentbox .el-form--inline .el-form-item__content > .el-input + .el-button,
