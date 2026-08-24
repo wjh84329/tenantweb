@@ -1529,6 +1529,30 @@ body.tenant-ui-modern {
   max-width: none;
 }
 
+/* 模板页的充值 NPC、红包 NPC 等宽表格与普通字段共用同一标签列 */
+.contentbox .template-form-modern .gs_listcontainer > dl:has(.tablebox) > dt,
+.contentbox .template-form-modern .gs_listcontainer > dl:has(.sqlsetbox) > dt,
+.contentbox .template-form-modern .gs_listcontainer > dl:has(.gs_textarea) > dt {
+  flex: 0 0 150px !important;
+  width: 150px !important;
+  box-sizing: border-box;
+  padding: 8px 18px 0 0 !important;
+  text-align: right;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > dl:has(.tablebox) > dd,
+.contentbox .template-form-modern .gs_listcontainer > dl:has(.sqlsetbox) > dd,
+.contentbox .template-form-modern .gs_listcontainer > dl:has(.gs_textarea) > dd {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.contentbox .template-form-modern .gs_listcontainer > dl:has(.tablebox) .tablebox,
+.contentbox .template-form-modern .gs_listcontainer > dl:has(.sqlsetbox) .sqlsetbox,
+.contentbox .template-form-modern .gs_listcontainer > dl:has(.gs_textarea) .gs_textarea {
+  margin-left: 0 !important;
+}
+
 .contentbox .template-form-modern .gs_listcontainer > .conditional-setting-pair {
   display: block !important;
 }
