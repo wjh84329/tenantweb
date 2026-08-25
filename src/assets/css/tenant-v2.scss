@@ -2392,7 +2392,7 @@ body.tenant-ui-modern {
 }
 
 /* 老 UI 附加详情：扩大表格与脚本命令列，避免前三列被压缩 */
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table {
+.partinstall .legacy-additional-detail-table {
   box-sizing: border-box;
   width: 100% !important;
   max-width: 1000px !important;
@@ -2400,44 +2400,44 @@ body.tenant-ui-modern {
   overflow-y: visible !important;
 }
 
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table {
+.partinstall .legacy-additional-detail-table > table {
   width: 100% !important;
   min-width: 0;
   table-layout: fixed;
 }
 
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(1),
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(1) {
+.partinstall .legacy-additional-detail-table > table th:nth-child(1),
+.partinstall .legacy-additional-detail-table > table td:nth-child(1) {
   width: 130px !important;
 }
 
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(2),
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(2) {
+.partinstall .legacy-additional-detail-table > table th:nth-child(2),
+.partinstall .legacy-additional-detail-table > table td:nth-child(2) {
   width: 240px !important;
 }
 
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(3),
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(3) {
+.partinstall .legacy-additional-detail-table > table th:nth-child(3),
+.partinstall .legacy-additional-detail-table > table td:nth-child(3) {
   width: 80px !important;
 }
 
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(4),
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(4) {
+.partinstall .legacy-additional-detail-table > table th:nth-child(4),
+.partinstall .legacy-additional-detail-table > table td:nth-child(4) {
   width: 235px !important;
 }
 
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(5),
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(5) {
+.partinstall .legacy-additional-detail-table > table th:nth-child(5),
+.partinstall .legacy-additional-detail-table > table td:nth-child(5) {
   width: 100px !important;
   white-space: nowrap;
 }
 
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(6),
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(6) {
+.partinstall .legacy-additional-detail-table > table th:nth-child(6),
+.partinstall .legacy-additional-detail-table > table td:nth-child(6) {
   width: 130px !important;
 }
 
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(2) .el-input {
+.partinstall .legacy-additional-detail-table > table td:nth-child(2) .el-input {
   width: 100% !important;
 }
 
