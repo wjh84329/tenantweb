@@ -365,7 +365,7 @@
             <dt>附加详情：</dt>
             <dd>
               <span class="inputbox">
-                <div class="tablebox" style="width: 800px;">
+                <div class="tablebox legacy-additional-detail-table">
                   <table>
                     <thead>
                       <tr>
@@ -2648,6 +2648,25 @@ export default {
   }
 }
 
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 1120px !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  table {
+    width: 100% !important;
+    min-width: 1030px;
+    table-layout: fixed;
+    th:nth-child(1), td:nth-child(1) { width: 145px !important; }
+    th:nth-child(2), td:nth-child(2) { width: 240px !important; }
+    th:nth-child(3), td:nth-child(3) { width: 110px !important; }
+    th:nth-child(4), td:nth-child(4) { width: 235px !important; }
+    th:nth-child(5), td:nth-child(5) { width: 90px !important; }
+    th:nth-child(6), td:nth-child(6) { width: 130px !important; }
+    td:nth-child(2) .el-input { width: 100% !important; }
+  }
+}
 .chargelist {
   width: 800px;
 
