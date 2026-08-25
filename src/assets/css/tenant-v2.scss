@@ -2394,15 +2394,15 @@ body.tenant-ui-modern {
 /* 老 UI 附加详情：扩大表格与脚本命令列，避免前三列被压缩 */
 .partinstall:not(.template-form-modern) .legacy-additional-detail-table {
   box-sizing: border-box;
-  width: 1000px !important;
-  max-width: none !important;
+  width: 100% !important;
+  max-width: 1000px !important;
   overflow: visible !important;
   overflow-y: visible !important;
 }
 
 .partinstall:not(.template-form-modern) .legacy-additional-detail-table > table {
-  width: 1000px !important;
-  min-width: 1000px;
+  width: 100% !important;
+  min-width: 0;
   table-layout: fixed;
 }
 

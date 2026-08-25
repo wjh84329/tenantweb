@@ -336,7 +336,7 @@
             <dd>
               <span class="inputbox">
                 <div class="tablebox legacy-additional-detail-table">
-                  <table style="width: 1000px; min-width: 1000px;">
+                  <table style="width: 100%; min-width: 0;">
                     <colgroup>
                       <col style="width: 130px;" />
                       <col style="width: 240px;" />
