@@ -534,18 +534,7 @@
             <img class="imgskin" src="../assets/images/sk4.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkin.skinNum === 5 }" @click="dialogSkin.skinNum = 5">
-          <el-tooltip class="item" effect="dark" content="经典红灰（兼容IE6）" placement="bottom">
-            <div class="legacy-pay-preview" aria-label="经典红灰充值皮肤预览">
-              <span class="legacy-pay-preview__top"></span>
-              <span class="legacy-pay-preview__notice"></span>
-              <span class="legacy-pay-preview__title"></span>
-              <span class="legacy-pay-preview__row legacy-pay-preview__row--one"></span>
-              <span class="legacy-pay-preview__row legacy-pay-preview__row--two"></span>
-              <strong>经典红灰</strong>
-            </div>
-          </el-tooltip>
-        </li>
+        <!-- 七星分支不提供新增的经典红灰充值皮肤；好充值分支保留该选项。 -->
       </ul>
       <p class="tc pdb10" style="padding-top: 30px;">
         <el-button size="mini" type="primary" @click="setSkin">确定</el-button>
