@@ -159,19 +159,27 @@
     <div class="dialogContainer" v-if="dialog.show">
       <div class="dialogbox">
         <div class="close" @click="dialog.show = false"></div>
-        <h2 class="tit">注册成功</h2>
+        <div class="dialog-head">
+          <span class="dialog-status">REGISTRATION COMPLETE</span>
+          <h2 class="tit">注册申请已提交</h2>
+          <p>账号资料提交成功，请完成审核后登录</p>
+        </div>
         <div class="box">
           <p class="text">请联系工作人员进行审核</p>
-          <p class="tc" v-for="(item, i) in serverQQ" :key="'qq' + i">
+          <div class="service-list" v-if="serverQQ.length">
             <a
+              v-for="(item, i) in serverQQ"
+              :key="'qq' + i"
               class="service-qq"
               :href="'https://wpa.qq.com/msgrd?v=3&uin=' + item.qq + '&site=qq&menu=yes'"
               target="_blank"
             >
-              <img src="../../assets/images/login/contact_qq.png" alt="" />
-              <div>请添加QQ：{{ item.qq }}</div>
+              <span class="service-qq__icon">QQ</span>
+              <span class="service-qq__label">联系审核客服</span>
+              <strong>{{ item.qq }}</strong>
             </a>
-          </p>
+          </div>
+          <p v-else class="service-empty">请联系平台客服完成审核</p>
         </div>
       </div>
     </div>
@@ -702,66 +710,193 @@ export default {
   right: 0;
   bottom: 0;
   z-index: 99999;
-  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgba(16, 33, 61, 0.52);
+  backdrop-filter: blur(3px);
 }
 
 .dialogbox {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 288px;
-  min-height: 327px;
-  margin-left: -144px;
-  margin-top: -163px;
-  background: #fff;
-  border-radius: 20px;
+  position: relative;
+  width: 420px;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(207, 227, 251, 0.95);
+  border-radius: 14px;
+  box-shadow: 0 28px 70px rgba(10, 42, 86, 0.28);
   overflow: hidden;
+}
+
+.dialogbox::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #126de8 0%, #5868f5 52%, #2d8cff 100%);
 }
 
 .dialogbox .close {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 22px;
-  height: 22px;
-  background: url(../../assets/images/login/cross_img.png) no-repeat center center;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #f2f6fc;
   cursor: pointer;
 }
 
-.dialogbox .tit {
-  height: 66px;
-  line-height: 66px;
-  margin: 0;
+.dialogbox .close::before,
+.dialogbox .close::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 8px;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: #708099;
+}
+
+.dialogbox .close::before {
+  transform: rotate(45deg);
+}
+
+.dialogbox .close::after {
+  transform: rotate(-45deg);
+}
+
+.dialog-head {
+  padding: 38px 58px 24px;
   text-align: center;
-  font-size: 24px;
-  font-weight: 400;
-  color: #fff;
-  background: #1792e3;
+  background: linear-gradient(180deg, #f3f7ff 0%, #ffffff 100%);
+  border-bottom: 1px solid #e4edf8;
+}
+
+.dialog-status {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 11px;
+  color: #126de8;
+  background: #e9f2ff;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+}
+
+.dialogbox .tit {
+  margin: 14px 0 8px;
+  color: #10213d;
+  font-size: 25px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.dialog-head p {
+  margin: 0;
+  color: #75849a;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 .dialogbox .box {
-  padding-top: 140px;
-  background: url(../../assets/images/login/cross.png) no-repeat center 35px;
+  padding: 24px 30px 30px;
   text-align: center;
 }
 
 .dialogbox .text {
-  margin-top: 5px;
-  margin-bottom: 15px;
-  font-size: 18px;
-  color: #5f5f5f;
+  margin: 0 0 16px;
+  color: #4d5d75;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.service-list {
+  display: grid;
+  gap: 10px;
 }
 
 .service-qq {
-  display: inline-flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) max-content;
+  gap: 12px;
   align-items: center;
+  min-height: 58px;
+  padding: 9px 14px;
+  box-sizing: border-box;
   text-decoration: none;
-  color: #333;
+  text-align: left;
+  color: #17233c;
+  background: #f7faff;
+  border: 1px solid #d8e7f8;
+  border-radius: 10px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.service-qq:hover {
+  border-color: #8fbcf5;
+  box-shadow: 0 8px 20px rgba(18, 109, 232, 0.12);
+  transform: translateY(-1px);
+}
+
+.service-qq__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  background: linear-gradient(135deg, #126de8 0%, #5868f5 100%);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.service-qq__label {
+  color: #53647d;
   font-size: 14px;
 }
 
-.service-qq img {
-  margin-bottom: 8px;
+.service-qq strong {
+  color: #126de8;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.service-empty {
+  margin: 0;
+  padding: 14px;
+  color: #6d7b91;
+  background: #f7faff;
+  border: 1px dashed #d5e3f4;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+@media (max-width: 520px) {
+  .dialog-head {
+    padding: 34px 42px 22px;
+  }
+
+  .dialogbox .box {
+    padding: 22px 20px 24px;
+  }
+
+  .service-qq {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .service-qq strong {
+    grid-column: 2;
+  }
 }
 </style>
