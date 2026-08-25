@@ -366,10 +366,10 @@
                   <table style="width: 100%; min-width: 0; table-layout: fixed;">
                     <colgroup>
                       <col style="width: 130px;" />
-                      <col style="width: 240px;" />
-                      <col style="width: 100px;" />
                       <col style="width: 180px;" />
-                      <col style="width: 70px;" />
+                      <col style="width: 80px;" />
+                      <col style="width: 180px;" />
+                      <col style="width: 120px;" />
                       <col style="width: 120px;" />
                       <col style="width: 80px;" />
                     </colgroup>
