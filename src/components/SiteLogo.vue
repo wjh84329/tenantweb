@@ -25,7 +25,7 @@ export default {
     },
     resourceName: {
       type: String,
-      default: 'logo'
+      default: ''
     },
     variant: {
       type: String,
@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     buildRemoteSrc() {
-      const defaultResource = this.logoType === 'home' ? 'homeLogo' : 'logo';
+      const defaultResource = this.logoType === 'home' ? 'HomeLogo' : 'logo';
       const resourceName = String(this.resourceName || defaultResource).trim() || defaultResource;
       return `${remoteBaseUrl}/api/Upload/ShowFile?name=${encodeURIComponent(resourceName)}`;
     },
