@@ -341,10 +341,10 @@
                       <col style="width: 130px;" />
                       <col style="width: 180px;" />
                       <col style="width: 80px;" />
-                      <col style="width: 180px;" />
-                      <col style="width: 120px;" />
-                      <col style="width: 120px;" />
-                      <col style="width: 80px;" />
+                      <col style="width: 220px;" />
+                      <col style="width: 140px;" />
+                      <col style="width: 140px;" />
+                      <col style="width: 100px;" />
                     </colgroup>
                     <thead>
                       <tr>
