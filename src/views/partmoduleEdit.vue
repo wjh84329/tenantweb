@@ -367,6 +367,10 @@
               <span class="inputbox">
                 <div class="tablebox legacy-additional-detail-table">
                   <table>
+                    <colgroup>
+                      <col style="width: 130px;" /><col style="width: 240px;" /><col style="width: 100px;" />
+                      <col style="width: 180px;" /><col style="width: 70px;" /><col style="width: 120px;" /><col style="width: 80px;" />
+                    </colgroup>
                     <thead>
                       <tr>
                         <th width="130">附加奖励</th>
@@ -2651,16 +2655,16 @@ export default {
 .partinstall:not(.template-form-modern) .legacy-additional-detail-table {
   box-sizing: border-box;
   width: 100% !important;
-  max-width: 1120px !important;
-  overflow-x: auto !important;
+  max-width: 1000px !important;
+  overflow: visible !important;
   overflow-y: visible !important;
   table {
     width: 100% !important;
-    min-width: 1030px;
+    min-width: 0;
     table-layout: fixed;
-    th:nth-child(1), td:nth-child(1) { width: 145px !important; }
+    th:nth-child(1), td:nth-child(1) { width: 130px !important; }
     th:nth-child(2), td:nth-child(2) { width: 240px !important; }
-    th:nth-child(3), td:nth-child(3) { width: 110px !important; }
+    th:nth-child(3), td:nth-child(3) { width: 100px !important; }
     th:nth-child(4), td:nth-child(4) { width: 235px !important; }
     th:nth-child(5), td:nth-child(5) { width: 90px !important; }
     th:nth-child(6), td:nth-child(6) { width: 130px !important; }
