@@ -2391,6 +2391,55 @@ body.tenant-ui-modern {
   color: #344054;
 }
 
+/* 老 UI 附加详情：给脚本命令留出足够宽度，窄屏时保留横向滚动而不裁掉操作列 */
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 1120px !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+}
+
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table {
+  width: 100% !important;
+  min-width: 1030px;
+  table-layout: fixed;
+}
+
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(1),
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(1) {
+  width: 145px !important;
+}
+
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(2),
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(2) {
+  width: 240px !important;
+}
+
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(3),
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(3) {
+  width: 110px !important;
+}
+
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(4),
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(4) {
+  width: 235px !important;
+}
+
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(5),
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(5) {
+  width: 90px !important;
+}
+
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table th:nth-child(6),
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(6) {
+  width: 130px !important;
+}
+
+.partinstall:not(.template-form-modern) .legacy-additional-detail-table > table td:nth-child(2) .el-input {
+  width: 100% !important;
+}
+
 /* 普通表单行统一按 32px 控件中心线对齐；高内容行保留顶部对齐 */
 .contentbox .gs_listcontainer dl:not(:has(.tablebox)):not(:has(.sqlsetbox)):not(:has(.gs_textarea)) > dt {
   display: flex;

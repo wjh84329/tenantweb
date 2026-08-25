@@ -362,7 +362,7 @@
             <dt>附加详情：</dt>
             <dd>
               <span class="inputbox">
-                <div class="tablebox" style="width: 800px;">
+                <div class="tablebox legacy-additional-detail-table">
                   <table>
                     <thead>
                       <tr>
