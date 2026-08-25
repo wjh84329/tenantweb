@@ -2652,7 +2652,7 @@ export default {
   }
 }
 
-.partinstall:not(.template-form-modern) .legacy-additional-detail-table {
+.partinstall .legacy-additional-detail-table {
   box-sizing: border-box;
   width: 100% !important;
   max-width: 1000px !important;
