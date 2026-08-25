@@ -369,7 +369,7 @@
                   <table style="width: 100%; min-width: 0; table-layout: fixed;">
                     <colgroup>
                       <col style="width: 130px;" /><col style="width: 180px;" /><col style="width: 80px;" />
-                      <col style="width: 180px;" /><col style="width: 120px;" /><col style="width: 120px;" /><col style="width: 80px;" />
+                      <col style="width: 220px;" /><col style="width: 140px;" /><col style="width: 140px;" /><col style="width: 100px;" />
                     </colgroup>
                     <thead>
                       <tr>
@@ -2665,9 +2665,9 @@ export default {
     th:nth-child(1), td:nth-child(1) { width: 130px !important; }
     th:nth-child(2), td:nth-child(2) { width: 180px !important; }
     th:nth-child(3), td:nth-child(3) { width: 80px !important; }
-    th:nth-child(4), td:nth-child(4) { width: 235px !important; }
-    th:nth-child(5), td:nth-child(5) { width: 120px !important; white-space: nowrap; }
-    th:nth-child(6), td:nth-child(6) { width: 130px !important; }
+    th:nth-child(4), td:nth-child(4) { width: 220px !important; }
+    th:nth-child(5), td:nth-child(5) { width: 140px !important; white-space: nowrap; }
+    th:nth-child(6), td:nth-child(6) { width: 140px !important; }
     td:nth-child(2) .el-input { width: 100% !important; }
   }
 }
