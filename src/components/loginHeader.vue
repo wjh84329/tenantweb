@@ -97,7 +97,7 @@ export default {
 }
 
 .logo {
-  width: 166px;
+  width: 250px;
   height: 50px;
   object-fit: contain;
   display: block;
