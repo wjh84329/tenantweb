@@ -218,7 +218,6 @@
           <div class="gateway-download-card__heading">
             <div class="gateway-download-card__brand">商户中心</div>
             <div class="gateway-download-card__title">{{ downloadStatusTitle }}</div>
-            <div class="gateway-download-card__subtitle">{{ downloadStatusText }}</div>
           </div>
           <div class="gateway-download-card__badge">{{ downloadPhaseLabel }}</div>
         </div>
