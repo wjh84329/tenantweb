@@ -368,7 +368,16 @@
             <dd>
               <span class="inputbox">
                 <div class="tablebox legacy-additional-detail-table">
-                  <table>
+                  <table style="width: 1000px; min-width: 1000px;">
+                    <colgroup>
+                      <col style="width: 130px;" />
+                      <col style="width: 240px;" />
+                      <col style="width: 100px;" />
+                      <col style="width: 180px;" />
+                      <col style="width: 70px;" />
+                      <col style="width: 120px;" />
+                      <col style="width: 80px;" />
+                    </colgroup>
                     <thead>
                       <tr>
                         <th width="130">附加奖励</th>
