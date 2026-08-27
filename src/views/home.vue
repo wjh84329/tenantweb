@@ -123,17 +123,17 @@
             </div>
             <div class="btns">
               <el-tooltip class="item" effect="dark" content="点击去绑定微信" placement="bottom">
-                <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/weixin"
+                <router-link v-if="$root.uiMode === 'modern' && $store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/weixin"
                   tag="span" class="account-quick-link">绑定微信</router-link>
-                <span v-else class="account-quick-link is-disabled">绑定微信</span>
+                <span v-else-if="$root.uiMode === 'modern'" class="account-quick-link is-disabled">绑定微信</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击修改登录密码" placement="bottom">
-                <span class="account-quick-link" @click="dialog.show = true">登录密码</span>
+                <span v-if="$root.uiMode === 'modern'" class="account-quick-link" @click="dialog.show = true">登录密码</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看操作日志" placement="bottom">
-                <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/main/conectKey"
+                <router-link v-if="$root.uiMode === 'modern' && $store.state.settlementType != 3 && $store.state.settlementType != 4" to="/main/conectKey"
                   tag="span" class="account-quick-link">通讯秘钥</router-link>
-                <span v-else class="account-quick-link is-disabled">通讯秘钥</span>
+                <span v-else-if="$root.uiMode === 'modern'" class="account-quick-link is-disabled">通讯秘钥</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看账户安全" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/acountsafe"
@@ -1697,18 +1697,6 @@ export default {
         color: #0a57ac;
         cursor: pointer;
         margin-top: 8px;
-
-        &.account-quick-link {
-          padding-left: 15px;
-          border-left: 1px solid #63aafa;
-          margin-left: 15px;
-
-          &:first-child {
-            padding-left: 0;
-            border-left: none;
-            margin-left: 0;
-          }
-        }
 
         &.linebtn {
           padding-left: 15px;
