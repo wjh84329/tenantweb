@@ -1698,6 +1698,18 @@ export default {
         cursor: pointer;
         margin-top: 8px;
 
+        &.account-quick-link {
+          padding-left: 15px;
+          border-left: 1px solid #63aafa;
+          margin-left: 15px;
+
+          &:first-child {
+            padding-left: 0;
+            border-left: none;
+            margin-left: 0;
+          }
+        }
+
         &.linebtn {
           padding-left: 15px;
           border-left: 1px solid #63aafa;
