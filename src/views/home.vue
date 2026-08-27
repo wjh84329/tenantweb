@@ -1707,6 +1707,7 @@ export default {
           box-sizing: border-box;
           position: relative;
           padding-right: 15px;
+          margin-right: 15px;
 
           &::after {
             content: '';
@@ -1721,6 +1722,10 @@ export default {
           &:last-child::after {
             display: none;
           }
+
+          &:last-child {
+            margin-right: 0;
+          }
         }
 
         &.account-quick-link {
@@ -1730,6 +1735,7 @@ export default {
           align-items: center;
           height: 24px;
           padding-right: 15px;
+          margin-right: 15px;
           line-height: 24px;
           white-space: nowrap;
           text-decoration: none;
@@ -1746,6 +1752,10 @@ export default {
 
           &:last-child::after {
             display: none;
+          }
+
+          &:last-child {
+            margin-right: 0;
           }
         }
       }
