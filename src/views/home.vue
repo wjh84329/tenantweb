@@ -1690,18 +1690,63 @@ export default {
 
     .btns {
       padding: 10px 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 0;
+      row-gap: 8px;
 
       span {
         display: inline-block;
         font-size: 14px;
         color: #0a57ac;
         cursor: pointer;
-        margin-top: 8px;
+        margin-top: 0;
 
         &.linebtn {
-          padding-left: 15px;
-          border-left: 1px solid #63aafa;
-          margin-left: 15px;
+          box-sizing: border-box;
+          position: relative;
+          padding-right: 15px;
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            right: 0;
+            width: 1px;
+            height: 16px;
+            background: #63aafa;
+          }
+
+          &:last-child::after {
+            display: none;
+          }
+        }
+
+        &.account-quick-link {
+          box-sizing: border-box;
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          height: 24px;
+          padding-right: 15px;
+          line-height: 24px;
+          white-space: nowrap;
+          text-decoration: none;
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            right: 0;
+            width: 1px;
+            height: 16px;
+            background: #63aafa;
+          }
+
+          &:last-child::after {
+            display: none;
+          }
         }
       }
     }
