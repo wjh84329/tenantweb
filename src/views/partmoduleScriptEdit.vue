@@ -67,7 +67,7 @@
             :name="f.fileName"
           >
             <div class="editor-actions mgb10">
-              <el-button type="primary" size="small" :loading="saving" @click="saveCurrent">保存当前文件</el-button>
+              <el-button type="primary" size="small" :loading="saving" @click="saveCurrent">保存为模板脚本</el-button>
               <el-button
                 size="small"
                 type="warning"
@@ -83,13 +83,22 @@
                 :disabled="!currentMeta || (!currentMeta.hasPlatformDefault && !currentMeta.isCustomized)"
                 @click="resetCurrent"
               >恢复默认</el-button>
-              <el-tag v-if="currentMeta && currentMeta.isCustomized" type="success" size="mini" class="mgl10">已定制</el-tag>
-              <el-tag v-else-if="currentMeta && currentMeta.hasPlatformDefault" type="info" size="mini" class="mgl10">使用平台默认</el-tag>
-              <el-tag v-else-if="currentMeta" type="warning" size="mini" class="mgl10">暂无平台脚本，请自编后保存</el-tag>
+              <el-tag v-if="currentMeta && currentMeta.isCustomized" type="success" size="mini" class="mgl10">模板脚本</el-tag>
+              <el-tag v-else-if="currentMeta && currentMeta.isGatewayBaseOverride" type="warning" size="mini" class="mgl10">来自网关底板</el-tag>
+              <el-tag v-else-if="currentMeta && currentMeta.hasPlatformDefault" type="info" size="mini" class="mgl10">平台默认</el-tag>
+              <el-tag v-else-if="currentMeta" type="danger" size="mini" class="mgl10">未配置</el-tag>
             </div>
             <el-alert
               v-if="currentMeta && !currentMeta.hasPlatformDefault && !currentMeta.isCustomized"
               :title="emptyScriptNotice"
+              type="info"
+              :closable="false"
+              class="mgb10"
+              show-icon
+            />
+            <el-alert
+              v-else-if="currentMeta && currentMeta.isGatewayBaseOverride"
+              title="当前内容来自网关底板。保存后将作为本模板的模板脚本覆盖。"
               type="info"
               :closable="false"
               class="mgb10"
@@ -451,6 +460,8 @@ export default {
           fileName: item.fileName || item.FileName,
           content: item.content != null ? item.content : item.Content != null ? item.Content : '',
           isCustomized: !!(item.isCustomized ?? item.IsCustomized),
+          isGatewayBaseOverride: !!(item.isGatewayBaseOverride ?? item.IsGatewayBaseOverride),
+          sourceLayer: item.sourceLayer || item.SourceLayer || '',
           /** 后台未返回时按旧版兼容：视为有平台默认 */
           hasPlatformDefault: (item.hasPlatformDefault ?? item.HasPlatformDefault ?? true) === true
         }))

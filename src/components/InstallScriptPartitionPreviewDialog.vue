@@ -43,6 +43,12 @@
             :value="opt.fileName"
           />
         </el-select>
+        <el-tag
+          v-if="currentScriptPreviewSourceText"
+          size="mini"
+          :type="currentScriptPreviewFile && currentScriptPreviewFile.isGatewayBaseOverride ? 'warning' : 'info'"
+          class="mgl10"
+        >{{ currentScriptPreviewSourceText }}</el-tag>
         <el-button
           class="mgl10"
           type="primary"
@@ -213,6 +219,18 @@ export default {
         return { minRows: 28, maxRows: 160 };
       }
       return { minRows: 18, maxRows: 32 };
+    },
+    currentScriptPreviewFile() {
+      return this.scriptPreview.fileOptions.find((item) => item.fileName === this.scriptPreview.fileName);
+    },
+    currentScriptPreviewSourceText() {
+      const item = this.currentScriptPreviewFile;
+      if (!item) return '';
+      if (item.sourceLayer === 'Template') return '当前来源：模板脚本';
+      if (item.sourceLayer === 'GatewayBase' || item.isGatewayBaseOverride) return '当前来源：网关底板';
+      if (item.sourceLayer === 'Missing') return '当前来源：未配置';
+      if (item.sourceLayer === 'Partition') return '当前来源：分区脚本';
+      return '当前来源：平台默认';
     }
   },
   mounted() {
@@ -255,7 +273,9 @@ export default {
           .map((item) => {
             const fileName = item.fileName || item.FileName || '';
             const sourceFileName = item.sourceFileName || item.SourceFileName || fileName;
-            return fileName ? { fileName, sourceFileName } : null;
+            const sourceLayer = item.sourceLayer || item.SourceLayer || '';
+            const isGatewayBaseOverride = !!(item.isGatewayBaseOverride ?? item.IsGatewayBaseOverride);
+            return fileName ? { fileName, sourceFileName, sourceLayer, isGatewayBaseOverride } : null;
           })
           .filter(Boolean);
         this.scriptPreview.fileOptions = opts;
