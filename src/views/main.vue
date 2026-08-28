@@ -69,12 +69,13 @@
           <tenant-icon name="employee" /><span>员工管理</span><tenant-icon class="tenant-nav__arrow" name="chevron" />
         </button>
       </nav>
-      <tenant-global-nav :active-section="activeSectionKey" @navigate="refresh" />
-      <div class="tenant-sidebar__utilities">
-        <button v-if="canShowSideMenu(19)" @click="startGatewayDownload"><tenant-icon name="download" /><span>下载网关</span></button>
-        <button v-if="siteBrandingResolved && !isAgentSite && !isRestrictedAccount" @click="openApiDoc"><tenant-icon name="document" /><span>教程文档</span></button>
-        <button class="is-danger" @click="loginOut"><tenant-icon name="logout" /><span>退出登录</span></button>
-      </div>
+      <tenant-global-nav :active-section="activeSectionKey" @navigate="refresh">
+        <div class="tenant-sidebar__utilities">
+          <button v-if="canShowSideMenu(19)" @click="startGatewayDownload"><tenant-icon name="download" /><span>下载网关</span></button>
+          <button v-if="siteBrandingResolved && !isAgentSite && !isRestrictedAccount" @click="openApiDoc"><tenant-icon name="document" /><span>教程文档</span></button>
+          <button class="is-danger" @click="loginOut"><tenant-icon name="logout" /><span>退出登录</span></button>
+        </div>
+      </tenant-global-nav>
     </aside>
     <header v-if="isModernUi" class="tenant-topbar">
       <div class="tenant-breadcrumb"><span>商户中心</span><i>/</i><strong>{{ shellTitle }}</strong></div>
@@ -1822,8 +1823,7 @@ export default {
 .tenant-nav--legacy { display: none !important; }
 
 .tenant-sidebar__utilities {
-  padding: 12px 10px 14px;
-  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 0;
 
   button {
     width: 100%;

@@ -24,6 +24,7 @@
         </div>
       </div>
     </template>
+    <slot />
   </nav>
 </template>
 
