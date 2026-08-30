@@ -146,6 +146,8 @@
                 <p class="tit">昨日收入</p>
                 <p class="num">{{ chargeInfoData.yesterdayProfit }}</p>
               </li>
+              <li><p class="tit">今日笔数</p><p class="num">{{ chargeInfoData.todayOrderCount }}</p></li>
+              <li><p class="tit">昨日笔数</p><p class="num">{{ chargeInfoData.yesterdayOrderCount }}</p></li>
               <li v-loading="chargeInfoData.waitFlag">
                 <p class="tit">等待发送</p>
                 <el-tooltip v-if="chargeInfoData.waitSend > 0" class="item" effect="dark" content="点击下发"
@@ -570,7 +572,9 @@ export default {
         tenantCount: 0,
         agentPayAmount: 0.0,
         yesterdayPayAmount: 0.0,
-        yesterdayProfit: 0.0
+        yesterdayProfit: 0.0,
+        todayOrderCount: 0,
+        yesterdayOrderCount: 0
       },
       // 功能设置
       functionSet: {
@@ -716,6 +720,7 @@ export default {
           if (chargeRes.status === 200) {
             this.chargeInfoData.todaycharge = chargeRes.data.payAmount.toFixed(2);
             this.chargeInfoData.todayProfit = chargeRes.data.profit.toFixed(2);
+            this.chargeInfoData.todayOrderCount = chargeRes.data.orderCount || 0;
             this.chargeInfoData.waitSend = chargeRes.data.toBeIssuedState;
             this.chargeInfoData.agentProfit = chargeRes.data.agentProfit.toFixed(2);
             this.chargeInfoData.tenantCount = chargeRes.data.tenantCount;
@@ -724,6 +729,7 @@ export default {
             );
             this.chargeInfoData.yesterdayPayAmount = chargeRes.data.yesterdayPayAmount.toFixed(2);
             this.chargeInfoData.yesterdayProfit = chargeRes.data.yesterdayProfit.toFixed(2);
+            this.chargeInfoData.yesterdayOrderCount = chargeRes.data.yesterdayOrderCount || 0;
           }
           console.log(this.$store.state);
           this.traceHomeStage('CoreDataDone');
@@ -827,6 +833,7 @@ export default {
           if (data.status === 200) {
             this.chargeInfoData.todaycharge = data.data.payAmount.toFixed(2);
             this.chargeInfoData.todayProfit = data.data.profit.toFixed(2);
+            this.chargeInfoData.todayOrderCount = data.data.orderCount || 0;
             this.chargeInfoData.waitSend = data.data.toBeIssuedState;
             this.chargeInfoData.agentProfit = data.data.agentProfit.toFixed(2);
             this.chargeInfoData.tenantCount = data.data.tenantCount;
@@ -839,6 +846,7 @@ export default {
             this.chargeInfoData.yesterdayProfit = data.data.yesterdayProfit.toFixed(
               2
             );
+            this.chargeInfoData.yesterdayOrderCount = data.data.yesterdayOrderCount || 0;
           } else if (data.status === 204) {
             this.chargeInfoData.todaycharge = 0.0;
             this.chargeInfoData.todayProfit = 0.0;
