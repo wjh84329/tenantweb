@@ -296,6 +296,8 @@
                     </el-table-column>
                     <el-table-column prop="playerAccount" label="玩家账号">
                     </el-table-column>
+                    <el-table-column prop="partitionName" label="分区名称">
+                    </el-table-column>
                     <el-table-column label="充值金额">
                       <template slot-scope="scope">
                         <span>{{scope.row.amount.toFixed(2)}}</span>
