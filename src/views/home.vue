@@ -1,59 +1,6 @@
 <template>
-  <div class="home" :class="{ 'tenant-dashboard': $root.uiMode === 'modern' }" v-loading="pageLoading">
-    <div v-if="$root.uiMode === 'modern'" class="tenant-dashboard__welcome">
-      <h1>您好，{{ userInfo.userName || 'Tenant' }}</h1>
-    </div>
-    <div v-if="$root.uiMode === 'modern'" class="tenant-design-summary">
-      <div class="tenant-design-summary__item is-blue">
-        <span class="tenant-design-summary__icon"><tenant-icon name="wallet" /></span>
-        <div><p>账户余额</p><strong>¥{{ accountInfo.accout }}</strong><small>可用余额</small></div>
-      </div>
-      <div class="tenant-design-summary__item is-cyan">
-        <span class="tenant-design-summary__icon"><tenant-icon name="cash" /></span>
-        <div><p>可提现金额</p><strong>¥{{ accountInfo.withdraw }}</strong><small>可提现余额</small></div>
-      </div>
-      <div class="tenant-design-summary__item is-green">
-        <span class="tenant-design-summary__icon"><tenant-icon name="arrowDown" /></span>
-        <div><p>今日充值</p><strong>¥{{ chargeInfoData.todaycharge }}</strong><small>今日 00:00–23:59</small></div>
-      </div>
-      <div class="tenant-design-summary__item is-green">
-        <span class="tenant-design-summary__icon"><tenant-icon name="document" /></span>
-        <div><p>今日笔数</p><strong>{{ chargeInfoData.todayOrderCount }}</strong><small>成功/待通知</small></div>
-      </div>
-      <div class="tenant-design-summary__item is-cyan">
-        <span class="tenant-design-summary__icon"><tenant-icon name="clock" /></span>
-        <div><p>昨日充值</p><strong>¥{{ chargeInfoData.yesterdayPayAmount }}</strong><small>昨日全天</small></div>
-      </div>
-      <div class="tenant-design-summary__item is-orange">
-        <span class="tenant-design-summary__icon"><tenant-icon name="document" /></span>
-        <div><p>昨日收入</p><strong>¥{{ chargeInfoData.yesterdayProfit }}</strong><small>昨日全天</small></div>
-      </div>
-      <div class="tenant-design-summary__item is-purple">
-        <span class="tenant-design-summary__icon"><tenant-icon name="document" /></span>
-        <div><p>昨日笔数</p><strong>{{ chargeInfoData.yesterdayOrderCount }}</strong><small>成功/待通知</small></div>
-      </div>
-      <div class="tenant-design-summary__item is-orange">
-        <span class="tenant-design-summary__icon"><tenant-icon name="send" /></span>
-        <div>
-          <p>等待发送</p>
-          <el-tooltip v-if="chargeInfoData.waitSend > 0" effect="dark" content="点击下发" placement="bottom">
-            <strong class="is-clickable" @click="waitSentAll">{{ chargeInfoData.waitSend }}</strong>
-          </el-tooltip>
-          <strong v-else>{{ chargeInfoData.waitSend }}</strong>
-          <small>待发送数量</small>
-        </div>
-      </div>
-      <div class="tenant-design-summary__item is-purple">
-        <span class="tenant-design-summary__icon"><tenant-icon name="clock" /></span>
-        <div><p>提现中金额</p><strong>¥{{ cashInfo.amount }}</strong><small>处理中金额</small></div>
-      </div>
-      <div class="tenant-design-summary__item is-red">
-        <span class="tenant-design-summary__icon"><tenant-icon name="document" /></span>
-        <div><p>提现手续费</p><strong>¥{{ cashInfo.fee }}</strong><small>当前手续费</small></div>
-      </div>
-    </div>
-    <div class="settingbox clearfix" :class="{ 'tenant-account-grid': $root.uiMode === 'modern' }">
-      <div v-if="$root.uiMode === 'modern'" class="tenant-section-heading">账户概览</div>
+  <div class="home" v-loading="pageLoading">
+    <div class="settingbox clearfix">
       <div class="userinfo gs_shadow" style="height: 150px;width: 23%;">
         <div class="infobox">
           <div style="display: flex;padding-left: 5px;">
@@ -82,7 +29,7 @@
             </div>
           </div>
         </div>
-        <ul v-if="$root.uiMode !== 'modern'" class="operbox">
+        <ul class="operbox">
           <li>
             <el-tooltip class="item" effect="dark" content="点击去绑定微信" placement="bottom">
               <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/weixin" tag="span">绑定微信</router-link>
@@ -104,7 +51,7 @@
       <div class="topinfo clearfix" style="height: 150px;width: 76%;">
         <div class="moneybox gs_shadow" style="height: 97%;">
           <div class="numberbox">
-            <ul v-if="$root.uiMode !== 'modern'" class="clearfix" style="border-bottom: 1px dashed #ccc">
+            <ul class="clearfix" style="border-bottom: 1px dashed #ccc">
               <li>
                 <p class="tit">账户余额</p>
                 <p style="color: blue;font-weight: bold;" class="number">{{ accountInfo.accout }}</p>
@@ -138,61 +85,47 @@
                 @click="$router.push({ path: '/main/withdrawapply' })">提现</el-button>
             </div>
             <div class="btns">
-              <el-tooltip class="item" effect="dark" content="点击去绑定微信" placement="bottom">
-                <router-link v-if="$root.uiMode === 'modern' && $store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/weixin"
-                  tag="span" class="account-quick-link">绑定微信</router-link>
-                <span v-else-if="$root.uiMode === 'modern'" class="account-quick-link is-disabled">绑定微信</span>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="点击修改登录密码" placement="bottom">
-                <span v-if="$root.uiMode === 'modern'" class="account-quick-link" @click="dialog.show = true">登录密码</span>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="点击查看操作日志" placement="bottom">
-                <router-link v-if="$root.uiMode === 'modern' && $store.state.settlementType != 3 && $store.state.settlementType != 4" to="/main/conectKey"
-                  tag="span" class="account-quick-link">通讯秘钥</router-link>
-                <span v-else-if="$root.uiMode === 'modern'" class="account-quick-link is-disabled">通讯秘钥</span>
-              </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看账户安全" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" to="/personal/acountsafe"
-                  tag='span' class="account-quick-link">账户安全</router-link>
-                <span v-else class="account-quick-link is-disabled">账户安全</span>
+                  tag='span'>账户安全</router-link>
+                <span v-else style="color: #ccc; cursor: not-allowed;">账户安全</span>
               </el-tooltip>
               <el-tooltip effect="dark" content="点击查看产品结算比率" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/rateList" tag='span'
-                  class="account-quick-link">结算比率</router-link>
-                <span v-else class="account-quick-link is-disabled">结算比率</span>
+                  class="linebtn">结算比率</router-link>
+                <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">结算比率</span>
               </el-tooltip>
               <!-- <el-tooltip class="item" effect="dark" content="点击查看帐户提现记录" placement="bottom">
                 <router-link to="/main/Withdrawalrecords" tag="span" class="linebtn">提现记录</router-link>
               </el-tooltip> -->
               <el-tooltip class="item" effect="dark" content="点击查看账户收支记录" placement="bottom"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/Withdrawalrecords" tag="span"
-                  class="account-quick-link">账户收支</router-link>
-                <span v-else class="account-quick-link is-disabled">账户收支</span>
+                  class="linebtn">账户收支</router-link>
+                <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">账户收支</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看微信动态密保" placement="bottom" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/wechat" tag="span"
-                  class="account-quick-link">微信动态密保</router-link>
-                <span v-else class="account-quick-link is-disabled">微信动态密保</span>
+                  class="linebtn">微信动态密保</router-link>
+                <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">微信动态密保</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看定时任务" placement="bottom">
                 <router-link v-if="$store.state.settlementType != 3" to="/main/orderInterval" tag="span"
-                  class="account-quick-link">定时任务</router-link>
-                <span v-else class="account-quick-link is-disabled">定时任务</span>
+                  class="linebtn">定时任务</router-link>
+                <span v-else class="linebtn" style="color: #ccc; cursor: not-allowed;">定时任务</span>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击查看登录日志" placement="bottom">
-                <router-link to="/main/Userlogs" tag="span" class="account-quick-link">登录日志</router-link>
+                <router-link to="/main/Userlogs" tag="span" class="linebtn">登录日志</router-link>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="点击领取礼品" placement="bottom"  v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4">
                 <!-- <input type="button" class="linebtn" value="领取礼品" @click="goOrder"> -->
-                <span class="account-quick-link" @click="goOrder">领取礼品</span>
+                <span class="linebtn" style="cursor:pointer;" @click="goOrder">领取礼品</span>
               </el-tooltip>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="settingbox clearfix" :class="{ 'tenant-metrics-grid': $root.uiMode === 'modern' }">
-      <div v-if="$root.uiMode === 'modern'" class="tenant-section-heading">经营概览</div>
+    <div class="settingbox clearfix">
       <div class="topinfo clearfix" style="width: 100%;">
         <div class="chargebox gs_shadow">
           <div class="chargebox_t">
@@ -212,14 +145,6 @@
               <li>
                 <p class="tit">昨日收入</p>
                 <p class="num">{{ chargeInfoData.yesterdayProfit }}</p>
-              </li>
-              <li>
-                <p class="tit">今日笔数</p>
-                <p class="num">{{ chargeInfoData.todayOrderCount }}</p>
-              </li>
-              <li>
-                <p class="tit">昨日笔数</p>
-                <p class="num">{{ chargeInfoData.yesterdayOrderCount }}</p>
               </li>
               <li v-loading="chargeInfoData.waitFlag">
                 <p class="tit">等待发送</p>
@@ -546,51 +471,39 @@
       width="1024px">
       <el-divider content-position="left">商户后台</el-divider>
       <ul class="areaContainer clearfix">
-        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 0 }" @click="handleSkinChange(0)">
+        <li :class="{ on: dialogSkins.skinNums === 0 }" @click="handleSkinChange(0)">
           <el-tooltip class="item" effect="dark" content="默认皮肤（怀旧）" placement="bottom">
             <img class="imgskin" src="../assets/images/skin0.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 1 }" @click="handleSkinChange(1)">
+        <li :class="{ on: dialogSkins.skinNums === 1 }" @click="handleSkinChange(1)">
           <el-tooltip class="item" effect="dark" content="深沉红" placement="bottom">
             <img class="imgskin" src="../assets/images/skin1.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 2 }" @click="handleSkinChange(2)">
+        <li :class="{ on: dialogSkins.skinNums === 2 }" @click="handleSkinChange(2)">
           <el-tooltip class="item" effect="dark" content="莫兰迪" placement="bottom">
             <img class="imgskin" src="../assets/images/skin2.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 3 }" @click="handleSkinChange(3)">
+        <li :class="{ on: dialogSkins.skinNums === 3 }" @click="handleSkinChange(3)">
           <el-tooltip class="item" effect="dark" content="海洋蓝" placement="bottom">
             <img class="imgskin" src="../assets/images/skin3.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 4 }" @click="handleSkinChange(4)">
+        <li :class="{ on: dialogSkins.skinNums === 4 }" @click="handleSkinChange(4)">
           <el-tooltip class="item" effect="dark" content="活力橙" placement="bottom">
             <img class="imgskin" src="../assets/images/skin4.png" alt="">
           </el-tooltip>
         </li>
-        <li style="display: none;" :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 5 }" @click="handleSkinChange(5)">
+        <li :class="{ on: dialogSkins.skinNums === 5 }" @click="handleSkinChange(5)">
           <el-tooltip class="item" effect="dark" content="晶莹紫" placement="bottom">
             <img class="imgskin" src="../assets/images/skin5.png" alt="">
           </el-tooltip>
         </li>
-        <li style="display: none;" :class="{ on: dialogSkins.uiMode === 'classic' && dialogSkins.skinNums === 6 }" @click="handleSkinChange(6)">
+        <li :class="{ on: dialogSkins.skinNums === 6 }" @click="handleSkinChange(6)">
           <el-tooltip class="item" effect="dark" content="商务灰" placement="bottom">
             <img class="imgskin" src="../assets/images/skin6.png" alt="">
-          </el-tooltip>
-        </li>
-        <li :class="{ on: dialogSkins.uiMode === 'modern' }" @click="handleUiModeChange('modern')">
-          <el-tooltip class="item" effect="dark" content="焕新版（新版布局）" placement="bottom">
-            <div class="modern-skin-preview" aria-label="焕新版界面预览">
-              <span class="modern-skin-preview__sidebar"></span>
-              <span class="modern-skin-preview__topbar"></span>
-              <span class="modern-skin-preview__card modern-skin-preview__card--one"></span>
-              <span class="modern-skin-preview__card modern-skin-preview__card--two"></span>
-              <span class="modern-skin-preview__table"></span>
-              <strong>焕新版</strong>
-            </div>
           </el-tooltip>
         </li>
       </ul>
@@ -621,18 +534,7 @@
             <img class="imgskin" src="../assets/images/sk4.png" alt="">
           </el-tooltip>
         </li>
-        <li :class="{ on: dialogSkin.skinNum === 5 }" @click="dialogSkin.skinNum = 5">
-          <el-tooltip class="item" effect="dark" content="经典红灰（兼容IE6）" placement="bottom">
-            <div class="legacy-pay-preview" aria-label="经典红灰充值皮肤预览">
-              <span class="legacy-pay-preview__top"></span>
-              <span class="legacy-pay-preview__notice"></span>
-              <span class="legacy-pay-preview__title"></span>
-              <span class="legacy-pay-preview__row legacy-pay-preview__row--one"></span>
-              <span class="legacy-pay-preview__row legacy-pay-preview__row--two"></span>
-              <strong>经典红灰</strong>
-            </div>
-          </el-tooltip>
-        </li>
+        <!-- 七星分支不提供新增的经典红灰充值皮肤；好充值分支保留该选项。 -->
       </ul>
       <p class="tc pdb10" style="padding-top: 30px;">
         <el-button size="mini" type="primary" @click="setSkin">确定</el-button>
@@ -643,11 +545,8 @@
 </template>
 
 <script>
-import TenantIcon from '../components/TenantIcon';
-
 export default {
   name: 'Home',
-  components: { TenantIcon },
   data() {
     return {
       // 帐户信息
@@ -671,9 +570,7 @@ export default {
         tenantCount: 0,
         agentPayAmount: 0.0,
         yesterdayPayAmount: 0.0,
-        yesterdayProfit: 0.0,
-        todayOrderCount: 0,
-        yesterdayOrderCount: 0
+        yesterdayProfit: 0.0
       },
       // 功能设置
       functionSet: {
@@ -748,8 +645,7 @@ export default {
       },
       dialogSkins: {
         show: false,
-        skinNums: 0,
-        uiMode: localStorage.getItem('tenantUiMode') === 'modern' ? 'modern' : 'classic'
+        skinNums: 0
       },
 
       bank: {
@@ -820,7 +716,6 @@ export default {
           if (chargeRes.status === 200) {
             this.chargeInfoData.todaycharge = chargeRes.data.payAmount.toFixed(2);
             this.chargeInfoData.todayProfit = chargeRes.data.profit.toFixed(2);
-            this.chargeInfoData.todayOrderCount = chargeRes.data.orderCount || 0;
             this.chargeInfoData.waitSend = chargeRes.data.toBeIssuedState;
             this.chargeInfoData.agentProfit = chargeRes.data.agentProfit.toFixed(2);
             this.chargeInfoData.tenantCount = chargeRes.data.tenantCount;
@@ -829,7 +724,6 @@ export default {
             );
             this.chargeInfoData.yesterdayPayAmount = chargeRes.data.yesterdayPayAmount.toFixed(2);
             this.chargeInfoData.yesterdayProfit = chargeRes.data.yesterdayProfit.toFixed(2);
-            this.chargeInfoData.yesterdayOrderCount = chargeRes.data.yesterdayOrderCount || 0;
           }
           console.log(this.$store.state);
           this.traceHomeStage('CoreDataDone');
@@ -933,7 +827,6 @@ export default {
           if (data.status === 200) {
             this.chargeInfoData.todaycharge = data.data.payAmount.toFixed(2);
             this.chargeInfoData.todayProfit = data.data.profit.toFixed(2);
-            this.chargeInfoData.todayOrderCount = data.data.orderCount || 0;
             this.chargeInfoData.waitSend = data.data.toBeIssuedState;
             this.chargeInfoData.agentProfit = data.data.agentProfit.toFixed(2);
             this.chargeInfoData.tenantCount = data.data.tenantCount;
@@ -946,7 +839,6 @@ export default {
             this.chargeInfoData.yesterdayProfit = data.data.yesterdayProfit.toFixed(
               2
             );
-            this.chargeInfoData.yesterdayOrderCount = data.data.yesterdayOrderCount || 0;
           } else if (data.status === 204) {
             this.chargeInfoData.todaycharge = 0.0;
             this.chargeInfoData.todayProfit = 0.0;
@@ -1541,16 +1433,8 @@ export default {
     // 实时修改皮肤
     handleSkinChange(num) {
       this.dialogSkins.skinNums = num;
-      this.dialogSkins.uiMode = 'classic';
       localStorage.setItem('skinNum', num); // 立即保存
-      localStorage.setItem('tenantUiMode', 'classic');
       this.$root.$emit('skin-change', num); // 通知主页面
-      this.$root.$emit('ui-theme-change', 'classic');
-    },
-    handleUiModeChange(mode) {
-      this.dialogSkins.uiMode = mode === 'modern' ? 'modern' : 'classic';
-      localStorage.setItem('tenantUiMode', this.dialogSkins.uiMode);
-      this.$root.$emit('ui-theme-change', this.dialogSkins.uiMode);
     },
     // 获取皮肤类型
     getSkin() {
@@ -1558,13 +1442,10 @@ export default {
         this.$messageError('没有操作权限！');
         return;
       }
-      this.dialogSkins.uiMode = localStorage.getItem('tenantUiMode') === 'modern' ? 'modern' : 'classic';
       this.dialogSkin.show = true;
     },
     // 设置皮肤
     setSkin() {
-      localStorage.setItem('tenantUiMode', this.dialogSkins.uiMode);
-      this.$root.$emit('ui-theme-change', this.dialogSkins.uiMode);
       this.$api.home
         .setSkin({
           skinIndex: this.dialogSkins.skinNums,
@@ -1720,73 +1601,18 @@ export default {
 
     .btns {
       padding: 10px 0;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      column-gap: 0;
-      row-gap: 8px;
 
       span {
         display: inline-block;
         font-size: 14px;
         color: #0a57ac;
         cursor: pointer;
-        margin-top: 0;
+        margin-top: 8px;
 
         &.linebtn {
-          box-sizing: border-box;
-          position: relative;
-          padding-right: 15px;
-          margin-right: 15px;
-
-          &::after {
-            content: '';
-            position: absolute;
-            top: 1px;
-            right: 0;
-            width: 1px;
-            height: 16px;
-            background: #63aafa;
-          }
-
-          &:last-child::after {
-            display: none;
-          }
-
-          &:last-child {
-            margin-right: 0;
-          }
-        }
-
-        &.account-quick-link {
-          box-sizing: border-box;
-          position: relative;
-          display: inline-flex;
-          align-items: center;
-          height: 24px;
-          padding-right: 15px;
-          margin-right: 15px;
-          line-height: 24px;
-          white-space: nowrap;
-          text-decoration: none;
-
-          &::after {
-            content: '';
-            position: absolute;
-            top: 4px;
-            right: 0;
-            width: 1px;
-            height: 16px;
-            background: #63aafa;
-          }
-
-          &:last-child::after {
-            display: none;
-          }
-
-          &:last-child {
-            margin-right: 0;
-          }
+          padding-left: 15px;
+          border-left: 1px solid #63aafa;
+          margin-left: 15px;
         }
       }
     }
@@ -2226,25 +2052,6 @@ export default {
   }
 }
 
-.modern-skin-preview {
-  position: relative;
-  box-sizing: border-box;
-  width: 200px;
-  height: 150px;
-  overflow: hidden;
-  border-radius: 3px;
-  background: #f3f6fb;
-
-  > span { position: absolute; display: block; }
-  &__sidebar { inset: 0 auto 0 0; width: 38px; background: linear-gradient(180deg, #102b50, #071a31); }
-  &__topbar { top: 0; right: 0; left: 38px; height: 18px; border-bottom: 1px solid #e6eaf1; background: #fff; }
-  &__card { top: 29px; height: 30px; border: 1px solid #e4e9f1; border-radius: 3px; background: #fff; box-shadow: 0 2px 5px rgba(31,48,80,.08); }
-  &__card--one { left: 48px; width: 62px; }
-  &__card--two { left: 117px; right: 9px; }
-  &__table { top: 68px; right: 9px; bottom: 16px; left: 48px; border: 1px solid #e4e9f1; border-radius: 3px; background: repeating-linear-gradient(180deg, #fff 0, #fff 12px, #eef2f8 13px); }
-  strong { position: absolute; right: 12px; bottom: 2px; color: #5268f7; font-size: 11px; font-weight: 700; }
-}
-
 .stateColor {
   background: #409eff;
   color: #fff;
@@ -2298,415 +2105,22 @@ export default {
     border-right-color: #409eff;
   }
 }
-
-/* 新版工作台：仅重排现有数据与操作，不改变任何接口或事件 */
-.tenant-dashboard {
-  padding-bottom: 24px;
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(330px, 1fr);
-  gap: 16px;
-}
-
-.tenant-dashboard__welcome {
-  margin: 0 0 14px;
-  grid-column: 1 / -1;
-
-  h1 {
-    margin: 0;
-    color: #172033;
-    font-size: 22px;
-    font-weight: 700;
-    line-height: 34px;
-  }
-}
-
-.tenant-design-summary {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(160px, 1fr));
-  gap: 16px;
-  margin-bottom: 16px;
-  grid-column: 1 / -1;
-}
-
-.tenant-design-summary__item {
-  box-sizing: border-box;
-  min-height: 118px;
-  padding: 20px 22px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  border: 1px solid #e5eaf2;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 4px 14px rgba(31,48,80,.07);
-
-  .tenant-design-summary__icon {
-    width: 52px;
-    height: 52px;
-    flex: 0 0 52px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    font-size: 24px;
-    font-weight: 700;
-  }
-
-  p { margin: 0 0 7px; color: #667085; font-size: 14px; }
-  strong { display: block; color: #172033; font-size: 22px; line-height: 28px; }
-  small { display: block; margin-top: 5px; color: #98a2b3; font-size: 12px; }
-  .is-clickable { cursor: pointer; }
-
-  &.is-blue .tenant-design-summary__icon { color: #3370ff; background: #edf3ff; }
-  &.is-cyan .tenant-design-summary__icon { color: #13b8c8; background: #e8fbfd; }
-  &.is-green .tenant-design-summary__icon { color: #16b364; background: #eaf9f0; }
-  &.is-orange .tenant-design-summary__icon { color: #f59e0b; background: #fff7e5; }
-  &.is-purple .tenant-design-summary__icon { color: #7a5af8; background: #f2efff; }
-  &.is-red .tenant-design-summary__icon { color: #e5484d; background: #fff0f1; }
-}
-
-.tenant-dashboard .tenant-account-grid {
-  display: grid;
-  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
-  gap: 16px;
-  margin-bottom: 0;
-  grid-column: 2;
-  grid-row: 3;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto minmax(0, 1fr);
-  align-content: stretch;
-  align-self: stretch;
-  gap: 0;
-  overflow: hidden;
-  border: 1px solid #e5eaf2;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 4px 14px rgba(31,48,80,.07);
-
-  .tenant-section-heading {
-    padding: 17px 20px 14px;
-    color: #172033;
-    font-size: 16px;
-    font-weight: 700;
-    border-bottom: 1px solid #eef1f5;
-  }
-
-  .userinfo {
-    float: none !important;
-    width: auto !important;
-    height: auto !important;
-    min-height: 0;
-    padding: 14px 18px 12px;
-    border: 0 !important;
-    border-radius: 0 !important;
-    color: #172033;
-    background: #fff !important;
-    box-shadow: none !important;
-  }
-
-  .userinfo .infobox { margin-top: 0; }
-  .userinfo .avatar { width: 64px; height: 64px; object-fit: contain; }
-  .userinfo .textbox { margin-top: 1px !important; }
-  .userinfo .textbox .acout { color: #344054; font-size: 17px; }
-  .userinfo .textbox .text { color: #98a2b3; line-height: 20px; }
-  .userinfo .operbox { margin-top: 14px; padding-top: 12px; border-top: 1px solid #eef1f5; }
-  .userinfo .operbox li { width: auto; padding: 0 12px; border-color: #d9e2ef; }
-  .userinfo .operbox span { color: #3370ff; }
-
-  .topinfo {
-    float: none !important;
-    width: auto !important;
-    height: auto !important;
-    min-height: 0;
-    display: flex;
-    border-top: 1px solid #eef1f5;
-  }
-
-  .moneybox {
-    box-sizing: border-box;
-    flex: 1 1 auto;
-    height: auto !important;
-    min-height: 0;
-    padding: 14px 20px 10px !important;
-    display: flex;
-    align-items: center;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: #fff !important;
-    box-shadow: none !important;
-  }
-
-  .moneybox .numberbox {
-    width: 100%;
-    min-width: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    column-gap: 20px;
-  }
-
-  .moneybox .numberbox > ul {
-    flex: 1 1 300px;
-    min-width: 0;
-    padding: 2px 0 20px;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(110px, 1fr));
-    gap: 0;
-    border-bottom: 1px solid #eef1f5 !important;
-  }
-
-  .moneybox .numberbox > ul > li:nth-child(1),
-  .moneybox .numberbox > ul > li:nth-child(2) { display: none; }
-
-  .moneybox .numberbox > ul { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
-
-  .moneybox .numberbox > ul > li {
-    width: auto !important;
-    padding: 6px 18px;
-    text-align: left;
-    border-right: 1px solid #eef1f5;
-  }
-
-  .moneybox .numberbox > ul > li:first-child { padding-left: 0; }
-  .moneybox .numberbox > ul > li:nth-last-child(1) { border-right: 0; }
-  .moneybox .numberbox > ul > .linebox { display: none; }
-  .moneybox .tit { color: #667085 !important; font-size: 13px !important; }
-  .moneybox .number { margin-top: 9px !important; font-size: 23px !important; font-weight: 700; letter-spacing: -.3px; }
-  .moneybox .getbtn {
-    position: static;
-    flex: 0 0 auto;
-    max-width: 100%;
-    margin-top: 2px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 8px;
-  }
-  .moneybox .getbtn .el-button + .el-button { margin-left: 0; }
-  .moneybox .btns {
-    flex: 0 0 100%;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    column-gap: 0;
-    row-gap: 6px;
-    padding: 12px 0 2px;
-    white-space: normal;
-    overflow: visible;
-  }
-  .moneybox .btns .account-quick-link {
-    box-sizing: border-box;
-    position: relative;
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 36px;
-    margin: 0;
-    padding: 0 16px;
-    line-height: 36px;
-    white-space: nowrap;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  .moneybox .btns .account-quick-link::after {
-    content: '';
-    position: absolute;
-    top: 8px;
-    right: 0;
-    width: 1px;
-    height: 20px;
-    background: #dbe3f0;
-  }
-  .moneybox .btns .account-quick-link:last-child::after { display: none; }
-  .moneybox .btns .account-quick-link.is-disabled { cursor: not-allowed; }
-}
-
-.tenant-dashboard .tenant-metrics-grid {
-  margin: 0;
-  grid-column: 1;
-  grid-row: 3;
-
-  > .tenant-section-heading {
-    position: relative;
-    z-index: 1;
-    margin-bottom: -52px;
-    padding: 17px 20px 14px;
-    color: #172033;
-    font-size: 16px;
-    font-weight: 700;
-  }
-
-  > .topinfo {
-    float: none !important;
-    width: 100% !important;
-  }
-
-  .chargebox {
-    margin: 0 !important;
-    padding: 58px 18px 18px !important;
-    border: 1px solid #e5eaf2 !important;
-    border-radius: 8px !important;
-    background: #fff !important;
-    box-shadow: 0 4px 14px rgba(31,48,80,.07) !important;
-  }
-
-  .chargebox_t { margin: 0 !important; padding: 0 !important; border: 0 !important; }
-
-  .chargebox ul {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(150px, 1fr));
-    gap: 12px;
-    padding: 0 !important;
-    border: 0 !important;
-  }
-
-  .chargebox ul li {
-    box-sizing: border-box;
-    width: auto !important;
-    min-height: 104px;
-    padding: 20px 22px 18px;
-    text-align: left;
-    border: 1px solid #e5eaf2;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: none;
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-  }
-
-  .chargebox ul li:nth-child(1),
-  .chargebox ul li:nth-child(5) { display: none; }
-
-  .chargebox ul li:hover { transform: translateY(-3px); border-color: #d8dff9; box-shadow: 0 18px 36px rgba(31,48,80,.1); }
-
-  .chargebox ul .tit { color: #667085 !important; font-size: 13px !important; }
-  .chargebox ul .num { margin-top: 14px !important; color: #172033 !important; font-size: 24px !important; font-weight: 700; letter-spacing: -.3px; }
-
-  .carousel {
-    margin-top: 16px;
-    padding: 0 20px 0 52px !important;
-    border: 1px solid #e5eaf2;
-    border-radius: 14px;
-    background-color: #fff !important;
-    background-position: 20px center !important;
-    box-shadow: 0 4px 16px rgba(31, 48, 80, .05);
-  }
-}
-
-.tenant-dashboard .functionbox {
-  margin: 0 0 16px !important;
-  padding: 0;
-  overflow: hidden;
-  border: 1px solid #e5eaf2 !important;
-  border-radius: 8px !important;
-  background: #fff !important;
-  box-shadow: 0 10px 32px rgba(31, 48, 80, .07) !important;
-  grid-column: 1 / -1;
-
-  > .gs_title {
-    margin: 0 !important;
-    padding: 20px 24px 13px !important;
-    font-size: 18px !important;
-  }
-
-  > div[style*="display: flex"] {
-    padding: 0 22px 22px;
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 14px;
-  }
-
-  ul {
-    width: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  ul li {
-    box-sizing: border-box;
-    min-height: 58px;
-    height: auto !important;
-    margin-bottom: 10px;
-    padding: 11px 14px 11px 42px !important;
-    line-height: 36px !important;
-    border: 1px solid #edf0f5;
-    border-radius: 12px;
-    background-position: 14px center !important;
-    background-color: #f8faff !important;
-    transition: background .18s ease, border-color .18s ease, transform .18s ease;
-  }
-
-  ul li:hover { transform: translateX(2px); border-color: #dce3fb; background-color: #f4f6ff !important; }
-}
-
-.tenant-dashboard > .tablebox {
-  margin: 0 !important;
-  padding-top: 0 !important;
-  border-radius: 8px !important;
-  box-shadow: 0 10px 32px rgba(31,48,80,.07) !important;
-  grid-column: 1 / -1;
-
-  > .gs_title {
-    margin: 0 !important;
-    padding: 16px 20px 10px !important;
-    font-size: 18px !important;
-  }
-}
-
-.tenant-dashboard .stateColor {
-  height: 24px;
-  padding: 0 9px;
-  line-height: 24px;
-  border-radius: 5px;
-  background: #4f6bff;
-}
-
-.tenant-dashboard .stateColor::before,
-.tenant-dashboard .stateColor::after { display: none; }
-
-.tenant-dashboard .stateColor.color1 { color: #087443; background: #ecfdf3; }
-.tenant-dashboard .stateColor.color2 { color: #d92d20; background: #fff1f2; }
-
-@media (max-width: 1380px) {
-  .tenant-design-summary { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
-  .tenant-dashboard { grid-template-columns: 1fr; }
-  .tenant-dashboard .tenant-metrics-grid .chargebox ul { grid-template-columns: repeat(2, minmax(150px, 1fr)); }
-  .tenant-dashboard .tenant-account-grid,
-  .tenant-dashboard .tenant-metrics-grid { grid-column: 1; grid-row: auto; }
-  .tenant-dashboard .tenant-account-grid { grid-template-columns: 1fr; }
-  .tenant-dashboard .tenant-account-grid .moneybox .numberbox > ul {
-    flex: 0 0 100%;
-    width: 100% !important;
-    max-width: 100%;
-    padding-right: 0;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .tenant-dashboard .tenant-account-grid .moneybox .getbtn {
-    flex: 0 0 100%;
-    width: 100%;
-    margin-top: 12px;
-    justify-content: flex-start;
-  }
-}
-
 .legacy-pay-preview {
   position: relative;
   box-sizing: border-box;
-  width: 200px;
-  height: 150px;
+  width: 142px;
+  height: 86px;
   overflow: hidden;
   border: 1px solid #d8d8d8;
-  background: linear-gradient(90deg, #f3f3f3 0 30px, #fff 30px 100%);
+  background: #fff;
 }
 
 .legacy-pay-preview span { position: absolute; display: block; }
-.legacy-pay-preview__top { top: 0; left: 0; right: 0; height: 20px; border-bottom: 3px solid #a92b1c; background: #fff; }
-.legacy-pay-preview__notice { top: 32px; left: 42px; right: 12px; height: 14px; background: #ededed; border-bottom: 1px solid #a92b1c; }
-.legacy-pay-preview__title { top: 59px; left: 42px; width: 62px; height: 7px; background: #a92b1c; }
-.legacy-pay-preview__row { left: 42px; right: 12px; height: 15px; border: 1px solid #ddd; background: #f5f5f5; }
-.legacy-pay-preview__row--one { top: 74px; }
-.legacy-pay-preview__row--two { top: 94px; }
-.legacy-pay-preview strong { position: absolute; right: 12px; bottom: 5px; color: #8f261a; font-size: 11px; font-weight: 600; }
+.legacy-pay-preview__top { top: 0; left: 0; right: 0; height: 14px; border-bottom: 2px solid #a92b1c; }
+.legacy-pay-preview__notice { top: 22px; left: 10px; width: 120px; height: 10px; background: #ededed; border-bottom: 1px solid #a92b1c; }
+.legacy-pay-preview__title { top: 39px; left: 10px; width: 46px; height: 5px; background: #a92b1c; }
+.legacy-pay-preview__row { left: 10px; width: 120px; height: 8px; border: 1px solid #ddd; background: #f5f5f5; }
+.legacy-pay-preview__row--one { top: 49px; }
+.legacy-pay-preview__row--two { top: 60px; }
+.legacy-pay-preview strong { position: absolute; right: 8px; bottom: 3px; color: #8f261a; font-size: 10px; font-weight: 600; }
 </style>
