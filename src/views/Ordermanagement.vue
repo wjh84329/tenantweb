@@ -125,35 +125,23 @@
         <div class="mgt10">
           <el-button size="small" type="success" @click="tomorrowTime">下一天</el-button>
           <el-button size="small" type="primary"
-            @click="() => { getlist(); yesterdayCharge(); todayCharge(); }">查询</el-button>
+            @click="() => { getlist(); yesterdayCharge(); }">查询</el-button>
         </div>
       </div>
     </div>
     <div :class="{ 'order-stat-grid': $root.uiMode === 'modern' }" style="padding: 30px 20px;border: 1px solid #facd89;margin: 0px 20px;">
       <ul style="display: flex;justify-content: space-around;text-align: center;">
         <li>
-          <p class="tit" style="margin-bottom: 15px;">昨日充值金额</p>
+          <p class="tit" style="margin-bottom: 15px;">昨日此时充值金额</p>
           <p class="num" style="color: #00b066;">{{ yesterday.payaccount.toFixed(2) }}</p>
         </li>
         <li>
-          <p class="tit" style="margin-bottom: 15px;">昨日总收入</p>
+          <p class="tit" style="margin-bottom: 15px;">昨日此时收入</p>
           <p class="num" style="color: #FF5722;">{{ yesterday.profit.toFixed(2) }}</p>
         </li>
         <li>
-          <p class="tit" style="margin-bottom: 15px;">昨日成功笔数</p>
+          <p class="tit" style="margin-bottom: 15px;">昨日此时成功笔数</p>
           <p class="num" style="color: goldenrod;">{{ yesterday.count }}</p>
-        </li>
-        <li>
-          <p class="tit" style="margin-bottom: 15px;">充值金额</p>
-          <p class="num" style="color: #00b066;">{{ today.payaccount.toFixed(2) }}</p>
-        </li>
-        <li>
-          <p class="tit" style="margin-bottom: 15px;">收入</p>
-          <p class="num" style="color: #FF5722;">{{ today.profit.toFixed(2) }}</p>
-        </li>
-        <li>
-          <p class="tit" style="margin-bottom: 15px;">成功笔数</p>
-          <p class="num" style="color: goldenrod;">{{ today.count }}</p>
         </li>
       </ul>
     </div>
@@ -290,7 +278,7 @@ import { url } from '../assets/js/version';
 export default {
   data() {
     return {
-      activeName: '-1', // tab切换
+      activeName: '1', // 默认显示充值成功
       loading: false,
       settr: null,
       options: [
@@ -505,7 +493,6 @@ export default {
       this.pageIndex = 1;
       this.getlist();
       this.yesterdayCharge();
-      this.todayCharge();
     },
     // 上一天日期
     yesterdayTime() {
@@ -514,7 +501,6 @@ export default {
       this.pageIndex = 1;
       this.getlist();
       this.yesterdayCharge();
-      this.todayCharge();
     },
     // 下一天日期
     tomorrowTime() {
@@ -526,7 +512,6 @@ export default {
       this.pageIndex = 1;
       this.getlist();
       this.yesterdayCharge();
-      this.todayCharge();
     },
     // 昨天充值
     yesterdayCharge() {
@@ -557,36 +542,6 @@ export default {
           this.$messageError(err.message);
         });
     },
-    // 今天充值
-    todayCharge() {
-      this.$api.order
-        .todayCharge({
-          State: this.activeName,
-          StartOrderDate: this.time1 ? this.time1 : '',
-          EndOrderDate: this.time2 ? this.time2 : '',
-          OrderNumber: this.ordernumber,
-          PlayerAccount: this.gameaccount,
-          GroupId: this.gameGrouppage === '' ? 0 : this.gameGrouppage,
-          PartitionId: this.gameDivisionpage === '' ? 0 : this.gameDivisionpage,
-          PartitionName: this.gameGroup,
-          ProductId: this.modeofpaymentpage === '' ? 0 : this.modeofpaymentpage,
-          StartAmount: this.Ordervalue,
-          EndAmount: this.Underorders,
-          PageNumber: this.pageIndex,
-          PageSize: this.pageSize
-        })
-        .then((data) => {
-          if (data.status === 200) {
-            this.today.payaccount = data.data.payAmount;
-            this.today.profit = data.data.profit;
-            this.today.count = data.data.successState;
-            this.today.successRate = data.data.successRate;
-          }
-        })
-        .catch((err) => {
-          this.$messageError(err.message);
-        });
-    },
     // 游戏分组下拉
     gameteamDrow() {
       this.$api.order
@@ -607,7 +562,6 @@ export default {
       this.pageIndex = 1;
       this.getlist();
       this.yesterdayCharge();
-      this.todayCharge();
     },
     // 游戏分区下拉
     gameareaDrow() {
@@ -842,7 +796,6 @@ export default {
     this.payDrow();
     this.getlist();
     this.yesterdayCharge();
-    this.todayCharge();
   }
 };
 </script>
