@@ -125,7 +125,7 @@
         <div class="mgt10">
           <el-button size="small" type="success" @click="tomorrowTime">下一天</el-button>
           <el-button size="small" type="primary"
-            @click="() => { getlist(); yesterdayCharge(); }">查询</el-button>
+            @click="() => { getlist(); yesterdayCharge(); todayCharge(); }">查询</el-button>
         </div>
       </div>
     </div>
@@ -142,6 +142,18 @@
         <li>
           <p class="tit" style="margin-bottom: 15px;">昨日此时成功笔数</p>
           <p class="num" style="color: goldenrod;">{{ yesterday.count }}</p>
+        </li>
+        <li>
+          <p class="tit" style="margin-bottom: 15px;">今日充值金额</p>
+          <p class="num" style="color: #00b066;">{{ today.payaccount.toFixed(2) }}</p>
+        </li>
+        <li>
+          <p class="tit" style="margin-bottom: 15px;">今日收入</p>
+          <p class="num" style="color: #FF5722;">{{ today.profit.toFixed(2) }}</p>
+        </li>
+        <li>
+          <p class="tit" style="margin-bottom: 15px;">今日成功笔数</p>
+          <p class="num" style="color: goldenrod;">{{ today.count }}</p>
         </li>
       </ul>
     </div>
@@ -493,6 +505,7 @@ export default {
       this.pageIndex = 1;
       this.getlist();
       this.yesterdayCharge();
+      this.todayCharge();
     },
     // 上一天日期
     yesterdayTime() {
@@ -501,6 +514,7 @@ export default {
       this.pageIndex = 1;
       this.getlist();
       this.yesterdayCharge();
+      this.todayCharge();
     },
     // 下一天日期
     tomorrowTime() {
@@ -512,6 +526,7 @@ export default {
       this.pageIndex = 1;
       this.getlist();
       this.yesterdayCharge();
+      this.todayCharge();
     },
     // 昨天充值
     yesterdayCharge() {
@@ -562,6 +577,7 @@ export default {
       this.pageIndex = 1;
       this.getlist();
       this.yesterdayCharge();
+      this.todayCharge();
     },
     // 游戏分区下拉
     gameareaDrow() {
@@ -795,7 +811,8 @@ export default {
     this.gameareaDrow();
     this.payDrow();
     this.getlist();
-    this.yesterdayCharge();
+      this.yesterdayCharge();
+      this.todayCharge();
   }
 };
 </script>
