@@ -140,15 +140,15 @@
           <p class="num" style="color: goldenrod;">{{ yesterday.count }}</p>
         </li>
         <li>
-          <p class="tit" style="margin-bottom: 15px;">今日充值金额</p>
+          <p class="tit" style="margin-bottom: 15px;">充值金额</p>
           <p class="num" style="color: #00b066;">{{ today.payaccount.toFixed(2) }}</p>
         </li>
         <li>
-          <p class="tit" style="margin-bottom: 15px;">今日收入</p>
+          <p class="tit" style="margin-bottom: 15px;">商户收入</p>
           <p class="num" style="color: #FF5722;">{{ today.profit.toFixed(2) }}</p>
         </li>
         <li>
-          <p class="tit" style="margin-bottom: 15px;">今日成功笔数</p>
+          <p class="tit" style="margin-bottom: 15px;">成功笔数</p>
           <p class="num" style="color: goldenrod;">{{ today.count }}</p>
         </li>
       </ul>
