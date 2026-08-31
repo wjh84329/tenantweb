@@ -94,11 +94,13 @@
                 </div>
               </div>
             </td>
-            <td class="th">签约状态：</td>
-            <td>
-              <el-button :disabled="addDisabled" @click="goqy" type="warning">{{ baseInfo.signStatus }}</el-button>
-              <el-button v-if="openDisabled" @click="openurl" type="warning">{{ baseInfo.signStatu }}</el-button>
-            </td>
+            <template v-if="$store.state.qyState">
+              <td class="th">签约状态：</td>
+              <td>
+                <el-button :disabled="addDisabled" @click="goqy" type="warning">{{ baseInfo.signStatus }}</el-button>
+                <el-button v-if="openDisabled" @click="openurl" type="warning">{{ baseInfo.signStatu }}</el-button>
+              </td>
+            </template>
           </tr>
           <!-- <tr>
             <td class="th">签约状态：</td>
@@ -392,6 +394,7 @@ export default {
           this.baseInfo.linkQQ = data.data.qqNumber;
           this.baseInfo.email = data.data.email;
           this.baseInfo.linkphone = data.data.phoneNumber;
+          this.$store.commit('changeqyState', !!data.data.isQY);
           this.baseInfo.idCard = data.data.idCard;
           this.baseInfo.signStatus = data.data.isSigned ? '已签约' : '现在签约';
           this.isSigned = data.data.isSigned;
