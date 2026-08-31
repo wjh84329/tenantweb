@@ -119,11 +119,6 @@
                         <span>{{scope.row.payAmount.toFixed(2)}}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column label="商户收入">
-                      <template slot-scope="scope">
-                        <span>{{scope.row.merchantProfit.toFixed(2)}}</span>
-                      </template>
-                    </el-table-column>
                     <el-table-column prop="payCount" label="支付笔数">
                     </el-table-column>
                     <el-table-column prop="rate" label="比率">
@@ -174,11 +169,6 @@
                     <el-table-column label="充值金额">
                       <template slot-scope="scope">
                         <span>{{scope.row.payAmount.toFixed(2)}}</span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="商户收入">
-                      <template slot-scope="scope">
-                        <span>{{scope.row.merchantProfit.toFixed(2)}}</span>
                       </template>
                     </el-table-column>
                     <el-table-column prop="payCount" label="支付笔数">
@@ -234,11 +224,6 @@
                     <el-table-column label="充值金额">
                       <template slot-scope="scope">
                         <span>{{scope.row.payAmount.toFixed(2)}}</span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="商户收入">
-                      <template slot-scope="scope">
-                        <span>{{scope.row.merchantProfit.toFixed(2)}}</span>
                       </template>
                     </el-table-column>
                     <el-table-column prop="payCount" label="支付笔数">
@@ -301,11 +286,6 @@
                     <el-table-column label="充值金额">
                       <template slot-scope="scope">
                         <span>{{scope.row.amount.toFixed(2)}}</span>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="商户收入">
-                      <template slot-scope="scope">
-                        <span>{{scope.row.merchantProfit.toFixed(2)}}</span>
                       </template>
                     </el-table-column>
                     <el-table-column prop="payCount" label="支付笔数">
@@ -670,9 +650,9 @@ export default {
               grid: {
                 top: 80
               },
-              color: ['#2EC7C9', '#CBBDE7', '#8BC8F3'],
+              color: ['#2EC7C9', '#CBBDE7'],
               legend: {
-                data: ['订单笔数', '支付金额', '商户收入']
+                data: ['订单笔数', '支付金额']
               },
               xAxis: [
                 {
@@ -721,14 +701,6 @@ export default {
                     return item.payAmount;
                   })
                 },
-                {
-                  name: '商户收入',
-                  type: 'bar',
-                  yAxisIndex: 1,
-                  data: res.map((item) => {
-                    return item.merchantProfit;
-                  })
-                }
               ]
             };
             this.$nextTick(() => {
@@ -778,7 +750,7 @@ export default {
               },
               color: ['#2EC7C9', '#CBBDE7', '#8BC8F3'],
               legend: {
-                data: ['订单笔数', '支付金额', '商户收入']
+                data: ['订单笔数', '支付金额']
               },
               xAxis: [
                 {
@@ -827,14 +799,6 @@ export default {
                     return item.payAmount;
                   })
                 },
-                {
-                  name: '商户收入',
-                  type: 'bar',
-                  yAxisIndex: 1,
-                  data: res.map((item) => {
-                    return item.merchantProfit;
-                  })
-                }
               ]
             };
             this.$nextTick(() => {
@@ -909,7 +873,7 @@ export default {
               },
               color: ['#2EC7C9', '#CBBDE7', '#8BC8F3'],
               legend: {
-                data: ['订单笔数', '支付金额', '商户收入']
+                data: ['订单笔数', '支付金额']
               },
               xAxis: [
                 {
@@ -959,14 +923,6 @@ export default {
                     return item.payAmount;
                   })
                 },
-                {
-                  name: '商户收入',
-                  type: 'bar',
-                  yAxisIndex: 1,
-                  data: res.map((item) => {
-                    return item.merchantProfit;
-                  })
-                }
               ]
             };
             this.$nextTick(() => {
@@ -1015,7 +971,7 @@ export default {
               },
               color: ['#2EC7C9', '#CBBDE7', '#8BC8F3'],
               legend: {
-                data: ['订单笔数', '支付金额', '商户收入']
+                data: ['订单笔数', '支付金额']
               },
               xAxis: [
                 {
@@ -1065,14 +1021,6 @@ export default {
                     return item.payAmount;
                   })
                 },
-                {
-                  name: '商户收入',
-                  type: 'bar',
-                  yAxisIndex: 1,
-                  data: res.map((item) => {
-                    return item.merchantProfit;
-                  })
-                }
               ]
             };
             this.$nextTick(() => {
