@@ -46,6 +46,8 @@
             <button v-if="canShowSideMenu(16)" :class="{ active: $route.path === '/main/orderInterval' }" @click="refresh('/main/orderInterval')"><tenant-icon name="clock" />定时任务</button>
             <button v-if="canShowSideMenu(21)" :class="{ active: $route.path === '/main/transfer' }" @click="refresh('/main/transfer')"><tenant-icon name="transfer" />转区点记录</button>
             <button v-if="canShowSideMenu(17)" :class="{ active: $route.path === '/main/conectKey' }" @click="refresh('/main/conectKey')"><tenant-icon name="key" />通讯秘钥</button>
+            <button v-if="canShowSideMenu(19)" @click="startGatewayDownload"><tenant-icon name="download" />下载网关</button>
+            <button v-if="siteBrandingResolved && !isAgentSite && !isRestrictedAccount" @click="openApiDoc"><tenant-icon name="document" />教程文档</button>
           </div>
         </div>
         <button v-if="hasMenu(4) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)"
@@ -71,8 +73,6 @@
       </nav>
       <tenant-global-nav :active-section="activeSectionKey" @navigate="refresh">
         <div class="tenant-sidebar__utilities">
-          <button v-if="canShowSideMenu(19)" @click="startGatewayDownload"><tenant-icon name="download" /><span>下载网关</span></button>
-          <button v-if="siteBrandingResolved && !isAgentSite && !isRestrictedAccount" @click="openApiDoc"><tenant-icon name="document" /><span>教程文档</span></button>
           <button class="is-danger" @click="loginOut"><tenant-icon name="logout" /><span>退出登录</span></button>
         </div>
       </tenant-global-nav>
