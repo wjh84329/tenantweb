@@ -557,6 +557,36 @@ export default {
           this.$messageError(err.message);
         });
     },
+    // 今天充值
+    todayCharge() {
+      this.$api.order
+        .todayCharge({
+          State: this.activeName,
+          StartOrderDate: this.time1 ? this.time1 : '',
+          EndOrderDate: this.time2 ? this.time2 : '',
+          OrderNumber: this.ordernumber,
+          PlayerAccount: this.gameaccount,
+          GroupId: this.gameGrouppage === '' ? 0 : this.gameGrouppage,
+          PartitionId: this.gameDivisionpage === '' ? 0 : this.gameDivisionpage,
+          PartitionName: this.gameGroup,
+          ProductId: this.modeofpaymentpage === '' ? 0 : this.modeofpaymentpage,
+          StartAmount: this.Ordervalue,
+          EndAmount: this.Underorders,
+          PageNumber: this.pageIndex,
+          PageSize: this.pageSize
+        })
+        .then((data) => {
+          if (data.status === 200) {
+            this.today.payaccount = data.data.payAmount;
+            this.today.profit = data.data.profit;
+            this.today.count = data.data.successState;
+            this.today.successRate = data.data.successRate;
+          }
+        })
+        .catch((err) => {
+          this.$messageError(err.message);
+        });
+    },
     // 游戏分组下拉
     gameteamDrow() {
       this.$api.order
