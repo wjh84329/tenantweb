@@ -148,14 +148,6 @@
               </li>
               <li><p class="tit">今日笔数</p><p class="num">{{ chargeInfoData.todayOrderCount }}</p></li>
               <li><p class="tit">昨日笔数</p><p class="num">{{ chargeInfoData.yesterdayOrderCount }}</p></li>
-              <li v-loading="chargeInfoData.waitFlag">
-                <p class="tit">等待发送</p>
-                <el-tooltip v-if="chargeInfoData.waitSend > 0" class="item" effect="dark" content="点击下发"
-                  placement="bottom">
-                  <p class="num" style="cursor:pointer;" @click="waitSentAll">{{ chargeInfoData.waitSend }}</p>
-                </el-tooltip>
-                <p class="num" v-else>{{ chargeInfoData.waitSend }}</p>
-              </li>
               <li v-if="userInfo.type">
                 <p class="tit">代理收入</p>
                 <p class="num">{{ chargeInfoData.agentProfit }}</p>
@@ -167,6 +159,18 @@
               <li v-if="userInfo.type">
                 <p class="tit">代理充值</p>
                 <p class="num">{{ chargeInfoData.agentPayAmount }}</p>
+              </li>
+              <li v-loading="chargeInfoData.waitFlag">
+                <p class="tit">等待发送</p>
+                <el-tooltip v-if="chargeInfoData.waitSend > 0" class="item" effect="dark" content="点击下发"
+                  placement="bottom">
+                  <p class="num" style="cursor:pointer;" @click="waitSentAll">{{ chargeInfoData.waitSend }}</p>
+                </el-tooltip>
+                <p class="num" v-else>{{ chargeInfoData.waitSend }}</p>
+              </li>
+              <li class="pending-order-actions">
+                <el-button size="mini" type="primary" :loading="pendingOrderAction === 'resend'" :disabled="!!pendingOrderAction || chargeInfoData.waitSend <= 0" @click="resendPendingOrders">立即发送</el-button>
+                <el-button size="mini" type="warning" :loading="pendingOrderAction === 'clear'" :disabled="!!pendingOrderAction || chargeInfoData.waitSend <= 0" @click="clearPendingOrders">清理下发</el-button>
               </li>
             </ul>
             <div class="carousel">
@@ -658,7 +662,8 @@ export default {
       pageLoading: false, // 新增全局loading状态
       isQY: false, // 是否强制签约
       showChannelSettingEntry: false,
-      homeTraceStartAt: 0
+      homeTraceStartAt: 0,
+      pendingOrderAction: ''
     };
   },
   methods: {
@@ -1418,6 +1423,52 @@ export default {
         this.chargeInfoData.waitFlag = false;
       }
     },
+    async resendPendingOrders() {
+      if (this.pendingOrderAction || this.chargeInfoData.waitSend <= 0) {
+        return;
+      }
+      try {
+        await this.$confirm('确定重新发送全部待发送订单吗？', '提示', {
+          confirmButtonText: '确定发送',
+          cancelButtonText: '取消',
+          type: 'warning'
+        });
+        this.pendingOrderAction = 'resend';
+        const data = await this.$api.home.resendPendingOrders();
+        this.$messageSuccess(typeof data.data === 'string' ? data.data : '发送完成');
+        this.orderList();
+        this.chargeInfo();
+      } catch (e) {
+        if (e !== 'cancel' && e !== 'close') {
+          this.$messageError((e && (e.message || e.Message)) || '发送失败');
+        }
+      } finally {
+        this.pendingOrderAction = '';
+      }
+    },
+    async clearPendingOrders() {
+      if (this.pendingOrderAction || this.chargeInfoData.waitSend <= 0) {
+        return;
+      }
+      try {
+        await this.$confirm('清理后，全部待发送订单会直接改为支付成功并停止下发，确定继续吗？', '清理下发', {
+          confirmButtonText: '确定清理',
+          cancelButtonText: '取消',
+          type: 'warning'
+        });
+        this.pendingOrderAction = 'clear';
+        const data = await this.$api.home.clearPendingOrders();
+        this.$messageSuccess(typeof data.data === 'string' ? data.data : '清理完成');
+        this.orderList();
+        this.chargeInfo();
+      } catch (e) {
+        if (e !== 'cancel' && e !== 'close') {
+          this.$messageError((e && (e.message || e.Message)) || '清理失败');
+        }
+      } finally {
+        this.pendingOrderAction = '';
+      }
+    },
     // 获取信息
     getInfo() {
       this.$api.home
@@ -1646,6 +1697,18 @@ export default {
       li {
         width: 105px;
         text-align: center;
+      }
+
+      .pending-order-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .el-button {
+          width: 78px;
+          margin: 2px 0;
+        }
       }
 
       .tit {

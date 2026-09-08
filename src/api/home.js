@@ -350,6 +350,24 @@ export default {
       headers: { Authorization: 'Bearer ' + header }
     });
   },
+  // 所有待发送订单重新发送一次
+  async resendPendingOrders() {
+    let header = await mgr();
+    return api({
+      url: '/api/OrderIssue/ResendPendingOrders',
+      method: 'post',
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
+  // 将所有待发送订单改为支付成功
+  async clearPendingOrders() {
+    let header = await mgr();
+    return api({
+      url: '/api/OrderIssue/ClearPendingOrders',
+      method: 'post',
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
   // 设置皮肤
   async setSkin(params) {
     let header = await mgr();
