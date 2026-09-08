@@ -103,10 +103,6 @@
                   <img class="lh-captcha" id="code" :src="randomCode" alt="" @click="getQrcode()" />
                 </div>
               </div>
-              <div class="lh-remember-login">
-                <el-checkbox v-model="form.rememberLogin">保持登录</el-checkbox>
-                <span>（有效期24小时）</span>
-              </div>
               <button type="submit" class="lh-submit" :disabled="isLoading">
                 {{ isLoading ? '登录中' : '登录' }}
               </button>
@@ -349,7 +345,7 @@ export default {
         code: '',
         checkKey: '',
         returnUrl: '',
-        rememberLogin: false
+        rememberLogin: true
       },
       qqSignin: '',
       wxQrSignin: '',
