@@ -99,8 +99,15 @@ export default {
         .changeSignKey()
         .then((data) => {
           if (data.status === 200) {
+            const result = data.data || {};
+            if (result.access_token) {
+              const storage = localStorage.getItem('access_token') ? localStorage : sessionStorage;
+              storage.setItem('access_token', result.access_token);
+            }
+            if (result.signKey) {
+              this.baseInfo.signKey = result.signKey;
+            }
             this.$messageSuccess('更新成功！');
-            this.getUser();
           }
         })
         .catch((err) => {
