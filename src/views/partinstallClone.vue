@@ -509,8 +509,9 @@ export default {
           this.teamdata.teamlist = data.data.partitionGroups.map(
             item => item.groupId
           );
-          this.serverIp = data.data.machineCode; // 服务器IP
-          // this.serverPort = data.data.serverPort; // 通讯端口
+          this.serverIp = data.data.machineCode; // 源分区绑定的网关设备
+          this.gatewayIp = data.data.serverIp || '';
+          this.gatewayPort = data.data.serverPort || '';
           this.installPath = data.data.scriptPath; // 安装路径
           this.installModel = data.data.templateId; // 模板
           this.modelDrow = data.data.templateId; // 模板的下拉
@@ -818,6 +819,8 @@ export default {
   created() {
     this.groupsdrow();
     this.modelDrowList();
+    // 同时加载已注册网关，兼容旧分区仅保存 machineCode、未保存 IP/端口的情况。
+    this.getequipcode();
     this.getareainfo();
   }
 };
