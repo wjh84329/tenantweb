@@ -22,40 +22,40 @@
       <div class="headbox clearfix" :style="headerStyle" style="display: flex;">
         <div class="logo"><site-logo variant="logo3" style="width: 250px;height: 50px;" alt="网站logo" /></div>
         <ul class="navbox clearfix" style="width: 75%;">
-          <li :class="{ active: activeNav === '/main/home' }"
+          <li v-if="hasMenu(1) || $store.state.settlementType != 3" :class="{ active: activeNav === '/main/home' }"
             :style="activeNav === '/main/home' ? activeNavStyle : (hoverNav === '/main/home' ? hoverNavStyle : null)"
             @click="setActive('/main/home')">
             <span class="icon1">首页</span>
           </li>
-          <li :class="{ active: activeNav === '/main/Ordermanagement' }"
+          <li v-if="canShowTopMenu(2)" :class="{ active: activeNav === '/main/Ordermanagement' }"
             :style="activeNav === '/main/Ordermanagement' ? activeNavStyle : (hoverNav === '/main/Ordermanagement' ? hoverNavStyle : null)"
             @click="setActive('/main/Ordermanagement')">
             <span class="icon1">订单管理</span>
           </li>
-          <li :class="{ active: activeNav === '/main/Zoningmanagement' }"
+          <li v-if="canShowTopMenu(3)" :class="{ active: activeNav === '/main/Zoningmanagement' }"
             :style="activeNav === '/main/Zoningmanagement' ? activeNavStyle : (hoverNav === '/main/Zoningmanagement' ? hoverNavStyle : null)"
             @click="setActive('/main/Zoningmanagement')">
             <span class="icon1">分区管理</span>
           </li>
-          <li :class="{ active: activeNav === '/main/DA' }"
+          <li v-if="hasMenu(4) || ($store.state.settlementType != 3 && $store.state.settlementType != 4)" :class="{ active: activeNav === '/main/DA' }"
             :style="activeNav === '/main/DA' ? activeNavStyle : (hoverNav === '/main/DA' ? hoverNavStyle : null)"
             @click="setActive('/main/DA')">
             <span class="icon1">数据分析</span>
           </li>
-          <li @click="setActive('/personal/baseInfo')" v-if="$store.state.settlementType !=3"
+          <li @click="setActive('/personal/baseInfo')" v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4"
             :class="{ active: activeNav === '/personal' || activeNav === '/personal/baseInfo' }"
             :style="activeNav === '/personal' || activeNav === '/personal/baseInfo' ? activeNavStyle : (hoverNav === '/personal' ? hoverNavStyle : null)">
             <span class="icon1">账户管理</span>
           </li>
-          <li v-if="$store.state.isEnabledPaid && $store.state.settlementType !=3" @click="setActive('/behalf')" :class="{ active: activeNav === '/behalf' }"
+          <li v-if="$store.state.isEnabledPaid && $store.state.settlementType != 3 && $store.state.settlementType != 4" @click="setActive('/behalf')" :class="{ active: activeNav === '/behalf' }"
             :style="hoverNav === '/behalf' ? hoverNavStyle : null">
             <span class="icon1">代付管理</span>
           </li>
-          <li v-if="$store.state.userType && $store.state.settlementType !=3" @click="setActive('/agentsystem')" :class="{ active: activeNav === '/agentsystem' }"
+          <li v-if="$store.state.userType && $store.state.settlementType != 3 && $store.state.settlementType != 4" @click="setActive('/agentsystem')" :class="{ active: activeNav === '/agentsystem' }"
             :style="hoverNav === '/agentsystem' ? hoverNavStyle : null">
             <span class="icon1">代理系统</span>
           </li>
-          <li v-if="$store.state.settlementType !=3" :class="{ active: activeNav === '/employee' }"
+          <li v-if="$store.state.settlementType != 3 && $store.state.settlementType != 4" :class="{ active: activeNav === '/employee' }"
             :style="activeNav === '/employee' ? activeNavStyle : (hoverNav === '/employee' ? hoverNavStyle : null)"
             @click="setActive('/employee')">
             <span class="icon1">员工管理</span>
@@ -195,12 +195,12 @@ export default {
     hoverNavStyle() {
       switch (this.skinNum) {
         case 1: return { background: '#b5c9b8', color: '#fff' }; // 莫兰迪绿加深
-        case 2: return { background: '#a7c7e7', color: '#fff' }; // 莫兰迪蓝加深
+        case 2: return { background: '#b5c9b8', color: '#fff' }; // 莫兰迪蓝加深
         case 3: return { background: '#b7afc6', color: '#fff' }; // 莫兰迪紫加深
         case 4: return { background: '#e6c1c5', color: '#fff' }; // 莫兰迪粉加深
         case 5: return { background: '#e9d7a5', color: '#fff' }; // 莫兰迪黄加深
         case 6: return { background: '#b4b8ab', color: '#fff' }; // 莫兰迪灰加深
-        default: return { background: '#b5c9b8', color: '#fff' };
+        default: return { background: '#a7c7e7', color: '#fff' };
       }
     }
   },
@@ -237,6 +237,17 @@ export default {
     }
   },
   methods: {
+    hasMenu(menuId) {
+      const menuIds = (this.$store.state.roleInfo || '').split(',').map(id => Number(id));
+      return menuIds.includes(menuId);
+    },
+    canShowTopMenu(menuId) {
+      const settlementType = Number(this.$store.state.settlementType);
+      if (settlementType === 3 || settlementType === 4) {
+        return this.hasMenu(menuId);
+      }
+      return true;
+    },
     // 获取用户信息
     getUser() {
       this.$api.home
@@ -246,6 +257,9 @@ export default {
           this.$store.commit('saveType', data.data.type);
           this.$store.commit('changeNickName', data.data.userName);
           this.$store.commit('changeId', data.data.id);
+          this.$store.commit('setEnabledPaid', data.data.isEnabledPaid);
+          this.$store.commit('settlementType', data.data.settlementType);
+          this.$store.commit('setRoleInfo', data.data.roleinfon);
         })
         .catch(err => {
           this.$messageError(err.message);
@@ -371,7 +385,7 @@ export default {
     height: 60px;
     top: 0;
     left: 0;
-    background: #63dcfa;
+    background: #24adec;
 
     .headbox {
       width: 1280px;
@@ -401,7 +415,7 @@ export default {
 
         li {
           float: left;
-          padding: 0 35px;
+          padding: 0 24px;
           height: 60px;
           line-height: 60px;
           // border-right: 1px solid #fff;
