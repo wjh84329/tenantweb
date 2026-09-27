@@ -1058,6 +1058,19 @@ import {
   filterWxmbQrcodeTemplates,
   defaultScanQrcodeForm
 } from '../assets/js/qrcodeTemplateKind';
+const transferRequiredRule = (vm, message, skipForLegendWorld = false) => ({
+  trigger: 'blur',
+  validator: (rule, value, callback) => {
+    const form = vm.wxmbDialog && vm.wxmbDialog.form;
+    const transferEnabled = Boolean(rule && form && form.transferEnable);
+    if (!transferEnabled || (skipForLegendWorld && form.gameType === '传奇世界') ||
+      (value !== null && value !== undefined && String(value).trim() !== '')) {
+      callback();
+      return;
+    }
+    callback(new Error(message));
+  }
+});
 // import { gameEngine, gameEngine1 } from '../assets/js/version';
 export default {
   computed: {
@@ -1258,25 +1271,25 @@ export default {
           wxVar: [{ required: true, message: '请输入微信保留ID变量', trigger: 'blur' }],
           npcName: [{ required: true, message: '请输入NPC名称', trigger: 'blur' }],
           transferMinAmount: [
-            { required: true, message: '请输入最低金额', trigger: 'blur' }
+            transferRequiredRule(this, '请输入最低金额')
           ],
           transferRechargeVar: [
-            { required: true, message: '请输入充值转区点变量', trigger: 'blur' }
+            transferRequiredRule(this, '请输入充值转区点变量', true)
           ],
           transferUsedVar: [
-            { required: true, message: '请输入已用转区点变量', trigger: 'blur' }
+            transferRequiredRule(this, '请输入已用转区点变量', true)
           ],
           transferFlagVar: [
-            { required: true, message: '请输入角色是否已转区变量', trigger: 'blur' }
+            transferRequiredRule(this, '请输入角色是否已转区变量', true)
           ],
           transferCoinVar: [
-            { required: true, message: '请输入通区货币变量', trigger: 'blur' }
+            transferRequiredRule(this, '请输入通区货币变量', true)
           ],
           transferCoinName: [
-            { required: true, message: '请输入通区货币名称', trigger: 'blur' }
+            transferRequiredRule(this, '请输入通区货币名称', true)
           ],
           transferNpcName: [
-            { required: true, message: '请输入转区NPC名称', trigger: 'blur' }
+            transferRequiredRule(this, '请输入转区NPC名称')
           ]
         }
       }
