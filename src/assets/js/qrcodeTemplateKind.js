@@ -24,7 +24,11 @@ export function filterScanQrcodeTemplates(list) {
 }
 
 export function filterWxmbQrcodeTemplates(list) {
-  return (list || []).filter(isWxmbQrcodeTemplate);
+  const templates = list || [];
+  const wxmbTemplates = templates.filter(isWxmbQrcodeTemplate);
+  // 兼容用途字段上线前创建的好充值二维码模板：历史记录会被数据库默认值
+  // 识别为扫码充值。商户尚未创建密保专用模板时，继续允许选择原有模板。
+  return wxmbTemplates.length > 0 ? wxmbTemplates : templates;
 }
 
 export function qrcodeTemplateKindLabel(kind) {
