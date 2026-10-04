@@ -29,6 +29,17 @@ export default {
       headers: { Authorization: 'Bearer ' + header }
     });
   },
+  // 直接下载多线路充值文件，避免二次跳转到 localhost/127.0.0.1 或临时文件失效
+  async downloadRechargeFile(params) {
+    let header = await mgr();
+    return api({
+      url: '/api/SelectDropDown/DownloadRechargeFileAsync',
+      method: 'get',
+      params: params,
+      responseType: 'blob',
+      headers: { Authorization: 'Bearer ' + header }
+    });
+  },
   // 充值站点
   async chargeStation(params) {
     let header = await mgr();
