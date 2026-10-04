@@ -152,7 +152,7 @@
 <script>
 import { mapState } from 'vuex';
 import { url } from '../assets/js/version';
-import { normalizeDownloadUrl } from '../utils/downloadFile';
+import { saveBlobResponse } from '../utils/downloadFile';
 export default {
   data() {
     return {
@@ -348,22 +348,17 @@ export default {
       if (!this.loading) {
         this.loading = true;
         this.$api.getcode
-          .downLink({
+          .downloadRechargeFile({
             group: this.gamegroupingpage
           })
           .then((data) => {
             this.loading = false;
             if (data.status === 200) {
-              // 创建隐藏的可下载链接
-              let eleLink = document.createElement('a');
-              eleLink.style.display = 'none';
-              // 字符内容转变成blob地址
-              eleLink.href = normalizeDownloadUrl(data.data, url);
-              // 触发点击
-              document.body.appendChild(eleLink);
-              eleLink.click();
-              // 然后移除
-              document.body.removeChild(eleLink);
+              if (!data.data || data.data.size === 0) {
+                this.$messageError('下载文件为空，请稍后重试');
+                return;
+              }
+              saveBlobResponse(data, 'payurls.html');
             }
           })
           .catch((err) => {
