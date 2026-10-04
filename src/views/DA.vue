@@ -379,11 +379,6 @@
                         <span>{{scope.row.orderMoney.toFixed(2)}}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column label="收入">
-                      <template slot-scope="scope">
-                        <span>{{scope.row.profit.toFixed(2)}}</span>
-                      </template>
-                    </el-table-column>
                   </el-table>
                 </div>
                 <div class="mgt15 pdl20">
