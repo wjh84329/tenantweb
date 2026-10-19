@@ -489,10 +489,20 @@ export default {
       if (this.gatewayIp && this.gatewayPort) {
         return;
       }
-      const eq = (this.serverDrow || []).find(e => (e.machineCode || '') === code);
+      const normalizedCode = code.toLowerCase();
+      const eq = (this.serverDrow || []).find(e =>
+        String(e.machineCode || e.MachineCode || '')
+          .trim()
+          .toLowerCase() === normalizedCode
+      );
       if (eq) {
-        this.gatewayIp = (eq.ip || '').trim();
-        this.gatewayPort = eq.port != null && eq.port !== '' ? String(eq.port) : '';
+        if (!this.gatewayIp) {
+          this.gatewayIp = String(eq.ip || eq.Ip || '').trim();
+        }
+        const port = eq.port == null ? eq.Port : eq.port;
+        if (!this.gatewayPort && port != null && port !== '') {
+          this.gatewayPort = String(port);
+        }
       }
     },
     // 获取分区信息
