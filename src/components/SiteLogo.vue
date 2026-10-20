@@ -25,7 +25,7 @@ export default {
     },
     resourceName: {
       type: String,
-      default: 'logo'
+      default: ''
     },
     variant: {
       type: String,
@@ -90,12 +90,9 @@ export default {
   },
   methods: {
     buildRemoteSrc() {
-      const defaultResource = this.logoType === 'home' ? 'homeLogo' : 'logo';
+      const defaultResource = this.logoType === 'home' ? 'homelogo' : 'logo';
       const resourceName = String(this.resourceName || defaultResource).trim() || defaultResource;
-      return `${remoteBaseUrl}/api/Upload/ShowFile?name=${encodeURIComponent(resourceName)}`;
-    },
-    buildGlobalSiteLogoSrc() {
-      return `${remoteBaseUrl}/api/Upload/ShowFile?name=logo`;
+      return `${remoteBaseUrl}/api/Upload/ShowFile?name=${encodeURIComponent(resourceName)}&v=${Date.now()}`;
     },
     getFallbackSrc() {
       return fallbackMap[this.variant] || fallbackMap.logo3;
@@ -115,7 +112,7 @@ export default {
         const response = await brandingRequest;
         const siteInfo = response && response.data ? response.data : {};
         const logoUrl = this.logoType === 'home'
-          ? (siteInfo.homeLogoUrl || siteInfo.logoUrl || '')
+          ? (siteInfo.homeLogoUrl || '')
           : (siteInfo.logoUrl || '');
         if (siteInfo.isAgentSite) {
           this.sourceKind = logoUrl ? 'agent' : 'empty';
@@ -144,11 +141,6 @@ export default {
         return;
       }
       if (this.sourceKind === 'local') {
-        return;
-      }
-      if (this.sourceKind === 'global' && this.logoType === 'home') {
-        this.sourceKind = 'global-site-fallback';
-        this.currentSrc = this.buildGlobalSiteLogoSrc();
         return;
       }
       this.sourceKind = 'local';
