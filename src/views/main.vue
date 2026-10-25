@@ -412,6 +412,7 @@ export default {
       if (path.startsWith('/agentsystem')) return 'agent';
       if (path.startsWith('/employee')) return 'employee';
       if (path === '/main/home') return 'home';
+      if (path === '/main/space') return 'space';
       if (path === '/main/Ordermanagement') return 'order';
       if (path === '/main/DA') return 'analysis';
       if (path.startsWith('/main/')) return 'partition';
@@ -435,6 +436,7 @@ export default {
         '/main/orderInterval': '定时任务',
         '/main/transfer': '转区点记录',
         '/main/conectKey': '通讯秘钥',
+        '/main/space': '网站空间',
         '/main/DA': '数据分析',
         '/main/gaincode': '获取代码'
       };
@@ -707,6 +709,7 @@ export default {
           // console.log(data);
           this.$store.commit('setEnabledPaid', data.data.isEnabledPaid);
           this.$store.commit('setEnabledWxValid', data.data.isEnabledWxValid);
+          this.$store.commit('setEnabledSpace', data.data.isEnabledSpace);
           this.$store.commit('setPlatOpenWxValid', data.data.isPlatOpenWxValid);
           this.$store.commit('settlementType', data.data.settlementType);
           this.$store.commit('setRoleInfo', data.data.roleinfon);
@@ -917,6 +920,10 @@ export default {
       return settlementType === 3 ? this.hasMenu(menuId) : true;
     },
     ensureRestrictedRouteAccess(path) {
+      if (path === '/main/space' && !this.$store.state.isEnabledSpace) {
+        this.$router.replace('/main/home').catch(() => {});
+        return;
+      }
       const settlementType = Number(this.$store.state.settlementType);
       if (settlementType === 3) {
         if (path === '/main/transfer' && !this.hasMenu(21)) {

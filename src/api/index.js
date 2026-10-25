@@ -20,6 +20,7 @@ import getcode from './getcode';
 import statics from './static';
 import login from './login';
 import employee from './employee';
+import space from './space';
 const _api = {
   partinstall,
   partmodule,
@@ -34,7 +35,8 @@ const _api = {
   getcode,
   statics,
   login,
-  employee
+  employee,
+  space
 };
 
 export default _api;

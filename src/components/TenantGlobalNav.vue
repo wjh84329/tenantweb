@@ -65,7 +65,7 @@ export default {
           { label: '定时任务', path: '/main/orderInterval', icon: 'clock', menuId: 16 },
           { label: '转区点记录', path: '/main/transfer', icon: 'transfer', menuId: 21 },
           { label: '通讯秘钥', path: '/main/conectKey', icon: 'key', menuId: 17 },
-          { label: '获取代码', path: '/main/gaincode', icon: 'code', menuId: 18 }
+          { label: '获取代码', path: '/main/gaincode', icon: 'code', menuId: 18 },
         ].filter(item => this.canShowSideMenu(item.menuId)),
         analysis: [
           { label: '充值统计', path: '/main/DA?tab=1', icon: 'chart', tab: '1' },
@@ -125,6 +125,7 @@ export default {
       const isRegularTenant = settlementType !== 3 && settlementType !== 4;
       return [
         { key: 'home', label: '首页', icon: 'home', path: '/main/home', visible: this.hasMenu(1) || settlementType !== 3 },
+        { key: 'space', label: '网站空间', icon: 'template', path: '/main/space', visible: this.$store.state.isEnabledSpace },
         { key: 'order', label: '订单管理', icon: 'order', path: '/main/Ordermanagement', expandable: true, visible: this.canShowTopMenu(2) },
         { key: 'partition', label: '分区管理', icon: 'partition', path: '/main/Zoningmanagement', expandable: true, visible: this.canShowTopMenu(3) },
         { key: 'analysis', label: '数据分析', icon: 'chart', path: '/main/DA', expandable: true, visible: this.hasMenu(4) || isRegularTenant },

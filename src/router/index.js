@@ -373,6 +373,12 @@ const routes = [
         }
       },
       {
+        path: 'space',
+        name: 'space',
+        meta: { requiresAuth: true, role: ['SuperAdmin', 'Admin', 'Tenant', 'Agent'] },
+        component: resolve => { require(['../views/space'], resolve); }
+      },
+      {
         path: 'DA',
         name: 'DA',
         meta: {

@@ -18,6 +18,7 @@ const state = {
   chargeUrl: '',
   isEnabledPaid: false,
   isEnabledWxValid: false,
+  isEnabledSpace: false,
   isPlatOpenWxValid: false,
   settlementType: 0,
   roleInfo: '',
@@ -59,6 +60,9 @@ const mutations = {
   },
   setEnabledWxValid(state, data) {
     state.isEnabledWxValid = data;
+  },
+  setEnabledSpace(state, data) {
+    state.isEnabledSpace = data;
   },
   setPlatOpenWxValid(state, data) {
     state.isPlatOpenWxValid = data;
