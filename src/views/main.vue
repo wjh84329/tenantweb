@@ -184,6 +184,9 @@
             <li v-if="canShowSideMenu(18)" :style="sliderStyle">
               <span class="icon9" @click="refresh('/main/gaincode')">获取代码</span>
             </li>
+            <li v-if="$store.state.isEnabledSpace" :style="sliderStyle">
+              <span class="icon3" @click="refresh('/main/space')">网站空间</span>
+            </li>
             <!-- <li style="color: black;">
               <span class="icon8" @click="refresh('/main/fenyong')"
                 >推广分佣</span

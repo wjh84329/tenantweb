@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Space from '../views/space';
 // import CallBack from '../views/callback';
 // import Mgr from '../assets/js/SecurityService';
 Vue.use(VueRouter);
@@ -376,7 +377,7 @@ const routes = [
         path: 'space',
         name: 'space',
         meta: { requiresAuth: true, role: ['SuperAdmin', 'Admin', 'Tenant', 'Agent'] },
-        component: resolve => { require(['../views/space'], resolve); }
+        component: Space
       },
       {
         path: 'DA',
