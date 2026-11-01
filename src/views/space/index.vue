@@ -2,7 +2,7 @@
   <div class="space-page">
     <div class="page-head">
       <div><h2>网站空间</h2><p>管理静态网站文件、赠送域名和自定义域名</p></div>
-      <div><el-button icon="el-icon-refresh" circle title="刷新" @click="load" /><el-button type="primary" icon="el-icon-plus" @click="showCreate">新建空间</el-button></div>
+      <div><el-button icon="el-icon-refresh" circle title="刷新" @click="load" /><el-button v-if="status.canCreateSpace" type="primary" icon="el-icon-plus" @click="showCreate">新建空间</el-button></div>
     </div>
     <div v-if="loading" class="state"><i class="el-icon-loading" /> 正在读取空间信息</div>
     <div v-else-if="loadError" class="state"><el-alert :title="loadError" type="error" :closable="false" show-icon /><el-button type="primary" plain @click="load">重新加载</el-button></div>
@@ -49,7 +49,7 @@
           </el-tab-pane>
         </el-tabs>
       </main>
-      <main v-else class="empty"><i class="el-icon-folder-opened" /><p>创建第一个网站空间开始使用</p><el-button type="primary" @click="showCreate">新建空间</el-button></main>
+      <main v-else class="empty"><i class="el-icon-folder-opened" /><p>暂无可用的网站空间</p><el-button v-if="status.canCreateSpace" type="primary" @click="showCreate">新建空间</el-button></main>
     </div>
     <el-dialog title="新建网站空间" :visible.sync="createVisible" width="520px"><el-form :model="createForm" label-width="110px"><el-form-item label="空间卡号" required><el-input v-model.trim="createForm.cardCode" maxlength="64" placeholder="请输入未使用的空间卡号" /></el-form-item><el-form-item label="空间名称"><el-input v-model.trim="createForm.name" maxlength="100" /></el-form-item><el-form-item label="空间分类"><el-select v-model="createForm.spaceCategoryId"><el-option v-for="item in status.categories" :key="item.id" :label="item.name" :value="item.id" /></el-select></el-form-item><el-form-item label="赠送域名"><el-input v-model.trim="createForm.hostPrefix" placeholder="自定义域名前缀"><template slot="append">.{{ selectedGiftDomain }}</template></el-input><div class="form-help">3-63 位小写字母、数字或连字符，留空时自动生成</div></el-form-item></el-form><span slot="footer"><el-button @click="createVisible=false">取消</el-button><el-button type="primary" :loading="creating" @click="createSpace">使用空间卡创建</el-button></span></el-dialog>
     <el-dialog :title="editorPath" :visible.sync="editorVisible" width="760px"><el-input v-model="editorContent" type="textarea" :rows="20" resize="vertical" /><span slot="footer"><el-button @click="editorVisible=false">取消</el-button><el-button type="primary" :loading="saving" @click="saveFile">保存</el-button></span></el-dialog>
