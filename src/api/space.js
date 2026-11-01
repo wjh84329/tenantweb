@@ -9,6 +9,13 @@ async function request(config) {
 
 export default {
   status() { return request({ url: '/api/Space/Status', method: 'get' }); },
-  open() { return request({ url: '/api/Space/Open', method: 'post' }); },
-  uploadToken() { return request({ url: '/api/Space/UploadToken', method: 'post' }); }
+  open(data) { return request({ url: '/api/Space/Open', method: 'post', data }); },
+  rename(id, name) { return request({ url: '/api/Space/Space/' + id + '/Rename', method: 'post', data: { name } }); },
+  changeHostPrefix(id, hostPrefix) { return request({ url: '/api/Space/Space/' + id + '/HostPrefix', method: 'post', data: { hostPrefix } }); },
+  remove(id) { return request({ url: '/api/Space/Space/' + id + '/Delete', method: 'post' }); },
+  accessToken(id) { return request({ url: '/api/Space/Space/' + id + '/AccessToken', method: 'post' }); },
+  addDomain(id, domain) { return request({ url: '/api/Space/Space/' + id + '/Domain', method: 'post', data: { domain } }); },
+  verifyDomain(id) { return request({ url: '/api/Space/Domain/' + id + '/Verify', method: 'post' }); },
+  removeDomain(id) { return request({ url: '/api/Space/Domain/' + id + '/Delete', method: 'post' }); },
+  redeem(data) { return request({ url: '/api/Space/Redeem', method: 'post', data }); }
 };
