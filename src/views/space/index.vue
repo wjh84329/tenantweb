@@ -73,12 +73,8 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
-const gatewayClient = axios.create({ timeout: 50000 });
-delete gatewayClient.defaults.headers.common.Authorization;
-
 export default {
-  data() { return { status: { categories: [], spaces: [] }, selectedId: null, tab: 'files', loading: false, loadError: '', filesLoading: false, files: [], selectedFiles: [], currentPath: '', gateway: null, createVisible: false, creating: false, createForm: { cardCode: '', name: '', hostPrefix: '' }, domainInput: '', zipFile: null, zipList: [], deploying: false, uploading: false, dragDepth: 0, isDragging: false, editorVisible: false, editorPath: '', editorContent: '', saving: false, cardCode: '', contextMenu: { visible: false, x: 0, y: 0, item: null }, fileClipboard: null }; },
+  data() { return { status: { categories: [], spaces: [] }, selectedId: null, tab: 'files', loading: false, loadError: '', filesLoading: false, files: [], selectedFiles: [], currentPath: '', createVisible: false, creating: false, createForm: { cardCode: '', name: '', hostPrefix: '' }, domainInput: '', zipFile: null, zipList: [], deploying: false, uploading: false, dragDepth: 0, isDragging: false, editorVisible: false, editorPath: '', editorContent: '', saving: false, cardCode: '', contextMenu: { visible: false, x: 0, y: 0, item: null }, fileClipboard: null }; },
   computed: {
     spaces() { return this.status.spaces || []; },
     current() { return this.spaces.find(x => x.id === this.selectedId) || null; },
@@ -94,9 +90,8 @@ export default {
     async load() { this.loading = true; this.loadError = ''; try { const r = await this.$api.space.status(); this.status = r.data || { categories: [], spaces: [] }; if (!this.spaces.some(x => x.id === this.selectedId)) this.selectedId = this.spaces.length ? this.spaces[0].id : null; if (this.current && this.tab === 'files') await this.listFiles(); } catch (e) { this.loadError = this.errorText(e, '空间信息加载失败，请稍后重试'); } finally { this.loading = false; } },
     showCreate() { this.createForm = { cardCode: '', name: '我的网站', hostPrefix: '' }; this.createVisible = true; },
     async createSpace() { if (!this.createForm.cardCode) return this.$message.warning('请输入空间卡号'); if (!this.createForm.name) return this.$message.warning('请输入空间名称'); if ((this.createForm.hostPrefix || '').trim().toLowerCase() === 'www') return this.$message.warning('赠送域名前缀不能使用 www'); this.creating = true; try { const r = await this.$api.space.open(this.createForm); this.createVisible = false; await this.load(); this.selectedId = r.data.id; await this.listFiles(); this.$message.success('空间创建成功'); } catch (e) { this.$message.error(this.errorText(e, '空间创建失败')); } finally { this.creating = false; } },
-    async selectSpace(id) { this.closeContextMenu(); this.selectedId = id; this.currentPath = ''; this.gateway = null; if (this.tab === 'files') await this.listFiles(); },
-    async gatewayAuth() { if (!this.gateway || this.gateway.spaceId !== this.selectedId || this.gateway.expiresAt * 1000 < Date.now() + 15000) { const r = await this.$api.space.accessToken(this.selectedId); this.gateway = { ...r.data, spaceId: this.selectedId }; } return this.gateway; },
-    async gatewayRequest(config) { const auth = await this.gatewayAuth(); config.url = auth.gatewayUrl + config.url; config.headers = { ...(config.headers || {}), 'X-Space-Upload-Token': auth.token }; return gatewayClient(config); },
+    async selectSpace(id) { this.closeContextMenu(); this.selectedId = id; this.currentPath = ''; if (this.tab === 'files') await this.listFiles(); },
+    async gatewayRequest(config) { return this.$api.space.gateway(this.selectedId, config); },
     async listFiles() { if (!this.current) return; this.filesLoading = true; this.selectedFiles = []; try { const r = await this.gatewayRequest({ method: 'get', url: '/api/files', params: { path: this.currentPath } }); this.files = r.data.items || []; this.current.usedBytes = r.data.usedBytes; } catch (e) { this.$message.error(this.errorText(e, '文件列表读取失败')); } finally { this.filesLoading = false; } },
     join(name) { return [this.currentPath, name].filter(Boolean).join('/'); }, openItem(item) { if (item.isDirectory) { this.currentPath = this.join(item.name); this.listFiles(); } else if (this.editable(item)) this.editFile(item); },
     goPath(index) { this.currentPath = index < 0 ? '' : this.pathParts.slice(0, index + 1).join('/'); this.listFiles(); }, editable(item) { return !item.isDirectory && /\.(html?|css|js|json|txt|xml|md|csv|svg)$/i.test(item.name); },
