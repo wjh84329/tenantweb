@@ -19,19 +19,32 @@ export function normalizeDownloadUrl(url, preferredBaseUrl = '') {
     if (preferredBaseUrl) {
       const preferredBase = new URL(preferredBaseUrl, window.location.href);
       parsed.protocol = preferredBase.protocol;
-      parsed.host = preferredBase.host;
+      parsed.hostname = preferredBase.hostname;
+      parsed.port = normalizePort(preferredBase.port, preferredBase.protocol);
       return parsed.toString();
     }
 
     if (parsed.protocol === 'http:') {
       if (window.location.protocol === 'https:') {
         parsed.protocol = 'https:';
+        parsed.port = normalizePort(parsed.port, parsed.protocol);
       }
     }
     return parsed.toString();
   } catch (e) {
     return window.location.protocol === 'https:' ? url.replace(/^http:\/\//i, 'https://') : url;
   }
+}
+
+function normalizePort(port, protocol) {
+  if (!port) {
+    return '';
+  }
+  if ((protocol === 'https:' && (port === '80' || port === '443')) ||
+      (protocol === 'http:' && port === '80')) {
+    return '';
+  }
+  return port;
 }
 
 function getHeader(headers, name) {
