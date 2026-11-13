@@ -324,15 +324,20 @@ export default {
           if (data.status === 200) {
             this.$messageSuccess('注册成功！');
             this.datainit();
+            this.getRandomCode();
             if (data.data === 'InAuth') {
               this.dialog.show = true;
             }
           } else {
             this.$messageError(data.msg);
+            this.validcode = '';
+            this.getRandomCode();
           }
         })
         .catch(err => {
           this.$messageError(err.message);
+          this.validcode = '';
+          this.getRandomCode();
         });
     },
     datainit() {
