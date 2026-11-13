@@ -893,6 +893,7 @@ export default {
           if (data.status === 200) {
             this.$messageSuccess('注册成功！');
             this.datainit();
+            this.getRandomCode();
             if (data.data === 'InAuth') {
               this.dialog.show = true;
             }
@@ -900,6 +901,8 @@ export default {
         })
         .catch(err => {
           this.$messageError(err.message);
+          this.validcode = '';
+          this.getRandomCode();
         });
     },
     // 注册成功后的数据初始化
@@ -918,6 +921,7 @@ export default {
       this.phone = ''; // 手机号码
       this.checkflag5 = true;
       this.sureChecked = false; // 是否同意协议
+      this.validcode = '';
     },
     // 获取客服的联系QQ
     getinfo() {
